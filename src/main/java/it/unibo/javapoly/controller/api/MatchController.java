@@ -1,7 +1,5 @@
 package it.unibo.javapoly.controller.api;
-
-import it.unibo.javapoly.model.api.Player;
-
+    
 public interface MatchController {
     public void startGame();
     public void nextTurn();
