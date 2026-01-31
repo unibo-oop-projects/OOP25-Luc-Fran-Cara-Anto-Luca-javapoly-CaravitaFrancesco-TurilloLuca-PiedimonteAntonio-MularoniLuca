@@ -14,7 +14,6 @@ public class JailedState implements PlayerState {
         turnsInJail++;
         System.out.println("[Prigione] Turno " + turnsInJail + " di detenzione.");
 
-        // Logica semplificata:
         // 1. Se fa "doppio" esce (se diceResult > 10 esce)
         // 2. Se raggiunge 3 turni esce
 
@@ -26,7 +25,7 @@ public class JailedState implements PlayerState {
             // Transizione di stato: torna Libero
             player.setState(FreeState.getInstance());
 
-            // Appena uscito, si muove!
+            // Appena uscito, si muove
             player.move(diceResult);
         } else {
             System.out.println("Resta in prigione.");
