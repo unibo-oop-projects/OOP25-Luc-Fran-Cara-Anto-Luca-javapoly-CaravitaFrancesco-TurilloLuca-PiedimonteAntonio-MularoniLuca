@@ -66,5 +66,5 @@ val main: String by project
 
 application {
     // Define the main class for the application
-    mainClass.set("it.unibo.javapoly.App")
+    mainClass.set(main)
 }
