@@ -1,21 +1,24 @@
 package it.unibo.javapoly.model.player;
 
 /**
- * Interfaccia per il pattern State.
- * Definisce il comportamento che varia in base alla condizione del giocatore.
+ * Represents the state of a player in the game.
+ * This interface defines the behavior of a player based on their current status
+ * It follows the State design pattern.
  */
 public interface PlayerState {
 
     /**
-     * Esegue la logica del turno specifica per lo stato corrente.
-     * 
-     * @param player     il contesto (il giocatore)
-     * @param diceResult la somma dei dadi lanciati
+     * Executes the logic for the player's turn based on the dice roll.
+     *
+     * @param player     the player performing the turn.
+     * @param diceResult the total value obtained from rolling the dice.
      */
     void playTurn(Player player, int diceResult);
 
     /**
-     * @return true se il giocatore può muoversi, false altrimenti.
+     * checks if the player is allowed to move from their current position.
+     *
+     * @return true if the player can move, false otherwise.
      */
     boolean canMove();
 

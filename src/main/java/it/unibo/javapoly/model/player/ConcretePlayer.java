@@ -7,11 +7,11 @@ package it.unibo.javapoly.model.player;
  */
 public class ConcretePlayer implements Player {
 
+    private static final int SPACES_ON_BOARD = 40;
     private final String name;
     private int balance;
     private final Token token;
     private PlayerState currentState;
-    private static final int SPACES_ON_BOARD = 40;
 
     // Placeholder per la posizione (da 0 a 39)
     private int currentPosition;
@@ -57,8 +57,7 @@ public class ConcretePlayer implements Player {
 
         System.out.println(// NOPMD
                 "DEBUG: " + name + " (" + token.getType() + ") si sposta da " + oldPos + " a " + currentPosition);
-
-        // TODO: notificare la View (Observer) e il Tabellone
+        // TODO notificare la View (Observer) e il Tabellone
     }
 
     /**
@@ -74,8 +73,7 @@ public class ConcretePlayer implements Player {
             balance -= amount;
             return true;
         }
-        return false; 
-        
+        return false;
         // TODO gestire la bancarotta o ipoteca
     }
 

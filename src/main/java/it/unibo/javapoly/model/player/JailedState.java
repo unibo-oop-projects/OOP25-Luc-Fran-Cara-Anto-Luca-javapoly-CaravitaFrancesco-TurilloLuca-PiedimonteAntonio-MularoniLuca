@@ -11,15 +11,15 @@ package it.unibo.javapoly.model.player;
 public final class JailedState implements PlayerState {
 
     /**
-     * The number of turns the player has currently spent in jail.
-     */
-    private int turnsInJail;
-
-    /**
      * The maximum number of turns a player must stay in jail before being
      * automatically released.
      */
-    private static final int MAX_TURNS = 3;
+    private static final int MAX_TURNS = 3; 
+
+    /**
+     * The number of turns the player has currently spent in jail.
+     */
+    private int turnsInJail;
 
     /**
      * Constructs a new {@code JailedState} with the turn counter reset to zero.
