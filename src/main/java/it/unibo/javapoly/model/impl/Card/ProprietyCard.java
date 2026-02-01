@@ -1,5 +1,6 @@
 package it.unibo.javapoly.model.impl.Card;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import it.unibo.javapoly.model.api.card.Card;
 import it.unibo.javapoly.utils.JsonUtils;
 
+// TODO: add all the JavaDoc comment
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
@@ -14,6 +16,7 @@ import it.unibo.javapoly.utils.JsonUtils;
 //   @JsonSubTypes.Type(value = StationPropertyCard.class, name = "station"),
   @JsonSubTypes.Type(value = UtilityProprietyCard.class, name = "utility")
 })
+@JsonRootName(value = "ProprietyCard")
 public abstract class ProprietyCard implements Card{
 
     final String id;
