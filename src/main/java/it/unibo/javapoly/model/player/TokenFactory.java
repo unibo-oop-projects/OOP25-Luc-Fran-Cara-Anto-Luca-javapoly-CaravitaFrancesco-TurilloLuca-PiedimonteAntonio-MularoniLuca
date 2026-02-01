@@ -1,9 +1,13 @@
 package it.unibo.javapoly.model.player;
 
-public class TokenFactory {
+@SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
+public final class TokenFactory {
+
+    private TokenFactory() {
+    }
 
     // Factory Method Statico
-    public static Token createToken(TokenType type) {
+    public static Token createToken(final TokenType type) {
         switch (type) {
             case CAR -> {
                 return new TokenImpl("Car");

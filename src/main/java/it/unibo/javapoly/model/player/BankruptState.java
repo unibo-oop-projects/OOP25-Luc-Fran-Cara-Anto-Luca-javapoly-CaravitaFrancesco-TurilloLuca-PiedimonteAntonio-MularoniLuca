@@ -1,6 +1,6 @@
 package it.unibo.javapoly.model.player;
 
-public class BankruptState implements PlayerState {
+public final class BankruptState implements PlayerState {
 
     private static final BankruptState INSTANCE = new BankruptState();
 
@@ -12,8 +12,8 @@ public class BankruptState implements PlayerState {
     }
 
     @Override
-    public void playTurn(Player player, int diceResult) {
-        System.out.println("[Bancarotta] Il giocatore " + player.getName() + " è fuori dal gioco.");
+    public void playTurn(final Player player, final int diceResult) {
+        System.out.println("[Bancarotta] Il giocatore " + player.getName() + " è fuori dal gioco."); // NOPMD
         // Non fa nulla
     }
 

@@ -6,7 +6,7 @@ class TokenImpl implements Token {
     private final String type;
 
     // Costruttore Protected: solo la Factory può chiamarlo
-    protected TokenImpl(String type) {
+    protected TokenImpl(final String type) {
         this.type = type;
     }
 
