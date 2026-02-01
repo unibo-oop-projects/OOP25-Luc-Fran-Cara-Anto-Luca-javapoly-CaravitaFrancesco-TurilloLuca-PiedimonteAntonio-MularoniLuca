@@ -23,7 +23,7 @@ public class UtilityProprietyCard extends ProprietyCard{
     }
 
     @Override
-    public int calculateRent() {
+    public int calculateRent(int utilityNumber) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'calculateRent'");
     }

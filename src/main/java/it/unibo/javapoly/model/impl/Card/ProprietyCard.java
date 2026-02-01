@@ -60,7 +60,7 @@ public abstract class ProprietyCard implements Card{
     *   this method return the final rent that a player need to pay
     *   (including house, multiplier, number of station)
     */
-    public abstract int calculateRent();
+    public abstract int calculateRent(int number);
 
     @Override
     public String toString() {
@@ -70,19 +70,5 @@ public abstract class ProprietyCard implements Card{
             return "{\"error\":\"Serialization failed\"}";
         }
     }
-
-
-    /*
-    @Override
-    public String toString() {
-        return "ProprietyCard{" +
-                "id:'" + this.id + '\'' +
-                ", name:'" + this.name + '\'' +
-                ", description:'" + this.description + '\'' +
-                ", proprietyCost:" + this.proprietyCost  +
-                ", group:'" + this.group + '\'' +
-                '}';
-    } */
-
     
 }
