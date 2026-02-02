@@ -6,10 +6,10 @@ package it.unibo.javapoly.model.impl.card;
  * <p>
  * The class stores the rents for different numbers of station
  */
-public class StationPropetyCard extends AbstractProprietyCard{
+public class StationPropetyCard extends AbstractPropertyCard{
 
-    public StationPropetyCard(String id, String name, String description, int proprietyCost, String group) {
-        super(id, name, description, proprietyCost, group);
+    public StationPropetyCard(String id, String name, String description, int propetyCost, String group) {
+        super(id, name, description, propetyCost, group);
         //TODO Auto-generated constructor stub
     }
 

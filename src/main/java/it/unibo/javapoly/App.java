@@ -2,8 +2,8 @@ package it.unibo.javapoly;
 
 import java.util.List;
 
-import it.unibo.javapoly.model.impl.card.LandProprietyCard;
-import it.unibo.javapoly.model.impl.card.AbstractProprietyCard;
+import it.unibo.javapoly.model.impl.card.LandPropertyCard;
+import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
 
 import it.unibo.javapoly.utils.JsonUtils;
 
@@ -21,7 +21,7 @@ public final class App {
         try {
             final List<Integer> rents = List.of(35, 90, 170, 260);
 
-            final AbstractProprietyCard p = new LandProprietyCard(
+            final AbstractPropertyCard p = new LandPropertyCard(
                 "VIA_ROMA",
                 "Via Roma",
                 "Descrizione", 100,

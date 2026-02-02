@@ -6,15 +6,15 @@ import java.util.NoSuchElementException;
 
 // TODO: add all the JavaDoc comment
 
-public class UtilityProprietyCard extends AbstractProprietyCard{
+public class UtilityPropertyCard extends AbstractPropertyCard{
 
     // TODO finire di aggiustare i CDC di questa classe
     final Map<Integer, Integer> multiplierRent;
 
 
-    public UtilityProprietyCard(final String id, final String name, final String description, final int proprietyCost,
+    public UtilityPropertyCard(final String id, final String name, final String description, final int propertyCost,
                              final String utility, final Map<Integer, Integer> multiProroprietyCost) {
-        super(id, name, description, proprietyCost, utility);
+        super(id, name, description, propertyCost, utility);
         this.multiplierRent = new HashMap<>(multiProroprietyCost);
 
     }

@@ -19,17 +19,17 @@ import it.unibo.javapoly.utils.JsonUtils;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = LandProprietyCard.class, name = "street"),
+    @JsonSubTypes.Type(value = LandPropertyCard.class, name = "street"),
     @JsonSubTypes.Type(value = StationPropetyCard.class, name = "station"),
-    @JsonSubTypes.Type(value = UtilityProprietyCard.class, name = "utility")
+    @JsonSubTypes.Type(value = UtilityPropertyCard.class, name = "utility")
 })
-@JsonRootName("ProprietyCard")
-public abstract class AbstractProprietyCard implements Card {
+@JsonRootName("PropertyCard")
+public abstract class AbstractPropertyCard implements Card {
 
     private final String id;
     private final String name;
     private final String description;
-    private final int proprietyCost;
+    private final int propertyCost;
     private final String group;
 
     /**
@@ -38,18 +38,18 @@ public abstract class AbstractProprietyCard implements Card {
      * @param id the card identifier
      * @param name the card name
      * @param description the card description
-     * @param proprietyCost the purchase cost of the property
+     * @param propertyCost the purchase cost of the property
      * @param group the color / group of the property
      */
-    public AbstractProprietyCard(final String id,
+    public AbstractPropertyCard(final String id,
                          final String name,
                          final String description,
-                         final int proprietyCost,
+                         final int propertyCost,
                          final String group) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.proprietyCost = proprietyCost;
+        this.propertyCost = propertyCost;
         this.group = group;
     }
 
@@ -88,8 +88,8 @@ public abstract class AbstractProprietyCard implements Card {
      *
      * @return the property cost.
      */
-    public int getProprietyCost() {
-        return this.proprietyCost;
+    public int getPropertyCost() {
+        return this.propertyCost;
     }
 
     /**

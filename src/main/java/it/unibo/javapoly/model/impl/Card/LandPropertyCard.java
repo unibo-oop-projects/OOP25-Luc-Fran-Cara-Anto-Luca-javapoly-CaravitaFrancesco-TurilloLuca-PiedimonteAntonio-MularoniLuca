@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * The class stores the rents for different numbers of houses and for the hotel,
  * together with the costs to build houses and hotels.
  */
-@JsonRootName("LandProprietyCard")
-public class LandProprietyCard extends AbstractProprietyCard {
+@JsonRootName("LandPropertyCard")
+public class LandPropertyCard extends AbstractPropertyCard {
 
     private static final String ERR_LIST_IS_EMPTY = "The rent list is empty";
     private static final String ERR_LIST_IS_NULL = "The rent list is null";
@@ -30,12 +30,12 @@ public class LandProprietyCard extends AbstractProprietyCard {
     private final int hotelPrice;
 
     /**
-     * Creates a new {@link LandProprietyCard}.
+     * Creates a new {@link LandPropertyCard}.
      *
      * @param id the card identifier
      * @param name the card name
      * @param description the card description
-     * @param proprietyCost the cost of the property
+     * @param propertyCost the cost of the property
      * @param color the property color
      * @param baseRent the base rent
      * @param multiProroprietyRent the list of rents for houses
@@ -43,17 +43,17 @@ public class LandProprietyCard extends AbstractProprietyCard {
      * @param houseCost the cost to build a house
      * @param hotelCost the cost to build a hotel
      */
-    public LandProprietyCard(final String id,
+    public LandPropertyCard(final String id,
                              final String name,
                              final String description,
-                             final int proprietyCost,
+                             final int propertyCost,
                              final String color,
                              final int baseRent,
                              final List<Integer> multiProroprietyRent,
                              final int hotelRent,
                              final int houseCost,
                              final int hotelCost) {
-        super(id, name, description, proprietyCost, color);
+        super(id, name, description, propertyCost, color);
         this.multiProroprietyRent = new LinkedList<>(multiProroprietyRent);
         this.multiProroprietyRent.addFirst(baseRent);
         this.multiProroprietyRent.addLast(hotelRent);
