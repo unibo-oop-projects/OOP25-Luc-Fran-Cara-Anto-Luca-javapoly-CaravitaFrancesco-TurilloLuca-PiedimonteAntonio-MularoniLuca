@@ -36,7 +36,7 @@ public final class JailedState implements PlayerState {
      * Increments the turn counter. Checks if the player meets the conditions to be
      * released:
      * <ul>
-     * <li>Rolling a "double" (simulated here by a dice result &gt; 10).</li>
+     * <li>Rolling a double.</li>
      * <li>Reaching the maximum number of turns in jail ({@value #MAX_TURNS}).</li>
      * </ul>
      * If released, the player's state transitions to {@link FreeState}, and they
@@ -45,15 +45,14 @@ public final class JailedState implements PlayerState {
      *
      * @param player     the player taking the turn.
      * @param diceResult the result of the dice roll for this turn.
+     * @param isDouble   indicates if the dice roll was a double.
      */
     @Override
-    public void playTurn(final Player player, final int diceResult) {
+    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
         turnsInJail++;
         System.out.println("[Prigione] Turno " + turnsInJail + " di detenzione."); // NOPMD
 
-        final boolean rolledDouble = diceResult > 10; // placeholder per "doppio"
-
-        if (rolledDouble || turnsInJail >= MAX_TURNS) {
+        if (isDouble || turnsInJail >= MAX_TURNS) {
             System.out.println(player.getName() + " esce di prigione!"); // NOPMD
 
             player.setState(FreeState.getInstance());

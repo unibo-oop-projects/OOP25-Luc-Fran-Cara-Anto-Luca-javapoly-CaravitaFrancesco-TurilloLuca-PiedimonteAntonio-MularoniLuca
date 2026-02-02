@@ -12,8 +12,9 @@ public interface PlayerState {
      *
      * @param player     the player performing the turn.
      * @param diceResult the total value obtained from rolling the dice.
+     * @param isDouble   indicates if the dice roll was a double.
      */
-    void playTurn(Player player, int diceResult);
+    void playTurn(Player player, int diceResult, boolean isDouble);
 
     /**
      * checks if the player is allowed to move from their current position.

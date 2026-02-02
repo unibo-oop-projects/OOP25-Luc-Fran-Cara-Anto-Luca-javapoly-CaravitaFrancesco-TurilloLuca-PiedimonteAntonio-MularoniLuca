@@ -43,10 +43,11 @@ public class PlayerImpl implements Player {
      * The logic is delegated to the current {@link PlayerState}.
      *
      * @param diceResult the total value rolled on the dice.
+     * @param isDouble   indicates if the dice roll was a double.
      */
     @Override
-    public void playTurn(final int diceResult) {
-        this.currentState.playTurn(this, diceResult);
+    public void playTurn(final int diceResult, final boolean isDouble) {
+        this.currentState.playTurn(this, diceResult, isDouble);
     }
 
     /**

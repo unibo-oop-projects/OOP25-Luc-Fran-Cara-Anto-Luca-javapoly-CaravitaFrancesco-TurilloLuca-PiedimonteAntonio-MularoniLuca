@@ -33,8 +33,9 @@ public interface Player {
      * Executes the logic for a player's turn based on a dice roll.
      *
      * @param diceResult the total value obtained from rolling the dice.
+     * @param isDouble   indicates if the dice roll was a double.
      */
-    void playTurn(int diceResult);
+    void playTurn(int diceResult, boolean isDouble);
 
     /**
      * Moves the player a specified number of steps on the game board.

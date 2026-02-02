@@ -40,9 +40,10 @@ public final class BankruptState implements PlayerState {
      *
      * @param player     the player currently in this state.
      * @param diceResult the result of the dice roll (ignored in this state).
+     * @param isDouble   indicates if the dice roll was a double.
      */
     @Override
-    public void playTurn(final Player player, final int diceResult) {
+    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
         System.out.println("[Bancarotta] Il giocatore " + player.getName() + " è fuori dal gioco."); // NOPMD
     }
 

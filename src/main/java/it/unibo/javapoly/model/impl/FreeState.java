@@ -40,9 +40,10 @@ public final class FreeState implements PlayerState {
      *
      * @param player     the player performing the turn.
      * @param diceResult the total result of the dice roll.
+     * @param isDouble   indicates if the dice roll was a double.
      */
     @Override
-    public void playTurn(final Player player, final int diceResult) {
+    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
         System.out.println("[Stato Libero] Il giocatore si muove di " + diceResult); // NOPMD
         player.move(diceResult);
     }
