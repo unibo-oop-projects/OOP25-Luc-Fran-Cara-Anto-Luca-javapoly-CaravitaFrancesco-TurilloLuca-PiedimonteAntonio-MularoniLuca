@@ -6,11 +6,13 @@ import java.util.NoSuchElementException;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-// TODO: add all the JavaDoc comment
+import it.unibo.javapoly.model.api.RentContext;
+
+// FIXME: add all the JavaDoc comment
 
 /**
  * Representation of a land/property card in the Monopoly-like game.
- * 
+ *
  * <p>
  * The class stores the rents for different numbers of houses and for the hotel,
  * together with the costs to build houses and hotels.
@@ -18,13 +20,14 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonRootName("LandPropertyCard")
 public class LandPropertyCard extends AbstractPropertyCard {
 
-    private static final String ERR_LIST_IS_EMPTY = "The rent list is empty";
-    private static final String ERR_LIST_IS_NULL = "The rent list is null";
-    private static final String ERR_INDEX_OUT_LIMITS = "The given index is out of size";
+    /**
+     * Multiplier applied when all lands of the same group are owned by a single player.
+     */
+    private static final int ALL_LAND = 2;
 
     // FIXME: riguardare il nome perche non è totalmente in inglese
-    // TODO: Valutare se trasformalo in una Map<Integer, Integer> -> <numHouse, numHouseRent>
-    private final List<Integer> multiProroprietyRent; 
+    // FIXME: Valutare se trasformalo in una Map<Integer, Integer> -> <numHouse, numHouseRent>
+    private final List<Integer> rentNumberHouses;
 
     private final int housePrice;
     private final int hotelPrice;
@@ -44,19 +47,19 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @param hotelCost the cost to build a hotel
      */
     public LandPropertyCard(final String id,
-                             final String name,
-                             final String description,
-                             final int propertyCost,
-                             final String color,
-                             final int baseRent,
-                             final List<Integer> multiProroprietyRent,
-                             final int hotelRent,
-                             final int houseCost,
-                             final int hotelCost) {
+                            final String name,
+                            final String description,
+                            final int propertyCost,
+                            final String color,
+                            final int baseRent,
+                            final List<Integer> multiProroprietyRent,
+                            final int hotelRent,
+                            final int houseCost,
+                            final int hotelCost) {
         super(id, name, description, propertyCost, color);
-        this.multiProroprietyRent = new LinkedList<>(multiProroprietyRent);
-        this.multiProroprietyRent.addFirst(baseRent);
-        this.multiProroprietyRent.addLast(hotelRent);
+        this.rentNumberHouses = new LinkedList<>(multiProroprietyRent);
+        this.rentNumberHouses.addFirst(baseRent);
+        this.rentNumberHouses.addLast(hotelRent);
         this.housePrice = houseCost;
         this.hotelPrice = hotelCost;
     }
@@ -72,7 +75,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
-        return this.multiProroprietyRent.get(0);
+        return this.rentNumberHouses.get(0);
     }
 
     /**
@@ -84,7 +87,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
-        return this.multiProroprietyRent.get(this.multiProroprietyRent.size() - 1);
+        return this.rentNumberHouses.get(this.rentNumberHouses.size() - 1);
     }
 
     /**
@@ -111,14 +114,14 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @param houseNumber the number of houses built
      * @return the rent for the given number of houses.
      */
-    public int getNumberHouseRent(final int houseNumber) {
+    public int getHouseRentByNumber(final int houseNumber) {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
         if (checkIsHotel(houseNumber)) {
             return getHotelRent();
         }
-        return this.multiProroprietyRent.get(houseNumber);
+        return this.rentNumberHouses.get(houseNumber);
     }
 
     /**
@@ -126,12 +129,12 @@ public class LandPropertyCard extends AbstractPropertyCard {
      *
      * @return a copy of the full rent list.
      */
-    public List<Integer> getMultiHouseRent() {
+    public List<Integer> getAllRent() {
         if (checkListIsEmpty()) {
-            // TODO: Valutare se restituire un errore o semplicemente restituire una lista vuota
-            throw new NoSuchElementException(ERR_LIST_IS_EMPTY); 
+            // FIXME: Valutare se restituire un errore o semplicemente restituire una lista vuota
+            throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
-        return new LinkedList<>(this.multiProroprietyRent);
+        return new LinkedList<>(this.rentNumberHouses);
     }
 
     //#endregion
@@ -139,13 +142,19 @@ public class LandPropertyCard extends AbstractPropertyCard {
     /**
      * This method calculates the rent based on the number of houses or the presence of a hotel.
      *
-     * @param houseNumber the number of houses built
+     * @param rentContext contains the number of houses built and if i have all house of the same color
      * @return the calculated rent.
      */
     @Override
-    public int calculateRent(final int houseNumber) {
-        return checkIsHotel(houseNumber) ? getHotelRent() : getNumberHouseRent(houseNumber);
+    public int calculateRent(final RentContext rentContext) {
+        if (checkIsHotel(rentContext.getNumberOfHouses())) {
+            return applyMultiplier(rentContext, getHotelRent());
+        }
+
+        return applyMultiplier(rentContext, getHouseRentByNumber(rentContext.getNumberOfHouses()));
     }
+
+    //#region Private method
 
     /**
      * This method checks if the passed number is out of the list limits.
@@ -154,7 +163,19 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @return true if the number is out of bounds, false otherwise.
      */
     private boolean checkNumberHouse(final int number) {
-        return number < 0 || number >= this.multiProroprietyRent.size();
+        return number < 0 || number >= this.rentNumberHouses.size();
+    }
+
+    /**
+     * Applies the group multiplier to the given rent result when all lands of
+     * the same group are owned by the same player.
+     *
+     * @param context the rent calculation context containing ownership flags.
+     * @param result the base rent to which the multiplier may be applied.
+     * @return the possibly multiplied rent.
+     */
+    private int applyMultiplier(final RentContext context, final int result) {
+        return context.isAllLand() ? result * this.ALL_LAND : result;
     }
 
     /**
@@ -165,23 +186,27 @@ public class LandPropertyCard extends AbstractPropertyCard {
      */
     private boolean checkIsHotel(final int number) {
         if (checkNumberHouse(number)) {
-            throw new IndexOutOfBoundsException(ERR_INDEX_OUT_LIMITS);
+            throw new IndexOutOfBoundsException(ERR_INDEX_OUT_LIMITS + number);
         }
-        return number == this.multiProroprietyRent.size() - 1;
+        return number == this.rentNumberHouses.size() - 1;
     }
 
     /**
+     * This method checks if the list of rents is null or empty.
+     *
      * @return true if the rent list is empty, false otherwise.
      */
     private boolean checkListIsEmpty() {
-        if (this.multiProroprietyRent == null) {
+        if (this.rentNumberHouses == null) {
             throw new IllegalStateException(ERR_LIST_IS_NULL);
         }
-        return this.multiProroprietyRent.isEmpty();
+        return this.rentNumberHouses.isEmpty();
     }
 
-    // FIXME: Capire bene cosa fare con l'indice per la lista. 
-    // Perche bisogna vedere se vogliamo fare indice-1 o lasciare indice. 
-    // Quindi bisogna vedere se vogliamo mettere baseRent nella posizione 0 
+    //#endregion
+
+    // FIXME: Capire bene cosa fare con l'indice per la lista.
+    // Perche bisogna vedere se vogliamo fare indice-1 o lasciare indice.
+    // Quindi bisogna vedere se vogliamo mettere baseRent nella posizione 0
     // del arraylist e hotelRent nell'ultima posizione
 }

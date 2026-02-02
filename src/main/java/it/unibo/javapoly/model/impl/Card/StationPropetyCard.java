@@ -1,22 +1,117 @@
 package it.unibo.javapoly.model.impl.card;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import it.unibo.javapoly.model.api.RentContext;
+
 /**
  * Representation of a station card in the Monopoly game.
- * 
- * <p>
- * The class stores the rents for different numbers of station
+ * The class stores the rents for different numbers of station.
  */
-public class StationPropetyCard extends AbstractPropertyCard{
+public class StationPropetyCard extends AbstractPropertyCard {
 
-    public StationPropetyCard(String id, String name, String description, int propetyCost, String group) {
+    // Indicates the rents that a player needs to pay based on the number of stations owned.
+    private final List<Integer> rentNumberSation;
+
+    /**
+     * Creates a new {@link StationPropetyCard}.
+     *
+     * @param id the card identifier.
+     * @param name the card name.
+     * @param description the card description.
+     * @param propetyCost the cost of the property.
+     * @param group the property group.
+     * @param rents the list of rents for 1..n stations (ordered).
+     */
+    public StationPropetyCard(final String id,
+                              final String name,
+                              final String description,
+                              final int propetyCost,
+                              final String group,
+                              final List<Integer> rents) {
         super(id, name, description, propetyCost, group);
-        //TODO Auto-generated constructor stub
+        this.rentNumberSation = new ArrayList<>(rents);
     }
 
-    @Override
-    public int calculateRent(int number) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculateRent'");
+    //#region Getter
+
+    /**
+     * Returns all station rents.
+     *
+     * <p>
+     * The returned list is a direct reference to the internal rents list.
+     *
+     * @return the list of rents for each number of stations.
+     */
+    public List<Integer> getAllRent() {
+        if (checkListIsEmpty()) {
+            throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
+        }
+
+        return new ArrayList<>(this.rentNumberSation);
     }
-    
+
+    /**
+     * This method returns the rent based on the number of station owned.
+     *
+     * @param stationNumber the number of station owned.
+     *
+     * @return the rent for the given number of station.
+     */
+    public int getStationRentByNumber(final int stationNumber) {
+        if (checkListIsEmpty()) {
+            throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
+        }
+
+        if (checkNumberStation(stationNumber)) {
+            throw new IndexOutOfBoundsException(ERR_INDEX_OUT_LIMITS + stationNumber);
+        }
+        return this.rentNumberSation.get(stationNumber - 1);
+    }
+
+    //#endregion
+
+    //#region Private method
+
+    /**
+     * This method checks if the passed number is out of the list limits.
+     *
+     * @param number the index to check.
+     * @return true if the number is out of bounds, false otherwise.
+     */
+    private boolean checkNumberStation(final int number) {
+        return number < 1 || number > this.rentNumberSation.size();
+    }
+
+    /**
+     * This method checks if the list of rents is null or empty.
+     *
+     * @return true if the rent list is empty, false otherwise.
+     */
+    private boolean checkListIsEmpty() {
+        if (this.rentNumberSation == null) {
+            throw new IllegalStateException(ERR_LIST_IS_NULL);
+        }
+        return this.rentNumberSation.isEmpty();
+    }
+    //#endregion
+
+    /**
+     * Calculates the rent for this station card according to the provided rent context.
+     *
+     * <p>
+     * Contract: this method expects {@code RentContext#getNumberOfStation()} to be in the
+     * valid range (1..n). It will throw {@link IndexOutOfBoundsException} if the requested
+     * station index is invalid.
+     *
+     * @param rentContext the rent calculation context (dice total is ignored for stations).
+     * @return the calculated rent for the provided context.
+     */
+    @Override
+    public int calculateRent(final RentContext rentContext) {
+        return getStationRentByNumber(rentContext.getNumberOfStation());
+    }
+
 }
