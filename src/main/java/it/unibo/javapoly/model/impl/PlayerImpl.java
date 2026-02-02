@@ -10,7 +10,7 @@ import it.unibo.javapoly.model.api.TokenType;
  * in the game.
  * This class manages the player's state, balance, position, and token.
  */
-public class ConcretePlayer implements Player {
+public class PlayerImpl implements Player {
 
     private static final int SPACES_ON_BOARD = 40;
     private final String name;
@@ -30,7 +30,7 @@ public class ConcretePlayer implements Player {
      * @param initialBalance the starting balance of the player.
      * @param tokenType      the type of token associated with the player.
      */
-    public ConcretePlayer(final String name, final int initialBalance, final TokenType tokenType) {
+    public PlayerImpl(final String name, final int initialBalance, final TokenType tokenType) {
         this.name = name;
         this.balance = initialBalance;
         this.token = TokenFactory.createToken(tokenType);
