@@ -16,5 +16,4 @@ public class DiceImpl implements Dice{
     public int getDicesResult(){
         return randResult;
     }
-
 }
