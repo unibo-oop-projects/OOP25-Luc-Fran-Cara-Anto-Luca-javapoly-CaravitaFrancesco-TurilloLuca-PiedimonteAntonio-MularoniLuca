@@ -16,7 +16,7 @@ public final class JsonUtils {
         ObjectMapper m = new ObjectMapper();
         m.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         m.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        m.enable(SerializationFeature.INDENT_OUTPUT); // per toString leggibile
+        m.enable(SerializationFeature.INDENT_OUTPUT);
         m.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
         // These two lines enable the @JsonRootName of the classes.

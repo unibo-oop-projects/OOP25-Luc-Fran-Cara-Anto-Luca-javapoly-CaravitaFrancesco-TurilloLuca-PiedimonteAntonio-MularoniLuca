@@ -18,11 +18,8 @@ public final class App {
      */
     public static void main(final String[] args) {
         try {
-            // ObjectMapper mapper = new ObjectMapper();
-            // String json = mapper.writeValueAsString(Map.of("test", 1));
-            // System.out.println(json);
             
-            final List<Integer> rents = List.of(10, 35, 90, 170, 260);
+            final List<Integer> rents = List.of(35, 90, 170, 260);
 
             final ProprietyCard p = new LandProprietyCard(
                 "VIA_ROMA",
