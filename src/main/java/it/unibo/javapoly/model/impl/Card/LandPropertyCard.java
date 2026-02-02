@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import it.unibo.javapoly.model.api.RentContext;
 
-// FIXME: add all the JavaDoc comment
-
 /**
  * Representation of a land/property card in the Monopoly-like game.
  *
@@ -25,7 +23,6 @@ public class LandPropertyCard extends AbstractPropertyCard {
      */
     private static final int ALL_LAND = 2;
 
-    // FIXME: riguardare il nome perche non è totalmente in inglese
     // FIXME: Valutare se trasformalo in una Map<Integer, Integer> -> <numHouse, numHouseRent>
     private final List<Integer> rentNumberHouses;
 
@@ -205,8 +202,4 @@ public class LandPropertyCard extends AbstractPropertyCard {
 
     //#endregion
 
-    // FIXME: Capire bene cosa fare con l'indice per la lista.
-    // Perche bisogna vedere se vogliamo fare indice-1 o lasciare indice.
-    // Quindi bisogna vedere se vogliamo mettere baseRent nella posizione 0
-    // del arraylist e hotelRent nell'ultima posizione
 }
