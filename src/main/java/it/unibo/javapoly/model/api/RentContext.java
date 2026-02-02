@@ -10,6 +10,7 @@ public class RentContext {
     private final int diceTotal;
     private final int ownedUtilities;
     private final int numberHouse;
+    private final int numberStations;
     private final boolean allLand;  // true if the player owned all the land of the same group
 
     /**
@@ -18,11 +19,14 @@ public class RentContext {
      * @param diceTotal       is the sum of the two rolled dice (0 if is not applicable)
      * @param ownedUtilities  is the number of utilities owned by player
      * @param numberHouse     is the number of the house built on a land (from {@code 0} - {@code 5} represents a hotel)
+     * @param numberStations     is the number of the station owned (from {@code 0} - {@code 4})
      * @param allLand         true if the owner owns all land of the same group
      */
-    public RentContext(final int diceTotal, final int ownedUtilities, final int numberHouse, final boolean allLand) {
+    public RentContext(final int diceTotal, final int ownedUtilities, final int numberHouse, 
+                       final int numberStations, final boolean allLand) {
         this.diceTotal = diceTotal;
         this.ownedUtilities = ownedUtilities;
+        this.numberStations = numberStations;
         this.numberHouse = numberHouse;
         this.allLand = allLand;
     }
@@ -60,12 +64,25 @@ public class RentContext {
     }
 
     /**
-     * Returns whether the property is part of a monopoly.
+     * Returns the number of houses built on the property.
+     *
+     * <p>
+     * A value of {@code 5} represents the presence of a hotel.
+     * </p>
+     *
+     * @return the number of houses or hotel indicator
+     */
+    public int getNumberOfStation() {
+        return this.numberStations;
+    }
+
+    /**
+     * This method checks if the player owned all Land of the same group.
      *
      * @return {@code true} if the owner owns all properties of the group,
      *         {@code false} otherwise
      */
-    public boolean isMonopoly() {
+    public boolean isAllLand() {
         return this.allLand;
     }
     //#endregion
@@ -81,19 +98,19 @@ public class RentContext {
      * @return an instance of RentContext ready for LandProperty
      */
     public static RentContext forLand(final int numberHouse, final boolean allLand) {
-        return new RentContext(0, 0, numberHouse, allLand);
+        return new RentContext(0, 0, numberHouse, 0, allLand);
     }
 
     /**
      * method for StationProperty. 
      * This method create an instance of RentContext for StationProperty
      *
-     * @param numberHouse     is the number of the station owned built on a land (from {@code 0} - {@code 4})
+     * @param numberStations     is the number of the station owned built on a land (from {@code 0} - {@code 4})
      * 
      * @return an instance of RentContext ready for StationProperty
      */
-    public static RentContext forStation(final int numberHouse) {
-        return new RentContext(0, 0, numberHouse, false);
+    public static RentContext forStation(final int numberStations) {
+        return new RentContext(0, 0, 0, numberStations, false);
     }
 
     /**
@@ -106,7 +123,7 @@ public class RentContext {
      * @return an instance of RentContext ready for UtilityProperty
      */
     public static RentContext forUtilities(final int diceTotal, final int ownedUtilities) {
-        return new RentContext(diceTotal, ownedUtilities, 0, false);
+        return new RentContext(diceTotal, ownedUtilities, 0, 0, false);
     }
     //#endregion
 
