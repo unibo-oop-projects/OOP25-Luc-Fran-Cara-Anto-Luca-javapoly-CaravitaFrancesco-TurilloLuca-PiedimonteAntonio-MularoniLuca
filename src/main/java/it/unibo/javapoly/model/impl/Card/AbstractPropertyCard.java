@@ -20,7 +20,7 @@ import it.unibo.javapoly.utils.JsonUtils;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = LandPropertyCard.class, name = "street"),
-    @JsonSubTypes.Type(value = StationPropetyCard.class, name = "station"),
+    @JsonSubTypes.Type(value = StationPropertyCard.class, name = "station"),
     @JsonSubTypes.Type(value = UtilityPropertyCard.class, name = "utility")
 })
 @JsonRootName("PropertyCard")

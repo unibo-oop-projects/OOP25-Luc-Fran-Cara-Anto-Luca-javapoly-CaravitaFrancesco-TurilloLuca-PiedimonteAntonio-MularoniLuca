@@ -10,13 +10,13 @@ import it.unibo.javapoly.model.api.RentContext;
  * Representation of a station card in the Monopoly game.
  * The class stores the rents for different numbers of station.
  */
-public class StationPropetyCard extends AbstractPropertyCard {
+public class StationPropertyCard extends AbstractPropertyCard {
 
     // Indicates the rents that a player needs to pay based on the number of stations owned.
     private final List<Integer> rentNumberSation;
 
     /**
-     * Creates a new {@link StationPropetyCard}.
+     * Creates a new {@link StationPropertyCard}.
      *
      * @param id the card identifier.
      * @param name the card name.
@@ -25,7 +25,7 @@ public class StationPropetyCard extends AbstractPropertyCard {
      * @param group the property group.
      * @param rents the list of rents for 1..n stations (ordered).
      */
-    public StationPropetyCard(final String id,
+    public StationPropertyCard(final String id,
                               final String name,
                               final String description,
                               final int propetyCost,
