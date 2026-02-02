@@ -6,7 +6,6 @@ package it.unibo.javapoly.model.api;
  * Each enum constant corresponds to a specific visual representation of a
  * player on the board.
  */
-
 public enum TokenType {
     CAR,
     HAT,
