@@ -1,4 +1,9 @@
-package it.unibo.javapoly.model.player;
+package it.unibo.javapoly.model.impl;
+
+import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.PlayerState;
+import it.unibo.javapoly.model.api.Token;
+import it.unibo.javapoly.model.api.TokenType;
 
 /**
  * Implementation of the {@link Player} interface representing a concrete player

@@ -1,4 +1,7 @@
-package it.unibo.javapoly.model.player;
+package it.unibo.javapoly.model.impl;
+
+import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.PlayerState;
 
 /**
  * Represents the state of a {@link Player} when they are in jail.

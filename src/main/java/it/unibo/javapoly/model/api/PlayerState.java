@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.player;
+package it.unibo.javapoly.model.api;
 
 /**
  * Represents the state of a player in the game.

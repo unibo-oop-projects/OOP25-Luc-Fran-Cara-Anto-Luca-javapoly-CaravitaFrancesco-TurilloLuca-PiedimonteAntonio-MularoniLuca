@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.player;
+package it.unibo.javapoly.model.api;
 
 /**
  * Represents the various types of tokens available for players in the JavaPoly

@@ -1,4 +1,7 @@
-package it.unibo.javapoly.model.player;
+package it.unibo.javapoly.model.impl;
+
+import it.unibo.javapoly.model.api.Token;
+import it.unibo.javapoly.model.api.TokenType;
 
 /**
  * Factory class for creating Token instances.

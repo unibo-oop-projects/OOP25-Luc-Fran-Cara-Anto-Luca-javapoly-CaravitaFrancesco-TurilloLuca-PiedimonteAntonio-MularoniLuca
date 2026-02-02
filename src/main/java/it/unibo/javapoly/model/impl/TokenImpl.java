@@ -1,4 +1,6 @@
-package it.unibo.javapoly.model.player;
+package it.unibo.javapoly.model.impl;
+
+import it.unibo.javapoly.model.api.Token;
 
 /**
  * Implementation of the {@link Token} interface representing a player's piece
