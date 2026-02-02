@@ -5,7 +5,7 @@ import java.util.List;
 import it.unibo.javapoly.controller.api.Bank;
 import it.unibo.javapoly.controller.api.GameBoard;
 import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.controller.api.Player;
+import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.impl.DiceImpl;
 import it.unibo.javapoly.model.impl.DiceThrow;
 import it.unibo.javapoly.view.impl.MainFrame;
@@ -18,24 +18,24 @@ import it.unibo.javapoly.view.impl.MainFrame;
  * - interaction with the bank and properties
  * - updating the GUI
  */
-public class MatchControllerImpl implements MatchController{
-    private List<Player> players;    //implementazione esterna
+public class MatchControllerImpl implements MatchController {
+    private List<Player> players; // implementazione esterna
     private int currentPlayerIndex;
     private int consecutiveDoubles;
     private DiceThrow diceThrow;
     private GameBoard gameBoard;
-    private Bank bank;               //implementazione esterna
+    private Bank bank; // implementazione esterna
     private MainFrame gui;
 
     /**
      * Constructor
      *
-     * @param players  list of players (already created)
+     * @param players   list of players (already created)
      * @param gameBoard the game board implementation
-     * @param bank the bank implementation
+     * @param bank      the bank implementation
      */
-    public MatchControllerImpl(List<Player> players, GameBoard gameBoard, Bank bank){
-        this.players = players; //perche' la lista e' gia stata creata, cosi' la passo semplicemente
+    public MatchControllerImpl(List<Player> players, GameBoard gameBoard, Bank bank) {
+        this.players = players; // perche' la lista e' gia stata creata, cosi' la passo semplicemente
         this.currentPlayerIndex = 0;
         this.consecutiveDoubles = 0;
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
@@ -43,7 +43,7 @@ public class MatchControllerImpl implements MatchController{
         this.bank = bank;
         this.gui = new MainFrame(this);
     }
-    
+
     /**
      * Starts the game.
      * Updates GUI and announces the first player.
@@ -90,15 +90,15 @@ public class MatchControllerImpl implements MatchController{
         Player currentPlayer = getCurrentPlayer();
         int steps = diceThrow.throwAll();
         gui.addLog("Il giocatore: " + currentPlayer.getName() + " lancia i dadi: " + steps);
-        
-        if(diceThrow.isDouble()){
+
+        if (diceThrow.isDouble()) {
             consecutiveDoubles++;
             gui.addLog("Doppio! Avanza e rilancia i dadi");
-        }else{
+        } else {
             consecutiveDoubles = 0;
         }
 
-        if(consecutiveDoubles == 3){
+        if (consecutiveDoubles == 3) {
             gui.addLog("3 doppi consecutivi! Vai in prigione senza passare dal Via");
             handlePrison();
             consecutiveDoubles = 0;
@@ -108,9 +108,9 @@ public class MatchControllerImpl implements MatchController{
         handleMove(steps);
         gui.addLog("Il giocatore " + currentPlayer.getName() + " e' avanzato di: " + steps);
 
-        if(diceThrow.isDouble()){
+        if (diceThrow.isDouble()) {
             gui.addLog(currentPlayer.getName() + " deve tirare ancora");
-        }else{
+        } else {
             gui.addLog(currentPlayer.getName() + " turno terminato");
         }
     }
@@ -152,11 +152,11 @@ public class MatchControllerImpl implements MatchController{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'handlePropertyLanding'");
     }
-    
+
     /**
      * Returns the game board.
      */
-    public GameBoard getBoard(){
+    public GameBoard getBoard() {
         return this.gameBoard;
     }
 }

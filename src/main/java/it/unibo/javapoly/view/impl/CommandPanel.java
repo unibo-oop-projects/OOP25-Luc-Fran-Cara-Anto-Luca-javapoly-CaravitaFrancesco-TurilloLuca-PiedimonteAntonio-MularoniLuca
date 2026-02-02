@@ -9,7 +9,7 @@ import it.unibo.javapoly.controller.api.MatchController;
  * CommandPanel contains the buttons for player actions,
  * such as throwing the dice and ending the turn.
  */
-public class CommandPanel extends JPanel{
+public class CommandPanel extends JPanel {
 
     private final MatchController matchController;
     JButton throwDice;
@@ -20,7 +20,7 @@ public class CommandPanel extends JPanel{
      *
      * @param matchController the controller that handles game logic
      */
-    public CommandPanel(MatchController matchController){
+    public CommandPanel(MatchController matchController) {
         this.matchController = matchController;
 
         throwDice = new JButton("Lancia dadi");
