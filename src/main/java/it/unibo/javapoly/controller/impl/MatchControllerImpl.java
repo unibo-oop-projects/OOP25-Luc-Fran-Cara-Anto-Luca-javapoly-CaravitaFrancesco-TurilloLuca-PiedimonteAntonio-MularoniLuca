@@ -19,13 +19,13 @@ import it.unibo.javapoly.view.impl.MainFrame;
  * - updating the GUI
  */
 public class MatchControllerImpl implements MatchController {
-    private List<Player> players; // implementazione esterna
+    private final List<Player> players; // implementazione esterna
     private int currentPlayerIndex;
     private int consecutiveDoubles;
-    private DiceThrow diceThrow;
-    private GameBoard gameBoard;
-    private Bank bank; // implementazione esterna
-    private MainFrame gui;
+    private final DiceThrow diceThrow;
+    private final GameBoard gameBoard;
+    private final Bank bank; // implementazione esterna
+    private final MainFrame gui;
 
     /**
      * Constructor
