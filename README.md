@@ -4,7 +4,7 @@ Questo modulo gestisce la logica dei giocatori, la gestione degli stati (libero,
 
 ## 📂 Struttura del Package
 
-Seguendo la nuova architettura del progetto, il codice è diviso in:
+Il codice è diviso in:
 
 - **`it.unibo.javapoly.model.api`**: Contiene le interfacce pubbliche e l'enum TokenType. È l'unico pacchetto che gli altri moduli dovrebbero importare.
 
