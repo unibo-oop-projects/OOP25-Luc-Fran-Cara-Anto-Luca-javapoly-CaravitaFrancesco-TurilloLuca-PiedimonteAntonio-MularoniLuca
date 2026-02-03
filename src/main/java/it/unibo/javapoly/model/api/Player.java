@@ -30,6 +30,13 @@ public interface Player {
     Token getToken();
 
     /**
+     * Retrieves the current position of the player on the game board.
+     *
+     * @return the index of the cell where the player is currently located.
+     */
+    int getCurrentPosition();
+
+    /**
      * Executes the logic for a player's turn based on a dice roll.
      *
      * @param diceResult the total value obtained from rolling the dice.

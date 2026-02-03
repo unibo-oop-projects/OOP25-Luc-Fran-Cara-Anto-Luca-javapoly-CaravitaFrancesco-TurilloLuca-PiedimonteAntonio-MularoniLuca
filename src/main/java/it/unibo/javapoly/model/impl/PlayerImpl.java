@@ -96,6 +96,14 @@ public class PlayerImpl implements Player {
     // --- Getter e Setter ---
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getCurrentPosition() {
+        return this.currentPosition;
+    }
+
+    /**
      * Gets the name of the player.
      *
      * @return the player's name.
