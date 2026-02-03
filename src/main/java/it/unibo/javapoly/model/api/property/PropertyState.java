@@ -5,13 +5,13 @@ package it.unibo.javapoly.model.api.property;
  * Mutations are performed by authorized services (e.g. Bank).
  */
 public interface PropertyState {
-    //FIXME: Valutare se restituire il riferimento dell'oggetto Player o solo ID
+
     /**
      * Returns the owner ID of the property if present (empty = owned by bank / unsold).
      *
      * @return optional owner
      */
-    String getIdOwner();
+    String getOwnerId();
 
     /**
      * Returns number of houses on the property (0..5). 
@@ -22,7 +22,7 @@ public interface PropertyState {
     int getHouses();
 
     /**
-     * Convenience: returns the purchase price from the card.
+     * Convenience: returns the purchase price from the card (convenience).
      *
      * @return purchase price
      */

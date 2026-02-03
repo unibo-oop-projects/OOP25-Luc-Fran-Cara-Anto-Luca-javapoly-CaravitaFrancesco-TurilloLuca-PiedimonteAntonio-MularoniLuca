@@ -1,38 +1,90 @@
 package it.unibo.javapoly.model.api.property;
 
-import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
+import it.unibo.javapoly.model.api.card.Card;
+import it.unibo.javapoly.model.api.RentContext;
 
 /**
- * Rappresents a board property in the space.
- * Exposes immutable card data and a read-only view of the dynamic state.
+ * Contract for a property on the board.
+ * 
+ * <p>
+ * NOTE: This interface exposes operations that the Bank or the Controller can
+ * call AFTER performing domain checks (e.g., checking if the player has enough money).
+ * The Property does NOT manage the player's money.
  */
 public interface Property {
 
     /**
-     * Returns the unique identifier of this property.
-     *
-     * @return the id string
+     * Unique identifier for the property.
+     * 
+     * @return the unique identifier of the property
      */
-    String getId(); 
+    String getId();
 
     /**
-     * Returns the immutable economic data for this property.
-     *
-     * @return the property card
+     * Immutable card associated (can be null in test mode).
+     * 
+     * @return the associated card
      */
-    AbstractPropertyCard getCard();
+    Card getCard();
 
     /**
-     * Returns the read-only state of this property.
-     *
-     * @return the property state
+     * Read-only view of the property's dynamic state.
+     * 
+     * @return the state of the property
      */
     PropertyState getState();
 
     /**
-     * Returns the board position of this property.
-     *
-     * @return position index
+     * Position on the board (0-based index).
+     * 
+     * @return the position of the property on the board
      */
     int getPosition();
+
+    /**
+     * Assigns the owner via ID.
+     *
+     * @param ownerId the ID of the player
+     * @return true if the owner was successfully assigned, false otherwise
+     * @throws IllegalStateException if the property is already owned
+     */
+    boolean assignOwner(String ownerId);
+
+    /**
+     * Removes the owner and resets the state.
+     */
+    void clearOwner();
+
+    /**
+     * Builds a house on the property.
+     *
+     * @param ownerId the ID of the owner
+     * @return true if a new house has been built, false otherwise
+     * @throws IllegalStateException if the player is not the owner or the house limit is exceeded
+     */
+    boolean buildHouse(String ownerId);
+
+    /**
+     * Destroys a house on the property.
+     *
+     * @param ownerId the ID of the owner
+     * @return true if a house has been removed, false otherwise
+     * @throws IllegalStateException if the player is not the owner or the house limit is exceeded
+     */
+    boolean destroyHouse(String ownerId);
+
+    /**
+     * Calculates the rent to be paid.
+     *
+     * @param ctx the context of the rent calculation
+     * @return the calculated rent
+     */
+    int getRent(RentContext ctx);
+
+    /**
+     * Returns the purchase cost of the property.
+     * 
+     * @return the purchase price of the property
+     */
+    int getPurchasePrice();
 }
