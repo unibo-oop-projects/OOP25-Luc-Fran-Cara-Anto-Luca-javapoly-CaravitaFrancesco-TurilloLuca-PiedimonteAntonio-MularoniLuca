@@ -124,7 +124,7 @@ public class MatchControllerImpl implements MatchController {
     @Override
     public void handleMove(int steps) {
         Player currentPlayer = getCurrentPlayer();
-        currentPlayer.move(steps);
+        currentPlayer.move(steps); // TODO chiamare currentPlayer.playTurn() invece di move.
 
         gui.addLog(currentPlayer.getName() + " si e' spostato di: " + steps + " spazi");
         gui.updateBoard();
