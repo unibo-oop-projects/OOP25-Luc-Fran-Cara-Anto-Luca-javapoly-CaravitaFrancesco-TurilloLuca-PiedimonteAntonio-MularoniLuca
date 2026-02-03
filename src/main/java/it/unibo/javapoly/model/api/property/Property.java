@@ -1,6 +1,5 @@
-package it.unibo.javapoly.model.api.board;
+package it.unibo.javapoly.model.api.property;
 
-import it.unibo.javapoly.model.api.state.PropertyState;
 import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
 
 /**

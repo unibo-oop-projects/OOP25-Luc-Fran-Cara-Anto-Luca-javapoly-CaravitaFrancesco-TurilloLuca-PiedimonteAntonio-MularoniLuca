@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.api.state;
+package it.unibo.javapoly.model.api.property;
 
 /**
  * Read-only view of a property's dynamic state.
