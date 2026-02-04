@@ -19,7 +19,7 @@ public class MatchControllerImpl implements MatchController{
 
     private static final int MAX_DOUBLES = 3;
 
-    private final List<Player> players;    //implementazione esterna
+    private final List<PlayerImpl> players;    //implementazione esterna
     private final DiceThrow diceThrow;
     private final GameBoard gameBoard;
     private final Bank bank;               //implementazione esterna
@@ -35,7 +35,7 @@ public class MatchControllerImpl implements MatchController{
      * @param gameBoard the game board implementation
      * @param bank      the bank implementation
      */
-    public MatchControllerImpl(final List<Player> players, final GameBoard gameBoard, final Bank bank){
+    public MatchControllerImpl(final List<PlayerImpl> players, final GameBoard gameBoard, final Bank bank){
         this.players = List.copyOf(players); //perche' la lista e' gia stata creata, cosi' la passo semplicemente
         this.currentPlayerIndex = 0;
         this.consecutiveDoubles = 0;

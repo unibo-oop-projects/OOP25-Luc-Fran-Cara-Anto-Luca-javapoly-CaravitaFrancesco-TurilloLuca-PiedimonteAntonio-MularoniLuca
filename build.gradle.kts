@@ -5,7 +5,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application
     // You can run your app via task "run": ./gradlew run
     application
-    id("org.openjfx.javafxplugin") version "0.10.0" // Plugin per JavaFX
+    id("org.openjfx.javafxplugin") version "0.1.0" // Plugin per JavaFX
     /*
      * Adds tasks to export a runnable jar.
      * In order to create it, launch the "shadowJar" task.

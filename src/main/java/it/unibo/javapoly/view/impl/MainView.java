@@ -2,17 +2,12 @@ package it.unibo.javapoly.view.impl;
 
 import java.util.Objects;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.controller.impl.MatchControllerImpl;
 
 /**
  * MainFrame is the main window of the JavaPoly game.

@@ -3,7 +3,6 @@ package it.unibo.javapoly.view.impl;
 import java.util.Objects;
 
 import it.unibo.javapoly.controller.api.GameBoard;
-import java.util.Objects;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
