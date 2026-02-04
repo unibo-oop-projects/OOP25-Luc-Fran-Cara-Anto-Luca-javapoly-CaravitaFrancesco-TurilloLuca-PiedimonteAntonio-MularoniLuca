@@ -33,6 +33,15 @@ public final class PropertyImpl implements Property {
         this.state = new PropertyStateImpl(card.getPropertyCost());
     }
 
+    /**
+     * Constructor to create a copy of a passed instance.
+     *
+     * @param property nstance from which to create a copy
+     */
+    public PropertyImpl(final Property property) {
+        this(property.getId(), property.getPosition(), property.getCard());
+    }
+
     //#region Getter
 
     /**
