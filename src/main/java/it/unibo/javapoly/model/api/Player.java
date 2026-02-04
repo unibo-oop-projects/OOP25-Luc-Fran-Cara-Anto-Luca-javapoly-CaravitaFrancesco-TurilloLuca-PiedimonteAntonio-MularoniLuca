@@ -7,16 +7,6 @@ package it.unibo.javapoly.model.api;
  * management.
  * Players can move around the board, manage their money, and interact with the
  * game through their turns.
- * <strong>Important:</strong> The {@link #move(int)} method should not be
- * called directly from outside the player implementation, as it would break the
- * state management logic.
- * Use {@link #playTurn(int, boolean)} instead to properly execute a player's
- * turn.
- *
- * @see PlayerState
- * @see FreeState
- * @see JailState
- * @see BankruptcyState
  * 
  */
 public interface Player {
@@ -50,10 +40,17 @@ public interface Player {
     int getCurrentPosition();
 
     /**
-     * Executes the logic for a player's turn based on a dice roll.
-     *
+     * Manages the turn logic based on the player's current state:
+     * in jail, free, or bankrupt.
+     * The method handle the player's actions, including moving the player and
+     * updating their state.
+     * The logic for the turn is delegated to the current {@link PlayerState} of the
+     * player, ensuring that the correct behavior is executed based on the player's
+     * situation.
+     * 
      * @param diceResult the total value obtained from rolling the dice.
      * @param isDouble   indicates if the dice roll was a double.
+     * @see PlayerState
      */
     void playTurn(int diceResult, boolean isDouble);
 
@@ -66,11 +63,12 @@ public interface Player {
      * Use {@link #playTurn(int, boolean)} instead to properly execute a player's
      * turn.
      * 
+     * <strong>Exception:</strong> This method can be called directly only when a
+     * card instructs the player to move without
+     * rolling the dice.
+     * 
      * @param steps the number of spaces to move forward.
      * @see PlayerState
-     * @see FreeState
-     * @see JailState
-     * @see BankruptcyState
      */
     void move(int steps);
 
