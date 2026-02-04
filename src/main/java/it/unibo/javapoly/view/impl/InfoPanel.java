@@ -4,7 +4,7 @@ import java.util.Objects;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.controller.api.Player;
+import it.unibo.javapoly.model.api.Player;
 
 /**
  * InfoPanel displays information about the current player,

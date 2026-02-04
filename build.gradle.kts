@@ -57,7 +57,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     // The library JACKSON: is a json formatter for data
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 }

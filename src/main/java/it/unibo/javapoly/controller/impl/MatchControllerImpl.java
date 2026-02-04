@@ -5,9 +5,10 @@ import java.util.Objects;
 import it.unibo.javapoly.controller.api.Bank;
 import it.unibo.javapoly.controller.api.GameBoard;
 import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.controller.api.Player;
+import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.impl.DiceImpl;
 import it.unibo.javapoly.model.impl.DiceThrow;
+import it.unibo.javapoly.model.impl.PlayerImpl;
 import it.unibo.javapoly.view.impl.MainView;
 
 /**
@@ -30,9 +31,9 @@ public class MatchControllerImpl implements MatchController{
     /**
      * Constructor
      *
-     * @param players  list of players (already created)
+     * @param players   list of players (already created)
      * @param gameBoard the game board implementation
-     * @param bank the bank implementation
+     * @param bank      the bank implementation
      */
     public MatchControllerImpl(final List<Player> players, final GameBoard gameBoard, final Bank bank){
         this.players = List.copyOf(players); //perche' la lista e' gia stata creata, cosi' la passo semplicemente
@@ -43,7 +44,7 @@ public class MatchControllerImpl implements MatchController{
         this.bank = Objects.requireNonNull(bank);
         this.gui = new MainView(this);
     }
-    
+
     /**
      * Starts the game.
      * Updates GUI and announces the first player.
@@ -74,7 +75,7 @@ public class MatchControllerImpl implements MatchController{
      * Returns the current player whose turn it is.
      */
     @Override
-    public Player getCurrentPlayer() {
+    public PlayerImpl getCurrentPlayer() {
         return this.players.get(this.currentPlayerIndex);
     }
 
@@ -105,9 +106,9 @@ public class MatchControllerImpl implements MatchController{
         handleMove(steps);
         gui.addLog("Il giocatore " + currentPlayer.getName() + " e' avanzato di: " + steps);
 
-        if(diceThrow.isDouble()){
+        if (diceThrow.isDouble()) {
             gui.addLog(currentPlayer.getName() + " deve tirare ancora");
-        }else{
+        } else {
             gui.addLog(currentPlayer.getName() + " turno terminato");
         }
     }
@@ -151,11 +152,11 @@ public class MatchControllerImpl implements MatchController{
         gui.addLog(currentPlayer + " e' in una proprieta' ora");
         //da finire di implementare
     }
-    
+
     /**
      * Returns the game board.
      */
-    public GameBoard getBoard(){
+    public GameBoard getBoard() {
         return this.gameBoard;
     }
 }

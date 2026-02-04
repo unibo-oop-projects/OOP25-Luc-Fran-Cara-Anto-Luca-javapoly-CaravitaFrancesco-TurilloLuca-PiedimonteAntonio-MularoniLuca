@@ -1,5 +1,7 @@
 package it.unibo.javapoly.controller.api;
-    
+
+import it.unibo.javapoly.model.impl.PlayerImpl;
+
 /**
  * Interface representing the main controller for a Monopoly match.
  * It manages the game loop, player actions, and turn logic.
@@ -19,7 +21,7 @@ public interface MatchController {
      * Returns the player who is currently taking their turn.
      * * @return the current {@link Player}
      */
-    Player getCurrentPlayer();
+    PlayerImpl getCurrentPlayer();
 
     /**
      * Handles the dice throwing logic, including doubles and consecutive doubles rules.
