@@ -17,6 +17,15 @@ public interface PropertyManager {
     List<Property> getAllProperties();
 
     /**
+     * Assigns a property to a player.
+     *
+     * @param property property to assign
+     * @param newOwner the player who will own the property
+     * @return {@code true} if assignment was successful, {@code false} if already owned
+     */
+    boolean assignProperty(Property property, Player newOwner);
+
+    /**
      * Builds a house on a property.
      *
      * @param property the property to build on.
@@ -33,6 +42,20 @@ public interface PropertyManager {
      * @return {@code true} if te house was built successfully, {@code false} otherwise.
      */
     boolean destroyHouse(Property property, Player owner);
+
+    /**
+     * Returns a property to the bank (remove ownership).
+     *
+     * @param property the property to return.
+     */
+    void returnPropertyToBank(Property property);
+
+    /**
+     * Returns all property to the bank.
+     *
+     * @param player the player whose properties will be removed.
+     */
+    void removeAllProperty(Player player);
 
     /**
      * Retrieves all properties owned by a specific player.
