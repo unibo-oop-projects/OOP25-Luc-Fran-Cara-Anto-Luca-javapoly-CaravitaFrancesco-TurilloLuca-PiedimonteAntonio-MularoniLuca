@@ -1,6 +1,7 @@
 package it.unibo.javapoly.model.api.property;
 
-import it.unibo.javapoly.model.api.card.Card;
+// import it.unibo.javapoly.model.api.card.Card;
+import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
 import it.unibo.javapoly.model.api.RentContext;
 
 /**
@@ -25,7 +26,7 @@ public interface Property {
      * 
      * @return the associated card
      */
-    Card getCard();
+    AbstractPropertyCard getCard(); // FIXME: valutare il tipo restituito 
 
     /**
      * Read-only view of the property's dynamic state.
