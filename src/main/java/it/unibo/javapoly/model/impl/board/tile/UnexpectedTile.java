@@ -2,11 +2,21 @@ package it.unibo.javapoly.model.impl.board.tile;
 
 import it.unibo.javapoly.model.api.board.TileType;
 
-public class UnexpectedTile extends AbstractTile {
+/**
+ * Represents an Unexpected tile.
+ */
+public final class UnexpectedTile extends AbstractTile {
 
-    protected UnexpectedTile(int position, TileType type, String name) {
+    /**
+     * Creates an Unexpected tile.
+     *
+     * @param position the position of the tile on the board
+     * @param type the tile type
+     * @param name the tile name
+     */
+    public UnexpectedTile(final int position,
+                          final TileType type,
+                          final String name) {
         super(position, type, name);
-        //TODO Auto-generated constructor stub
     }
-    
 }
