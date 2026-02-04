@@ -23,7 +23,7 @@ public interface PropertyManager {
      * @param owner owner of property.
      * @return {@code true} if te house was built successfully, {@code false} otherwise.
      */
-    boolean buildhouse(Property property, Player owner);
+    boolean buildHouse(Property property, Player owner);
 
     /**
      * Destroys a house on a property.
