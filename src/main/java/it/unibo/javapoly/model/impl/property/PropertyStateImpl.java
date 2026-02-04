@@ -40,8 +40,8 @@ public final class PropertyStateImpl implements PropertyState {
      */
     public PropertyStateImpl(final int purchasePrice) {
         this.purchasePrice = Objects.requireNonNull(purchasePrice);
-        this.ownerID = "";
-        this.houses = 0;
+        this.ownerID = this.BANK_OWN;
+        this.houses = this.HOUSE_DEF;
     }
 
     /**
@@ -62,9 +62,6 @@ public final class PropertyStateImpl implements PropertyState {
      */
     @Override
     public String getOwnerId() { 
-        if (this.ownerID.isEmpty()) {
-            return this.BANK_OWN;
-        }
         return this.ownerID;
     }
 
@@ -113,9 +110,12 @@ public final class PropertyStateImpl implements PropertyState {
 
     /**
      * Set the property to be owned by the bank.
+     * if there are houses built above they will be demolished
      */
     void bankIsNewOwnerID() {
-        this.setNewOwnerID("");
+        this.setNewOwnerID(this.BANK_OWN);
+
+        this.setHouse(this.HOUSE_DEF);
     }
 
     /**
