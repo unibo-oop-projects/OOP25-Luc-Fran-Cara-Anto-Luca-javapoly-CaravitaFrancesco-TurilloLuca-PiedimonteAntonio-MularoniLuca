@@ -1,8 +1,8 @@
-# 👤 Modulo Player (Branch: LucaTurillo)
+# Modulo Player (Branch: LucaTurillo)
 
 Questo modulo gestisce la logica dei giocatori, la gestione degli stati (libero, prigione, bancarotta) tramite il Pattern State e la creazione delle pedine tramite il Factory Method.
 
-## 📂 Struttura del Package
+## Struttura del Package
 
 Il codice è diviso in:
 
@@ -10,7 +10,7 @@ Il codice è diviso in:
 
 - **`it.unibo.javapoly.model.impl`**: Contiene le implementazioni concrete, i Singleton degli stati e la Factory.
 
-## 🛠 Come Integrare il Modulo
+## Come Integrare il Modulo
 
 ### 1. Creazione di un Giocatore
 
@@ -58,7 +58,7 @@ Le pedine (Token) sono immutabili e create tramite una Factory per nascondere l'
 
 Usare `TokenType` (Enum) per scegliere la grafica (es. `CAR`, `HAT`, `DOG`, ecc..).
 
-### 🔑 Riferimenti alle Proprietà (Owner)
+### Riferimenti alle Proprietà (Owner)
 
 Per evitare dipendenze circolari e problemi di serializzazione:
 
@@ -66,7 +66,7 @@ Per evitare dipendenze circolari e problemi di serializzazione:
 
 - Il Player NON mantiene una lista di oggetti Property. Se serve sapere cosa possiede un giocatore, filtrare le caselle del tabellone tramite il Controller.
 
-### 📦 Factory delle Pedine
+### Factory delle Pedine
 
 Le pedine (Token) sono gestite internamente. Se serve aggiungere nuove tipologie, modificare l'enum TokenType e la TokenFactory nel package `.impl`. Il costruttore di TokenImpl è protetto per impedire creazioni non autorizzate fuori dalla factory.
 
