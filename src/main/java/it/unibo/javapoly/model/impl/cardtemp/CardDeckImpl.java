@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.impl.card;
+package it.unibo.javapoly.model.impl.cardtemp;
 
 import it.unibo.javapoly.model.api.card.CardDeck;
 import it.unibo.javapoly.model.api.card.GameCard;
