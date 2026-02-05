@@ -18,7 +18,6 @@ public final class UtilityPropertyTile extends AbstractTile {
      * Creates a utility property tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      * @param property the utility property associated with this tile
      */
