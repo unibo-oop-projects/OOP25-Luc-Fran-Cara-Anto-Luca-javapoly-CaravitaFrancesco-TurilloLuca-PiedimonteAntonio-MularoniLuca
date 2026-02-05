@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
+import it.unibo.javapoly.model.impl.card.LandPropertyCard;
 
 class LandPropertyCardTest {
 
