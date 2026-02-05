@@ -78,3 +78,74 @@ Esempio di utilizzo:
 ```java
 int posizioneAttuale = p1.getCurrentPosition();
 ```
+
+## 5. Pattern Observer (Notifiche dei Cambiamenti)
+
+Il modulo Player implementa il **Pattern Observer** per notificare altri componenti del sistema quando lo stato del giocatore cambia, senza creare accoppiamento stretto tra i moduli.
+
+### Quando Vengono Inviate le Notifiche
+
+Il `PlayerImpl` notifica automaticamente gli observer nei seguenti casi:
+
+- **Movimento del giocatore**: Quando il giocatore si sposta da una posizione all'altra sul tabellone (metodo `onPlayerMoved`).
+- **Cambio di bilancio**: Quando il giocatore riceve denaro (metodo `onBalanceChanged`).
+
+### Come Implementare un Observer
+
+Per ricevere notifiche sui cambiamenti del giocatore, crea una classe che implementi l'interfaccia `PlayerObserver`:
+
+```java
+import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.PlayerObserver;
+
+public class MyPlayerObserver implements PlayerObserver {
+    
+    @Override
+    public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
+        // Gestisci il movimento del giocatore
+        System.out.println(player.getName() + " si è mosso da " + 
+                          oldPosition + " a " + newPosition);
+        // Ad esempio: aggiorna la GUI, registra su log, ecc.
+    }
+    
+    @Override
+    public void onBalanceChanged(Player player, int newBalance) {
+        // Gestisci il cambio di bilancio
+        System.out.println(player.getName() + " ora ha " + newBalance + "$");
+        // Ad esempio: aggiorna l'interfaccia utente
+    }
+}
+```
+
+### Come Registrare un Observer
+
+Una volta implementato l'observer, registralo sul giocatore di interesse:
+
+```java
+Player p1 = new PlayerImpl("Luca", 1500, TokenType.CAR);
+MyPlayerObserver observer = new MyPlayerObserver();
+
+// Registra l'observer
+p1.addObserver(observer);
+
+// Da questo momento in poi, l'observer riceverà tutte le notifiche
+p1.move(5); // Trigger: onPlayerMoved
+p1.receiveMoney(200); // Trigger: onBalanceChanged
+```
+
+### Come Rimuovere un Observer
+
+Se non hai più bisogno di ricevere notifiche, rimuovi l'observer:
+
+```java
+p1.removeObserver(observer);
+```
+
+### Casi d'Uso Tipici
+
+- **Controller/View**: Per aggiornare l'interfaccia grafica quando un giocatore si muove o cambia bilancio.
+- **Sistema di Logging**: Per registrare tutte le azioni dei giocatori durante la partita.
+- **Sistema di Statistiche**: Per calcolare e aggiornare statistiche in tempo reale.
+- **Salvataggio Automatico**: Per salvare lo stato di gioco dopo ogni cambio significativo.
+
+**Nota**: Un singolo giocatore può avere più observer registrati contemporaneamente. Tutti riceveranno le notifiche nello stesso ordine di registrazione.
