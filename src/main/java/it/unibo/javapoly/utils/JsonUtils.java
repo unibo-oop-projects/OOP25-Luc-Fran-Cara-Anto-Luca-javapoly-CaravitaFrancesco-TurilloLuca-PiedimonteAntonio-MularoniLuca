@@ -1,43 +1,30 @@
 package it.unibo.javapoly.utils;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Utility class for JSON processing using the Jackson ObjectMapper.
- * This class provides a pre-configured singleton-like {@link ObjectMapper}
- * instance tailored for specific serialization and deserialization needs.
- * The configuration includes:
- * <ul>
- * <li>Excluding null values during serialization
- * ({@code JsonInclude.Include.NON_NULL}).</li>
- * <li>Disabling writing dates as timestamps.</li>
- * <li>Enabling indented output (pretty printing).</li>
- * <li>Disabling failure on empty beans.</li>
- * <li>Enabling wrapping of the root value during serialization.</li>
- * <li>Enabling unwrapping of the root value during deserialization.</li>
- * </ul>
- * This class is final and cannot be instantiated.
+ * Utility class that provides a pre-configured {@link ObjectMapper} for JSON
+ * serialization and deserialization across the project.
+ *
+ * <p>
+ * The mapper is configured with consistent options (indentation, root wrapping,
+ * date handling, ...). Callers receive a copy of the shared configuration
+ * through {@link #mapper()} to avoid accidental cross-thread/state mutation.
  */
 public final class JsonUtils {
-
-    /**
-     * The shared {@link ObjectMapper} instance with specific configurations.
-     */
     private static final ObjectMapper MAPPER = create();
 
-    /**
-     * Private constructor to prevent instantiation of this utility class.
-     */
     private JsonUtils() {
+        // Prevent instantiation
     }
 
     /**
-     * Creates and configures the {@link ObjectMapper}.
+     * Creates and configures the {@link ObjectMapper} used as template.
      *
-     * @return a configured {@link ObjectMapper} instance.
+     * @return a configured ObjectMapper instance (the internal template).
      */
     private static ObjectMapper create() {
         final ObjectMapper m = new ObjectMapper();
@@ -45,6 +32,8 @@ public final class JsonUtils {
         m.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         m.enable(SerializationFeature.INDENT_OUTPUT);
         m.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+        // These two lines enable the @JsonRootName of the classes.
         m.enable(SerializationFeature.WRAP_ROOT_VALUE);
         m.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         return m;
@@ -52,10 +41,8 @@ public final class JsonUtils {
 
     /**
      * Returns a copy of the pre-configured {@link ObjectMapper}.
-     * Returning a copy ensures that changes made to the returned mapper do not
-     * affect the shared configuration.
      *
-     * @return a copy of the configured {@link ObjectMapper}.
+     * @return a copy of the configured ObjectMapper to be used for (de)serialization.
      */
     public static ObjectMapper mapper() {
         return MAPPER.copy();

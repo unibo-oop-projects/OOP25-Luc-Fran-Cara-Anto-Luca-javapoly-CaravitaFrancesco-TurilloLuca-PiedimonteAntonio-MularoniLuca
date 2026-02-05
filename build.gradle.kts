@@ -12,7 +12,7 @@ plugins {
      * The runnable jar will be found in build/libs/projectname-all.jar
      */
     id("com.gradleup.shadow") version "9.3.1"
-    id("org.danilopianini.gradle-java-qa") version "1.164.0"
+    id("org.danilopianini.gradle-java-qa") version "1.165.0"
 }
 
 javafx {
@@ -57,6 +57,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
     // The library JACKSON: is a json formatter for data
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 }
