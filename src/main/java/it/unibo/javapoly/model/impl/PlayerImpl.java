@@ -95,7 +95,6 @@ public class PlayerImpl implements Player {
             return true;
         }
         return false;
-        // TODO gestire la bancarotta o ipoteca
     }
 
     /**
