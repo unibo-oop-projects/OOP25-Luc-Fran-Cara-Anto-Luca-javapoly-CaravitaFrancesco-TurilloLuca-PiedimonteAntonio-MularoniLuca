@@ -1,6 +1,6 @@
 package it.unibo.javapoly.model.api.card;
 
-import java.util.Map;
+import it.unibo.javapoly.model.api.card.payload.CardPayload;
 
 /**
  * General interface that every type of card will implement (not the {@code ProprietyCard} type).
@@ -18,9 +18,9 @@ public interface GameCard extends Card {
      * Returns the data associated with the card (e.g., amount, targetPosition, delta, etc.).
      * The controller interprets the data.
      * 
-     * @return a map containing the data associated with the card.
+     * @return a CardPayload containing the data associated with the card.
      */
-    Map<String, Object> getPayload();
+    CardPayload getPayload();
 
     /**
      * Returns whether the card should be kept by the player (e.g., Get Out of Jail Free).
