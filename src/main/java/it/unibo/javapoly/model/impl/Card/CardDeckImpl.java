@@ -18,10 +18,11 @@ import java.util.Random;
  */
 public class CardDeckImpl implements CardDeck {
 
-    private final Deque<GameCard> drawPile = new ArrayDeque<>();
-    private final Deque<GameCard> discardPile = new ArrayDeque<>();
-    private final Map<GameCard, String> heldCards = new HashMap<>();
-    private final Random random = new Random();
+    private final Deque<GameCard> drawPile;
+    private final Deque<GameCard> discardPile;
+    private final Map<GameCard, String> heldCards;
+    private final Random random;
+    private final List<GameCard> cards;
 
     /**
      * Constructs a new CardDeckImpl with the provided list of cards.
@@ -32,8 +33,24 @@ public class CardDeckImpl implements CardDeck {
      * @param cards the list of cards to initialize the deck with
      */
     public CardDeckImpl(final List<GameCard> cards) {
-        this.discardPile.addAll(cards);
+        this.drawPile = new ArrayDeque<>();
+        this.discardPile = new ArrayDeque<>(cards);
+        this.heldCards = new HashMap<>();
+        random = new Random();
+        this.cards = new ArrayList<>(cards);
     }
+
+    //#region Getter
+    /**
+     * Returns a copy of the list containing all the cards in the deck.
+     * This includes both the cards in the draw pile and discard pile.
+     *
+     * @return a list of all the GameCard objects in the deck
+     */
+    public List<GameCard> getAllCards() {
+        return new ArrayList<>(this.cards);
+    }
+    //#endregion
 
     /**
      * Draws a card from the draw pile for the given player.
