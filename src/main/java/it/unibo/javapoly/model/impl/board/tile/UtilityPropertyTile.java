@@ -23,10 +23,9 @@ public final class UtilityPropertyTile extends AbstractTile {
      * @param property the utility property associated with this tile
      */
     public UtilityPropertyTile(final int position,
-                               final TileType type,
                                final String name,
                                final Property property) {
-        super(position, type, name);
+        super(position, TileType.UTILITY, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
     }
 

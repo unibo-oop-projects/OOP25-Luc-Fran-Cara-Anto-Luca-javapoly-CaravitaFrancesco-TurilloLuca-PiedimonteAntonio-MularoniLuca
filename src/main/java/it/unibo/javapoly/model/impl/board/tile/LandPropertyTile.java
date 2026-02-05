@@ -18,15 +18,13 @@ public final class LandPropertyTile extends AbstractTile {
      * Creates a land property tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      * @param property the property associated with this tile
      */
     public LandPropertyTile(final int position,
-                            final TileType type,
                             final String name,
                             final Property property) {
-        super(position, type, name);
+        super(position, TileType.PROPERTY, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
 
     }

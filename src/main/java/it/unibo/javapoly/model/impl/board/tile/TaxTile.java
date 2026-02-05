@@ -13,15 +13,13 @@ public final class TaxTile extends AbstractTile {
      * Creates a tax tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      * @param amount the tax amount to be paid
      */
     public TaxTile(final int position,
-                   final TileType type,
                    final String name,
                    final int amount) {
-        super(position, type, name);
+        super(position, TileType.TAX, name);
         this.amountTax = amount;
     }
 

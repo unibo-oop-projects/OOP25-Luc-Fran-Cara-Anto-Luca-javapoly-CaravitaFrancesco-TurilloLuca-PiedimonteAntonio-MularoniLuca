@@ -11,10 +11,9 @@ public final class JailTile extends AbstractTile {
      * Creates the Jail tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      */
-    public JailTile(final int position, final TileType type, final String name) {
-        super(position, type, name);
+    public JailTile(final int position, final String name) {
+        super(position, TileType.JAIL, name);
     }
 }

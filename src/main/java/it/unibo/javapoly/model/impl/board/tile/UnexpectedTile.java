@@ -11,12 +11,10 @@ public final class UnexpectedTile extends AbstractTile {
      * Creates an Unexpected tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      */
     public UnexpectedTile(final int position,
-                          final TileType type,
                           final String name) {
-        super(position, type, name);
+        super(position, TileType.UNEXPECTED, name);
     }
 }

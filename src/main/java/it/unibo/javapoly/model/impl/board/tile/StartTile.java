@@ -13,15 +13,13 @@ public final class StartTile extends AbstractTile {
      * Creates the Start tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      * @param amount the reward gained when passing the tile
      */
     public StartTile(final int position,
-                     final TileType type,
                      final String name,
                      final int amount) {
-        super(position, type, name);
+        super(position, TileType.START, name);
         this.reward = amount;
     }
 

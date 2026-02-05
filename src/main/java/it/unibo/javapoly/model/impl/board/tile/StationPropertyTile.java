@@ -18,15 +18,13 @@ public final class StationPropertyTile extends AbstractTile {
      * Creates a station property tile.
      *
      * @param position the position of the tile on the board
-     * @param type the tile type
      * @param name the tile name
      * @param property the station property associated with this tile
      */
     public StationPropertyTile(final int position,
-                               final TileType type,
                                final String name,
                                final Property property) {
-        super(position, type, name);
+        super(position, TileType.RAILROAD, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
     }
 
