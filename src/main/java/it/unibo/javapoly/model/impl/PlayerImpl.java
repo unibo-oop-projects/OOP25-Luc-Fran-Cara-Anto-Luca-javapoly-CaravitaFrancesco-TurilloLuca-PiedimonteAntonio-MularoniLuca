@@ -1,6 +1,10 @@
 package it.unibo.javapoly.model.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.PlayerObserver;
 import it.unibo.javapoly.model.api.PlayerState;
 import it.unibo.javapoly.model.api.Token;
 import it.unibo.javapoly.model.api.TokenType;
@@ -11,11 +15,14 @@ import it.unibo.javapoly.model.api.TokenType;
  * This class manages the player's state, balance, position, and token.
  * It delegates turn logic to the current {@link PlayerState} and handles
  * movement and financial transactions.
+ * It also implements the Observer pattern to notify registered observers
+ * about state changes.
  * 
  * @see Player
  * @see PlayerState
  * @see Token
  * @see TokenType
+ * @see PlayerObserver
  */
 public class PlayerImpl implements Player {
 
@@ -29,6 +36,8 @@ public class PlayerImpl implements Player {
     private final Token token;
     private PlayerState currentState;
     private int currentPosition;
+
+    private final List<PlayerObserver> observers = new ArrayList<>();
 
     /**
      * Constructs a new PlayerImpl with a specified name, initial balance, and
@@ -65,6 +74,8 @@ public class PlayerImpl implements Player {
     /**
      * {@inheritDoc}
      * 
+     * Notifies observers about the movement.
+     * 
      * @see Player
      * @see PlayerState
      * @see FreeState
@@ -73,38 +84,93 @@ public class PlayerImpl implements Player {
      */
     @Override
     public void move(final int steps) {
-        final int oldPos = currentPosition;
-        currentPosition = (currentPosition + steps) % SPACES_ON_BOARD;
+        final int oldPos = this.currentPosition;
+        this.currentPosition = (this.currentPosition + steps) % SPACES_ON_BOARD;
+
+        notifyMoved(oldPos, this.currentPosition);
 
         System.out.println(// NOPMD
-                "DEBUG: " + name + " (" + token.getType() + ") si sposta da " + oldPos + " a " + currentPosition);
-        // TODO notificare la View (Observer) e il Tabellone
+                "DEBUG: " + this.name + " (" + this.token.getType() + ") si sposta da " + oldPos + " a "
+                        + this.currentPosition);
     }
 
     /**
-     * Attempts to pay a specified amount from the player's balance.
-     *
-     * @param amount the amount of money to pay.
-     * @return true if the player has enough balance and the payment was successful;
-     *         false otherwise.
+     * {@inheritDoc}
+     * 
+     * Notifies observers about the balance change if the payment is successful.
      */
     @Override
     public boolean tryToPay(final int amount) {
-        if (balance >= amount) {
-            balance -= amount;
+        if (this.balance >= amount) {
+            this.balance -= amount;
+            notifyBalanceChanged(this.balance);
             return true;
         }
         return false;
     }
 
     /**
-     * Adds a specified amount of money to the player's balance.
-     *
-     * @param amount the amount of money to receive.
+     * {@inheritDoc}
+     * 
+     * Notifies observers about the balance change.
      */
     @Override
     public void receiveMoney(final int amount) {
         this.balance += amount;
+        notifyBalanceChanged(this.balance);
+    }
+
+    // --- Observer Pattern Methods ---
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addObserver(PlayerObserver observer) {
+        this.observers.add(observer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeObserver(PlayerObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    /**
+     * Notifies all registered observers about the player's movement.
+     * 
+     * @param oldPos the previous position of the player.
+     * @param newPos the new position of the player.
+     */
+    private void notifyMoved(int oldPos, int newPos) {
+        for (PlayerObserver obs : this.observers) {
+            obs.onPlayerMoved(this, oldPos, newPos);
+        }
+    }
+
+    /**
+     * Notifies all registered observers about the player's balance change.
+     * 
+     * @param newBalance the new balance of the player.
+     */
+    private void notifyBalanceChanged(int newBalance) {
+        for (PlayerObserver obs : this.observers) {
+            obs.onBalanceChanged(this, newBalance);
+        }
+    }
+
+    /**
+     * Notifies all registered observers about the player's state change.
+     * 
+     * @param oldState the previous state of the player.
+     * @param newState the new state of the player.
+     */
+    private void notifyStateChanged(PlayerState oldState, PlayerState newState) {
+        for (PlayerObserver obs : observers) {
+            obs.onStateChanged(this, oldState, newState);
+        }
     }
 
     // --- Getter e Setter ---
@@ -122,7 +188,7 @@ public class PlayerImpl implements Player {
      */
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -130,7 +196,7 @@ public class PlayerImpl implements Player {
      */
     @Override
     public int getBalance() {
-        return balance;
+        return this.balance;
     }
 
     /**
@@ -138,7 +204,7 @@ public class PlayerImpl implements Player {
      */
     @Override
     public Token getToken() {
-        return token;
+        return this.token;
     }
 
     /**
@@ -146,15 +212,22 @@ public class PlayerImpl implements Player {
      */
     @Override
     public PlayerState getState() {
-        return currentState;
+        return this.currentState;
     }
 
     /**
      * {@inheritDoc}
+     * 
+     * Notifies observers about the state change if the new state is different from
+     * the old state.
      */
     @Override
     public void setState(final PlayerState state) {
+        PlayerState oldState = this.currentState;
         this.currentState = state;
+        if (!oldState.getClass().equals(state.getClass())) {
+            notifyStateChanged(oldState, state);
+        }
         System.out.println("Stato cambiato in: " + state.getClass().getSimpleName()); // NOPMD
     }
 
@@ -163,6 +236,6 @@ public class PlayerImpl implements Player {
      */
     @Override
     public String toString() {
-        return "Player{" + name + ", " + balance + "$, " + currentState.getClass().getSimpleName() + "}";
+        return "Player{" + this.name + ", " + this.balance + "$, " + this.currentState.getClass().getSimpleName() + "}";
     }
 }
