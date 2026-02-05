@@ -1,0 +1,190 @@
+{
+  "chance": [
+    {
+      "id": 1,
+      "text": "Avanzate fino al Via. Ritirate 200.",
+      "effect": "MOVE_TO"
+    },
+    {
+      "id": 2,
+      "text": "Avanzate fino alla più vicina stazione. Se non è vostra pagate il doppio dell’affitto.",
+      "effect": "MOVE_TO_NEAREST"
+    },
+    {
+      "id": 3,
+      "text": "Avanzate fino alla più vicina società. Se non è vostra pagate 10 volte il valore dei dadi.",
+      "effect": "MOVE_TO_NEAREST"
+    },
+    {
+      "id": 4,
+      "text": "Avanzate fino a Parco della Vittoria.",
+      "effect": "MOVE_TO",
+      "tileID": ""
+    },
+    {
+      "id": 5,
+      "text": "Andate indietro di tre caselle.",
+      "effect": "MOVE_RELATIVE",
+      "steps": 3
+    },
+    {
+      "id": 6,
+      "text": "Andate in prigione. Senza passare dal Via.",
+      "effect": "GO_TO_JAIL"
+    },
+    {
+      "id": 7,
+      "text": "Uscite gratis di prigione.",
+      "effect": "GET_OUT_OF_JAIL_FREE"
+    },
+    {
+      "id": 8,
+      "text": "Riparazioni agli edifici. Pagate 25 per ogni casa e 100 per ogni albergo.",
+      "effect": "PAY_BANK",
+      "house": 25,
+      "hotel": 100
+    },
+    {
+      "id": 9,
+      "text": "Pagate una multa di 15.",
+      "effect": "PAY_BANK",
+      "amount": 15
+    },
+    {
+      "id": 10,
+      "text": "Avanzate fino a Stazione Nord.",
+      "effect": "MOVE_TO_NEAREST",
+      "tileID": ""
+    },
+    {
+      "id": 11,
+      "text": "Avanzate fino a Via dei Giardini.",
+      "effect": "MOVE_TO",
+      "tileID": ""
+    },
+    {
+      "id": 12,
+      "text": "Avanzate fino a Largo Colombo.",
+      "effect": "MOVE_TO",
+      "tileID": ""
+    },
+    {
+      "id": 13,
+      "text": "La banca vi paga un dividendo di 50.",
+      "effect": "RECEIVE_BANK",
+      "amount": 50
+    },
+    {
+      "id": 14,
+      "text": "Pagate spese di riparazione. 150.",
+      "effect": "PAY_BANK",
+      "amount": 150
+    },
+    {
+      "id": 15,
+      "text": "Avanzate fino alla più vicina stazione.",
+      "effect": "MOVE_TO_NEAREST"
+    },
+    {
+      "id": 16,
+      "text": "Avanzate fino a Vicolo Corto.",
+      "effect": "MOVE_TO",
+      "tileID": ""
+    },
+    {
+      "id": 17,
+      "text": "Avanzate fino al Via. Ritirate 200.",
+      "effect": "MOVE_TO"
+    },
+    {
+      "id": 18,
+      "text": "Errore della banca a vostro favore. Ritirate 200.",
+      "effect": "RECEIVE_BANK",
+      "amount": 200
+    },
+    {
+      "id": 19,
+      "text": "Spese mediche. Pagate 50.",
+      "effect": "PAY_BANK",
+      "amount": 50
+    },
+    {
+      "id": 20,
+      "text": "Avete venduto azioni. Ritirate 50.",
+      "effect": "RECEIVE_BANK",
+      "amount": 50
+    },
+    {
+      "id": 21,
+      "text": "Uscite gratis di prigione gratis.",
+      "effect": "GET_OUT_OF_JAIL_FREE"
+    },
+    {
+      "id": 22,
+      "text": "Andate in prigione. Andate direttamente in prigione senza passare dal Via.",
+      "effect": "GO_TO_JAIL"
+    },
+    {
+      "id": 23,
+      "text": "Eredità. Ritirate 100.",
+      "effect": "RECEIVE_BANK",
+      "amount": 100
+    },
+    {
+      "id": 24,
+      "text": "Reddito annuale. Ritirate 100.",
+      "effect": "RECEIVE_BANK",
+      "amount": 100
+    },
+    {
+      "id": 25,
+      "text": "Rimborso tasse. Ritirate 20.",
+      "effect": "RECEIVE_BANK",
+      "amount": 20
+    },
+    {
+      "id": 26,
+      "text": "Pagate l’assicurazione sulla vita. Pagate 50.",
+      "effect": "PAY_BANK",
+      "amount": 50
+    },
+    {
+      "id": 27,
+      "text": "Pagate spese scolastiche. Pagate 50.",
+      "effect": "PAY_BANK",
+      "amount": 50
+    },
+    {
+      "id": 28,
+      "text": "Avete vinto un concorso di bellezza. Ritirate 10.",
+      "effect": "RECEIVE_BANK",
+      "amount": 10
+    },
+    {
+      "id": 29,
+      "text": "Ricevete una rendita. Ritirate 25.",
+      "effect": "RECEIVE_BANK",
+      "amount": 25
+    },
+    {
+      "id": 30,
+      "text": "Riparazioni stradali. Pagate 40 per ogni casa e 115 per ogni albergo.",
+      "effect": "PAY_BANK",
+      "house": 40,
+      "hotel": 115
+    },
+    {
+      "id": 31,
+      "text": "Ricevete 10 da ogni giocatore.",
+      "effect": "RECEIVE_BANK",
+      "amount": 10
+    },
+    {
+      "id": 32,
+      "text": "Pagate una multa di 10.",
+      "effect": "PAY_BANK",
+      "amount": 15
+    }
+  ]
+}
+
