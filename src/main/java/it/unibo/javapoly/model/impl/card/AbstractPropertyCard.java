@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.impl.cardtemp;
+package it.unibo.javapoly.model.impl.card;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;

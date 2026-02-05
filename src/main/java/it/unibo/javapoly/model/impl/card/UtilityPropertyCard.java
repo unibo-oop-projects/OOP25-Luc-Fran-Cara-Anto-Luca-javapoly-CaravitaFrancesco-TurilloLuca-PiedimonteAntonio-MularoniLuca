@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.impl.cardtemp;
+package it.unibo.javapoly.model.impl.card;
 
 import java.util.ArrayList;
 import java.util.List;
