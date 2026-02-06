@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.impl.card;
+package it.unibo.javapoly.model.impl.Card;
 
 import java.util.LinkedList;
 import java.util.List;

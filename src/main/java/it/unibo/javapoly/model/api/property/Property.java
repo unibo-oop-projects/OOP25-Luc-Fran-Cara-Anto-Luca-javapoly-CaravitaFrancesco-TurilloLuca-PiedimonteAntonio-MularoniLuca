@@ -1,8 +1,8 @@
 package it.unibo.javapoly.model.api.property;
 
 // import it.unibo.javapoly.model.api.card.Card;
-import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
 import it.unibo.javapoly.model.api.RentContext;
+import it.unibo.javapoly.model.impl.Card.AbstractPropertyCard;
 
 /**
  * Contract for a property on the board.

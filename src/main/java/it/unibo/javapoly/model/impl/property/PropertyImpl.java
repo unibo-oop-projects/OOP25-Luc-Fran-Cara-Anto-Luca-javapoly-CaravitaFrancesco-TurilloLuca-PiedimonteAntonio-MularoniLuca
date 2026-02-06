@@ -5,7 +5,7 @@ import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 import it.unibo.javapoly.model.api.property.PropertyState;
-import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
+import it.unibo.javapoly.model.impl.Card.AbstractPropertyCard;
 
 /**
  * Represents a property on the board, including its state and card information.

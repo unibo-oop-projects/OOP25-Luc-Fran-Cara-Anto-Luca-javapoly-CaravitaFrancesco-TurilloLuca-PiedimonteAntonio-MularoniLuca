@@ -2,7 +2,7 @@ package it.unibo.javapoly.view.impl;
 
 import java.util.Objects;
 
-import it.unibo.javapoly.controller.api.GameBoard;
+import it.unibo.javapoly.model.api.board.Board;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -14,9 +14,9 @@ import javafx.scene.shape.Rectangle;
 public class BoardPanel {
 
     private final StackPane root;
-    private final GameBoard board;
+    private final Board board;
 
-    public BoardPanel(final GameBoard board){
+    public BoardPanel(final Board board){
         this.board = Objects.requireNonNull(board);
         this.root = new StackPane();
 

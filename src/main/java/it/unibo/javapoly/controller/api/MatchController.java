@@ -1,5 +1,7 @@
 package it.unibo.javapoly.controller.api;
 
+import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.impl.PlayerImpl;
 
 /**
@@ -45,5 +47,8 @@ public interface MatchController {
     void handlePropertyLanding();
 
     /** @return the game board. */
-    GameBoard getBoard();
+    Board getBoard();
+
+    //descrizione da inserire
+    boolean canCurrentPlayerRoll();
 }

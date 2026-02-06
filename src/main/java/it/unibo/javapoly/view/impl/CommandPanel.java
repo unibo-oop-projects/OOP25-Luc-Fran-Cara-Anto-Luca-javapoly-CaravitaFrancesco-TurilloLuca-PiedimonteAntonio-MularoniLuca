@@ -31,11 +31,23 @@ public class CommandPanel {
         this.endTurnButton = new Button("Fine turno");
 
         // JavaFX usa setOnAction con espressioni lambda
-        this.throwDice.setOnAction(e -> this.matchController.handleDiceThrow());
-        this.endTurnButton.setOnAction(e -> this.matchController.nextTurn());
+        this.throwDice.setOnAction(e -> 
+            this.matchController.handleDiceThrow());
+            updateState();
+        this.endTurnButton.setOnAction(e -> 
+            this.matchController.nextTurn());
+            updateState();
 
         // Aggiunta dei nodi alla radice del pannello
         this.root.getChildren().addAll(this.throwDice, this.endTurnButton);
+
+        updateState();
+    }
+
+    public void updateState(){
+        boolean canRoll = matchController.canCurrentPlayerRoll();
+        this.throwDice.setDisable(!canRoll);
+        this.endTurnButton.setDisable(canRoll);
     }
 
     /**

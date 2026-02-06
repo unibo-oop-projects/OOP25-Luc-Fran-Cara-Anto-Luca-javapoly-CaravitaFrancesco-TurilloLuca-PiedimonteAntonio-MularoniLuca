@@ -3,9 +3,9 @@ package it.unibo.javapoly.controller.impl;
 import java.util.List;
 import java.util.Objects;
 import it.unibo.javapoly.controller.api.Bank;
-import it.unibo.javapoly.controller.api.GameBoard;
 import it.unibo.javapoly.controller.api.MatchController;
 import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.impl.DiceImpl;
 import it.unibo.javapoly.model.impl.DiceThrow;
 import it.unibo.javapoly.model.impl.PlayerImpl;
@@ -21,12 +21,14 @@ public class MatchControllerImpl implements MatchController{
 
     private final List<PlayerImpl> players;    //implementazione esterna
     private final DiceThrow diceThrow;
-    private final GameBoard gameBoard;
+    private final Board gameBoard;
     private final Bank bank;               //implementazione esterna
     private final MainView gui;
 
     private int currentPlayerIndex;
     private int consecutiveDoubles;
+
+    private boolean hasRolled = false;
 
     /**
      * Constructor
@@ -35,7 +37,7 @@ public class MatchControllerImpl implements MatchController{
      * @param gameBoard the game board implementation
      * @param bank      the bank implementation
      */
-    public MatchControllerImpl(final List<PlayerImpl> players, final GameBoard gameBoard, final Bank bank){
+    public MatchControllerImpl(final List<PlayerImpl> players, final Board gameBoard, final Bank bank){
         this.players = List.copyOf(players); //perche' la lista e' gia stata creata, cosi' la passo semplicemente
         this.currentPlayerIndex = 0;
         this.consecutiveDoubles = 0;
@@ -66,6 +68,7 @@ public class MatchControllerImpl implements MatchController{
     @Override
     public void nextTurn() {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.size();
+        this.hasRolled = false;
         final Player current = getCurrentPlayer();
         gui.addLog("Ora e' il turno di: " + current.getName());
         gui.updateInfo();
@@ -84,6 +87,10 @@ public class MatchControllerImpl implements MatchController{
      */
     @Override
     public void handleDiceThrow() {
+        if(this.hasRolled){
+            return;
+        }
+
         final Player currentPlayer = getCurrentPlayer();
         final int steps = diceThrow.throwAll();
 
@@ -91,15 +98,19 @@ public class MatchControllerImpl implements MatchController{
         
         if(diceThrow.isDouble()){
             this.consecutiveDoubles++;
+            this.hasRolled = false;
             gui.addLog("Doppio! Avanza e rilancia i dadi");
         }else{
             this.consecutiveDoubles = 0;
+            this.hasRolled = true;
         }
 
         if(consecutiveDoubles == MAX_DOUBLES){
             gui.addLog("3 doppi consecutivi! Vai in prigione senza passare dal Via");
             handlePrison();
             this.consecutiveDoubles = 0;
+            this.hasRolled = true;
+            gui.updateInfo();
             return;
         }
 
@@ -122,7 +133,10 @@ public class MatchControllerImpl implements MatchController{
     @Override
     public void handleMove(int steps) {
         final Player currentPlayer = getCurrentPlayer();
+        int oldPosition = currentPlayer.getCurrentPosition();
+
         currentPlayer.move(steps);
+        int newPosition = currentPlayer.getCurrentPosition();
 
         gui.addLog(currentPlayer.getName() + " si e' spostato di: " + steps + " spazi");
         gui.updateBoard();
@@ -156,7 +170,12 @@ public class MatchControllerImpl implements MatchController{
     /**
      * Returns the game board.
      */
-    public GameBoard getBoard() {
+    public Board getBoard() {
         return this.gameBoard;
+    }
+
+    //descrizione da inserire
+    public boolean canCurrentPlayerRoll() {
+    return !hasRolled;
     }
 }
