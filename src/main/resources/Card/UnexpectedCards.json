@@ -71,9 +71,9 @@
   "description" : "",
   "type" : "PAY_BANK",
   "payload" : {
-    "type" : "PayLoadMoney",
-    "amount" : 25,
-    "receiverMoney" : "BANK_PER_HOUSE_HOTEL:house=25;hotel=100"
+    "type" : "PayloadBuilding",
+    "house" : 25,
+    "hotel" : 100
   },
   "keepUntilUsed" : false
 }, {
@@ -302,9 +302,9 @@
   "description" : "",
   "type" : "PAY_BANK",
   "payload" : {
-    "type" : "PayLoadMoney",
-    "amount" : 40,
-    "receiverMoney" : "BANK_PER_HOUSE_HOTEL:house=40;hotel=115"
+    "type" : "PayloadBuilding",
+    "house" : 40,
+    "hotel" : 115
   },
   "keepUntilUsed" : false
 }, {
