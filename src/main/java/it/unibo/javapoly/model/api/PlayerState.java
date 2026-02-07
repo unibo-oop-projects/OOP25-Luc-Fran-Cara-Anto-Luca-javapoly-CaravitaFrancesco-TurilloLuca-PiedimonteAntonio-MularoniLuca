@@ -53,7 +53,7 @@ public interface PlayerState {
     /**
      * Checks if the player is allowed to move from their current position.
      *
-     * @return true if the player can move, false otherwise.
+     * @return {@code true} if the player can move, {@code false} otherwise.
      */
     boolean canMove();
 

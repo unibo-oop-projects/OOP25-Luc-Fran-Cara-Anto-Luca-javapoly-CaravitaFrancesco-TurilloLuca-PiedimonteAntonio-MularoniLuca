@@ -94,8 +94,9 @@ public interface Player {
      * </p>
      *
      * @param amount the amount of money to pay.
-     * @return true if the player has enough balance and the payment was successful;
-     *         false otherwise.
+     * @return {@code true} if the player has enough balance and the payment was
+     *         successful;
+     *         {@code false} otherwise.
      * @throws IllegalArgumentException if the amount is negative.
      */
     boolean tryToPay(int amount);

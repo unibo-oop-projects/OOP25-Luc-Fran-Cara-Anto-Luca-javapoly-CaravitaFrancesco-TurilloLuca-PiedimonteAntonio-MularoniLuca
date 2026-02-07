@@ -5,12 +5,11 @@ import java.util.Objects;
 import it.unibo.javapoly.model.api.Token;
 
 /**
- * Implementation of the {@link Token} interface representing a player's piece
- * on the board.
- * This class encapsulates the visual or logical type of the token.
- * 
+ * Concrete implementation of the {@link Token} interface.
+ * Represents a token used by a player on the game board, characterized by its
+ * type.
+ *
  * @see Token
- * @see TokenType
  */
 class TokenImpl implements Token {
 

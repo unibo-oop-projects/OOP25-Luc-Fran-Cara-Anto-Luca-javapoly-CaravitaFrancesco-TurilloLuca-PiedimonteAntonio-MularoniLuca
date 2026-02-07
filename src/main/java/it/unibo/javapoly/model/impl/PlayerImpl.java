@@ -11,13 +11,29 @@ import it.unibo.javapoly.model.api.Token;
 import it.unibo.javapoly.model.api.TokenType;
 
 /**
- * Implementation of the {@link Player} interface representing a concrete player
- * in the game.
- * This class manages the player's state, balance, position, and token.
- * It delegates turn logic to the current {@link PlayerState} and handles
- * movement and financial transactions.
- * It also implements the Observer pattern to notify registered observers
- * about state changes.
+ * Concrete implementation of the {@link Player} interface.
+ * 
+ * <p>
+ * This class encapsulates the complete status of a player within the game,
+ * including their identity, financial resources (balance), board position, and
+ * the game piece (Token) they use.
+ * </p>
+ * 
+ * <p>
+ * <strong>Behavioral Logic:</strong>
+ * The class employs the <em>State Pattern</em> regarding turn execution.
+ * The {@link #playTurn(int, boolean)} method delegates logic to the current
+ * {@link PlayerState}, allowing the player's capabilities to
+ * change dynamically (e.g., when moving normally vs. when in jail).
+ * </p>
+ * 
+ * <p>
+ * <strong>Event Notification:</strong>
+ * Implementing the <em>Observer Pattern</em>, this class notifies registered
+ * {@link PlayerObserver}s whenever critical properties change (position
+ * updates, balance transactions, or state transitions), facilitating loose
+ * coupling with the UI and Game Controller.
+ * </p>
  * 
  * @see Player
  * @see PlayerState
@@ -43,6 +59,9 @@ public class PlayerImpl implements Player {
      * @param name           the name of the player.
      * @param initialBalance the starting balance of the player.
      * @param tokenType      the type of token associated with the player.
+     * @throws NullPointerException     if name or tokenType is null.
+     * @throws IllegalArgumentException if name is blank or initialBalance is
+     *                                  negative.
      * @see FreeState
      * @see TokenFactory
      */
@@ -71,11 +90,6 @@ public class PlayerImpl implements Player {
 
     /**
      * {@inheritDoc}
-     * 
-     * @see PlayerState
-     * @see FreeState
-     * @see JailedState
-     * @see BankruptState
      */
     @Override
     public void playTurn(final int potentialDestination, final boolean isDouble) {
@@ -87,16 +101,6 @@ public class PlayerImpl implements Player {
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Notifies observers about the movement.
-     * </p>
-     * 
-     * @see Player
-     * @see PlayerState
-     * @see FreeState
-     * @see JailedState
-     * @see BankruptState
      */
     @Override
     public void move(final int newPosition) {
@@ -116,10 +120,6 @@ public class PlayerImpl implements Player {
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Notifies observers about the balance change if the payment is successful.
-     * </p>
      */
     @Override
     public boolean tryToPay(final int amount) {
@@ -137,10 +137,6 @@ public class PlayerImpl implements Player {
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Notifies observers about the balance change.
-     * </p>
      */
     @Override
     public void receiveMoney(final int amount) {
@@ -249,11 +245,6 @@ public class PlayerImpl implements Player {
 
     /**
      * {@inheritDoc}
-     * 
-     * <p>
-     * Notifies observers about the state change if the new state is different from
-     * the old state.
-     * </p>
      */
     @Override
     public void setState(final PlayerState state) {

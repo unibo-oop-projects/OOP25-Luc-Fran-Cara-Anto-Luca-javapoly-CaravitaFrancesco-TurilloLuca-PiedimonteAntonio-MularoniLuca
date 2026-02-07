@@ -6,12 +6,12 @@ import it.unibo.javapoly.model.api.Token;
 import it.unibo.javapoly.model.api.TokenType;
 
 /**
- * Factory class for creating Token instances.
- * This class provides a static method to create tokens based on a specified
- * type.
- * It follows the Factory pattern to abstract the instantiation logic of Token
- * objects.
- * 
+ * Factory class responsible for creating {@link Token} instances.
+ * <p>
+ * This class provides a static factory method to instantiate tokens based on
+ * the available {@link TokenType}s, abstracting the creation logic.
+ * </p>
+ *
  * @see Token
  * @see TokenType
  */
