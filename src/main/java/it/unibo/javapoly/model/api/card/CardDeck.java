@@ -32,4 +32,13 @@ public interface CardDeck {
      * @return {@code true} if the deck is empty, {@code false} otherwise
      */
     boolean isEmpty();
+
+    /**
+     * Discards the given card type, only if the player helds it.
+     * Removing it from the held cards and adding it to the discard pile.  
+     * @param type the type card to use and discard
+     * @param playerID tha player id that should have the card with the same type
+     */
+    boolean discardByType(CardType type, String playerID);
+
 }
