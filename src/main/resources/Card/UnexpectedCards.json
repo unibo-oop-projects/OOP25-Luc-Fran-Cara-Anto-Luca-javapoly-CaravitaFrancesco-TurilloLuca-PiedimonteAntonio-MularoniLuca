@@ -309,7 +309,7 @@
   "keepUntilUsed" : false
 }, {
   "id" : "31",
-  "name" : "Ricevete 10 da ogni giocatore.",
+  "name" : "Ricevete 10 per ogni giocatore.",
   "description" : "",
   "type" : "RECEIVE_BANK",
   "payload" : {
