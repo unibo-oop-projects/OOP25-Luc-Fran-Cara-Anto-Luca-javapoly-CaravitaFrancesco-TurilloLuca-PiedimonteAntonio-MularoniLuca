@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.impl;
 
+import java.util.Objects;
+
 import it.unibo.javapoly.model.api.Token;
 import it.unibo.javapoly.model.api.TokenType;
 
@@ -31,6 +33,8 @@ public final class TokenFactory {
      * @see TokenType
      */
     public static Token createToken(final TokenType type) {
+        Objects.requireNonNull(type, "The token type cannot be null");
+
         switch (type) {
             case CAR -> {
                 return new TokenImpl("Car");
@@ -47,7 +51,7 @@ public final class TokenFactory {
             case SHIP -> {
                 return new TokenImpl("Ship");
             }
-            default -> throw new IllegalArgumentException("Tipo pedina non supportato: " + type);
+            default -> throw new IllegalArgumentException("Unsupported token type: " + type);
         }
     }
 }
