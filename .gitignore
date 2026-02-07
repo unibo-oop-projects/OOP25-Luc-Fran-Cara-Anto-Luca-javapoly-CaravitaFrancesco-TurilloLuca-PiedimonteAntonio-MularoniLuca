@@ -14,3 +14,7 @@ bin/
 
 src/main/java/it/unibo/javapoly/controller/api/EconomyController.java
 
+src/main/java/it/unibo/javapoly/model/api/player
+src/main/java/it/unibo/javapoly/model/impl/player
+
+
