@@ -8,6 +8,15 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  */
 @JsonRootName("PayLoadMoney")
 public final class MoneyPayload implements CardPayload {
+    /**
+     * Contains the minimum value that the amounts must have.
+     */
+    private static final int ERR_VALUE = 0;
+
+    /**
+     * Contains the String error for the value that the amounts must have.
+     */
+    private static final String ERR_MSG = "amount >= 0";
 
     private final int amount;
     private final String receiver;
@@ -20,8 +29,8 @@ public final class MoneyPayload implements CardPayload {
      * @throws IllegalArgumentException if the amount is negative
      */
     public MoneyPayload(final int amount, final String receiver) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("amount >= 0");
+        if (amount < this.ERR_VALUE) {
+            throw new IllegalArgumentException(this.ERR_MSG);
         }
         this.amount = amount;
         this.receiver = receiver;
