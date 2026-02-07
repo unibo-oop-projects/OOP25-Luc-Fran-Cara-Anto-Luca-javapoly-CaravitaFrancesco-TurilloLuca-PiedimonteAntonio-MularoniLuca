@@ -8,11 +8,11 @@ import it.unibo.javapoly.model.api.PlayerState;
 /**
  * Represents the state of a {@link Player} when they are in jail.
  * In this state, a player cannot move freely. They must wait for a specific
- * condition to be met
- * (rolling a double or waiting for a maximum number of turns) to be released
- * and transition back to the {@link FreeState}.
+ * condition to be met (rolling a double or waiting for a maximum number of
+ * turns) to be released and transition back to the {@link FreeState}.
  * 
  * @see FreeState
+ * @see PlayerState
  */
 public final class JailedState implements PlayerState {
 
@@ -50,6 +50,8 @@ public final class JailedState implements PlayerState {
      * @param potentialDestination the potential new position of the player based on
      *                             the dice roll.
      * @param isDouble             indicates if the dice roll was a double.
+     * @throws NullPointerException     if the player is null.
+     * @throws IllegalArgumentException if the potential destination is negative.
      * @see FreeState
      */
     @Override

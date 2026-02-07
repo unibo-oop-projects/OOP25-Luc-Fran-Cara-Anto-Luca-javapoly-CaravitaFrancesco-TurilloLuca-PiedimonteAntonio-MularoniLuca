@@ -11,6 +11,8 @@ import it.unibo.javapoly.model.api.PlayerState;
  * Singleton pattern, ensuring that only one instance of the free state exists.
  * In this state, the player is allowed to move normally based on the dice roll
  * result.
+ * 
+ * @see PlayerState
  */
 public final class FreeState implements PlayerState {
 
@@ -42,6 +44,8 @@ public final class FreeState implements PlayerState {
      * @param potentialDestination the potential new position of the player based on
      *                             the dice roll.
      * @param isDouble             indicates if the dice roll was a double.
+     * @throws NullPointerException     if the player is null.
+     * @throws IllegalArgumentException if the potential destination is negative.
      */
     @Override
     public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
