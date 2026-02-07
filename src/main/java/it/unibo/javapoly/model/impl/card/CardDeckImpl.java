@@ -1,6 +1,7 @@
 package it.unibo.javapoly.model.impl.card;
 
 import it.unibo.javapoly.model.api.card.CardDeck;
+import it.unibo.javapoly.model.api.card.CardType;
 import it.unibo.javapoly.model.api.card.GameCard;
 
 import java.util.Deque;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -86,6 +88,22 @@ public class CardDeckImpl implements CardDeck {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean discardByType(final CardType type, final String playerID) {
+
+        final GameCard card = isHeldsByPlayer(type, playerID);
+
+        if(Objects.isNull(card)){
+            return false;
+        }
+
+        discard(card);
+        return true;
+    }
+
+    /**
      * Shuffles the cards in the draw pile.
      * The deck is shuffled using a random generator.
      */
@@ -105,6 +123,16 @@ public class CardDeckImpl implements CardDeck {
     @Override
     public boolean isEmpty() {
         return drawPile.isEmpty() && discardPile.isEmpty();
+    }
+
+    private GameCard isHeldsByPlayer(final CardType type, final String playerID){
+        for (GameCard card : this.heldCards.keySet()) {
+            if(this.heldCards.get(card).equals(playerID) && card.getType() == type){
+                return card;
+            }
+        }
+
+        return null;
     }
 
     /**
