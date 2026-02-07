@@ -28,18 +28,22 @@ Player p1 = new PlayerImpl("Luca", 1500, TokenType.CAR);
 
 **IMPORTANTE**: Non chiamare mai direttamente il metodo `move()`. Il movimento deve essere gestito dal metodo `playTurn()`. Questo perché il giocatore potrebbe essere in Prigione o in Bancarotta, e solo `playTurn` sa se il movimento è consentito o meno.
 
+**AGGIORNAMENTO**: I metodi `playTurn()` e `move()` ora accettano solo la **posizione di destinazione** come parametro, non più il risultato del lancio del dado. La logica di controllo su quale azione può essere eseguita è delegata interamente allo stato corrente del giocatore tramite il Pattern State.
+
 Esempio di integrazione nel MatchController:
 
 ```java
-// Recupera i risultati dai dadi
+// Calcola la posizione di destinazione in base al lancio dei dadi
 int result = diceThrow.throwAll();
 boolean isDouble = diceThrow.isDouble();
+int destination = (currentPlayer.getCurrentPosition() + result) % boardSize;
 
 // Il metodo playTurn gestirà automaticamente:
 // - Movimento (se Libero)
 // - Tentativo di uscita (se in Prigione)
-// - Nulla (se in Bancarotta)   
-currentPlayer.playTurn(result, isDouble);
+// - Nulla (se in Bancarotta)
+// Lo stato del giocatore decide se e come eseguire l'azione
+currentPlayer.playTurn(destination, isDouble);
 ```
 
 ### 3. Pattern State
@@ -51,6 +55,8 @@ Il giocatore cambia stato automaticamente. Gli stati disponibili (accessibili tr
 - **JailedState**: Movimento bloccato (esce solo con doppio o dopo 3 turni).
 
 - **BankruptState**: Giocatore rimosso dai turni attivi.
+
+Ogni stato implementa la propria logica per `playTurn()`, verificando internamente se l'azione richiesta può essere eseguita.
 
 ### 4. Pattern Factory (Creazione Pedine)
 
@@ -70,7 +76,7 @@ Per evitare dipendenze circolari e problemi di serializzazione:
 
 Le pedine (Token) sono gestite internamente. Se serve aggiungere nuove tipologie, modificare l'enum TokenType e la TokenFactory nel package `.impl`. Il costruttore di TokenImpl è protetto per impedire creazioni non autorizzate fuori dalla factory.
 
-### 4. Accesso alla Posizione Attuale del Giocatore
+### 5. Accesso alla Posizione Attuale del Giocatore
 
 Per ottenere la posizione attuale del giocatore sul tabellone, puoi utilizzare il metodo `getCurrentPosition()` della classe `PlayerImpl`. Questo metodo restituisce un intero che rappresenta l'indice della casella in cui si trova il giocatore.
 Esempio di utilizzo:
@@ -79,7 +85,7 @@ Esempio di utilizzo:
 int posizioneAttuale = p1.getCurrentPosition();
 ```
 
-## 5. Pattern Observer (Notifiche dei Cambiamenti)
+## 6. Pattern Observer (Notifiche dei Cambiamenti)
 
 Il modulo Player implementa il **Pattern Observer** per notificare altri componenti del sistema quando lo stato del giocatore cambia, senza creare accoppiamento stretto tra i moduli.
 
@@ -149,3 +155,4 @@ p1.removeObserver(observer);
 - **Salvataggio Automatico**: Per salvare lo stato di gioco dopo ogni cambio significativo.
 
 **Nota**: Un singolo giocatore può avere più observer registrati contemporaneamente. Tutti riceveranno le notifiche nello stesso ordine di registrazione.
+ Modulo Player (Branch: LucaTurillo)
