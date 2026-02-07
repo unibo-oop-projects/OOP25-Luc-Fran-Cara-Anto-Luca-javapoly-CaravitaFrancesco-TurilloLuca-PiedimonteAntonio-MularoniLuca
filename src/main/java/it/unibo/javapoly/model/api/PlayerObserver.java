@@ -10,6 +10,7 @@ package it.unibo.javapoly.model.api;
  * observer pattern, the game maintains a clean separation of concerns where the
  * Player class doesn't need to know about the specific implementations that
  * respond to its changes.
+ * </p>
  * 
  * <p>
  * The primary purposes of this interface are:
@@ -25,12 +26,14 @@ package it.unibo.javapoly.model.api;
  * <li>To maintain consistency across the game by ensuring all interested
  * components are notified when critical player events occur</li>
  * </ul>
+ * </p>
  * 
  * <p>
  * This design allows for flexible extension of game functionality, as new
  * observers can be added without modifying the existing Player class. It also
  * supports features like logging, game statistics tracking, UI updates, and
  * game rule enforcement in a modular and maintainable way.
+ * </p>
  * 
  * @see Player
  * @see PlayerState

@@ -76,6 +76,7 @@ public class PlayerImpl implements Player {
      * 
      * <p>
      * Notifies observers about the movement.
+     * </p>
      * 
      * @see Player
      * @see PlayerState
@@ -100,6 +101,7 @@ public class PlayerImpl implements Player {
      * 
      * <p>
      * Notifies observers about the balance change if the payment is successful.
+     * </p>
      */
     @Override
     public boolean tryToPay(final int amount) {
@@ -116,6 +118,7 @@ public class PlayerImpl implements Player {
      * 
      * <p>
      * Notifies observers about the balance change.
+     * </p>
      */
     @Override
     public void receiveMoney(final int amount) {
@@ -224,6 +227,7 @@ public class PlayerImpl implements Player {
      * <p>
      * Notifies observers about the state change if the new state is different from
      * the old state.
+     * </p>
      */
     @Override
     public void setState(final PlayerState state) {

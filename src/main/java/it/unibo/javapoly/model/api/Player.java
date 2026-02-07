@@ -11,6 +11,7 @@ package it.unibo.javapoly.model.api;
  * <p>
  * Also implements the Observer pattern to allow monitoring of player state
  * changes.
+ * </p>
  * 
  * @see PlayerState
  * @see Token
