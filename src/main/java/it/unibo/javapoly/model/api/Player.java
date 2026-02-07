@@ -74,11 +74,12 @@ public interface Player {
      * player, ensuring that the correct behavior is executed based on the player's
      * situation.
      * 
-     * @param diceResult the total value obtained from rolling the dice.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
      * @see PlayerState
      */
-    void playTurn(int diceResult, boolean isDouble);
+    void playTurn(int potentialDestination, boolean isDouble);
 
     /**
      * Moves the player to a specified position on the game board.

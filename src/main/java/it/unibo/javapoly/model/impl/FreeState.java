@@ -34,16 +34,26 @@ public final class FreeState implements PlayerState {
 
     /**
      * Executes the standard turn logic for a free player.
-     * The player moves to the new position indicated by the dice result.
+     * The player moves to the new position indicated by the potential destination.
      *
-     * @param player     the player currently in this state.
-     * @param diceResult the result of the dice roll.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param player               the player currently in this state.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
      */
     @Override
-    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
-        player.move(diceResult);
-        System.out.println("[Stato Libero] Il giocatore si muove di " + diceResult); // NOPMD
+    public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
+        player.move(potentialDestination);
+
+        // TODO try to understand if the roll of a double has to be handled in the
+        // player or in the game, considering that the player can only know if he rolled
+        // a double or not, but not how many times he rolled a double in a row, which is
+        // relevant for the game logic. Maybe the player can have a counter of
+        // consecutive doubles rolled, but it seems to be more related to the game logic
+        // than to the player logic, so maybe it's better to handle it in the game and
+        // just pass the information to the player when he has to play his turn.
+
+        System.out.println("[Stato Libero] Il giocatore si muove a " + potentialDestination); // NOPMD
     }
 
     /**

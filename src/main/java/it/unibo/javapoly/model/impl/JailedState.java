@@ -44,13 +44,14 @@ public final class JailedState implements PlayerState {
      * immediately move.
      * Otherwise, they remain in jail.
      *
-     * @param player     the player currently in this state.
-     * @param diceResult the result of the dice roll.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param player               the player currently in this state.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
      * @see FreeState
      */
     @Override
-    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
+    public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
         turnsInJail++;
         System.out.println("[Prigione] Turno " + turnsInJail + " di detenzione."); // NOPMD
 
@@ -58,7 +59,7 @@ public final class JailedState implements PlayerState {
             System.out.println(player.getName() + " esce di prigione!"); // NOPMD
 
             player.setState(FreeState.getInstance());
-            player.move(diceResult);
+            player.move(potentialDestination);
         } else {
             System.out.println("Resta in prigione."); // NOPMD
         }

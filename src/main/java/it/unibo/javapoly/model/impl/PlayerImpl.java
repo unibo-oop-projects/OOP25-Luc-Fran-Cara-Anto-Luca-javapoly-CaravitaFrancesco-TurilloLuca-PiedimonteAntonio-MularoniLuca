@@ -68,8 +68,8 @@ public class PlayerImpl implements Player {
      * @see BankruptState
      */
     @Override
-    public void playTurn(final int diceResult, final boolean isDouble) {
-        this.currentState.playTurn(this, diceResult, isDouble);
+    public void playTurn(final int potentialDestination, final boolean isDouble) {
+        this.currentState.playTurn(this, potentialDestination, isDouble);
     }
 
     /**
