@@ -50,7 +50,7 @@ public final class BankruptState implements PlayerState {
     }
 
     /**
-     * Determines if the player is allowed to move in this state.
+     * {@inheritDoc}
      *
      * @return {@code false} as a bankrupt player cannot move.
      */

@@ -63,7 +63,7 @@ public final class FreeState implements PlayerState {
     }
 
     /**
-     * Checks if the player is allowed to move in this state.
+     * {@inheritDoc}
      *
      * @return {@code true} as the player is in a free state and can always move.
      */
