@@ -7,6 +7,7 @@ import it.unibo.javapoly.model.api.TokenType;
 
 /**
  * Factory class responsible for creating {@link Token} instances.
+ * 
  * <p>
  * This class provides a static factory method to instantiate tokens based on
  * the available {@link TokenType}s, abstracting the creation logic.
