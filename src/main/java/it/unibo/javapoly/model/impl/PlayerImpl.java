@@ -48,10 +48,10 @@ public class PlayerImpl implements Player {
      */
     public PlayerImpl(final String name, final int initialBalance, final TokenType tokenType) {
         Objects.requireNonNull(name, "Name cannot be null");
+        Objects.requireNonNull(tokenType, "Token type cannot be null");
         if (name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be blank");
         }
-        Objects.requireNonNull(tokenType, "Token type cannot be null");
         if (initialBalance < 0) {
             throw new IllegalArgumentException("Initial balance cannot be negative: " + initialBalance);
         }
