@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.api.card.payload;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
@@ -16,7 +18,8 @@ public final class MoveToPayload implements CardPayload {
      *
      * @param targetPosition the target position for the move
      */
-    public MoveToPayload(final int targetPosition) {
+    @JsonCreator
+    public MoveToPayload(@JsonProperty("targetPosition") final int targetPosition) {
         this.targetPosition = targetPosition;
     }
 

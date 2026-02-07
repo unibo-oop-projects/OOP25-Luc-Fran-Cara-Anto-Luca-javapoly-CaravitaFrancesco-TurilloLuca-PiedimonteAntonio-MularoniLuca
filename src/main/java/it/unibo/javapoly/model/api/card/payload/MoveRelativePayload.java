@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.api.card.payload;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
@@ -16,7 +18,8 @@ public final class MoveRelativePayload implements CardPayload {
      *
      * @param delta the delta of the move
      */
-    public MoveRelativePayload(final int delta) {
+    @JsonCreator
+    public MoveRelativePayload(@JsonProperty("delta") final int delta) {
         this.delta = delta;
     }
 

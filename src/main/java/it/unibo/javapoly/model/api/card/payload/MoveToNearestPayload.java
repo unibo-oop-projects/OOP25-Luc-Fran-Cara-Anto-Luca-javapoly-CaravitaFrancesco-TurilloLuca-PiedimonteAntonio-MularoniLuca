@@ -2,18 +2,20 @@ package it.unibo.javapoly.model.api.card.payload;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import it.unibo.javapoly.model.api.property.PropertyGroup;
+import it.unibo.javapoly.model.api.board.TileType;
 
 /**
- * The class represents the payload for a move to the nearest category operation.
+ * The class represents the payload for a move to the nearest category(TileType) operation.
  * It contains the destination category for the move.
  */
 @JsonRootName("PayLoadMoveToNearest")
 public final class MoveToNearestPayload implements CardPayload {
 
-    private final PropertyGroup category;
+    private final TileType category;
 
     /**
      * Constructor to create an instance of MoveToNearestPayload.
@@ -21,7 +23,8 @@ public final class MoveToNearestPayload implements CardPayload {
      * @param category the destination category for the move
      * @throws NullPointerException if the category is null
      */
-    public MoveToNearestPayload(final PropertyGroup category) {
+    @JsonCreator
+    public MoveToNearestPayload(@JsonProperty("category") final TileType category) {
         this.category = Objects.requireNonNull(category, "category must not be null");
     }
 
@@ -30,7 +33,7 @@ public final class MoveToNearestPayload implements CardPayload {
      * 
      * @return the destination category
      */
-    public PropertyGroup getCategory() {
+    public TileType getCategory() {
         return this.category;
     }
 

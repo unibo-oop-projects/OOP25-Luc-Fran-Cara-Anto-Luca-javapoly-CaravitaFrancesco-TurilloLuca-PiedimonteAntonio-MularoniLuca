@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.api.card.payload;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
@@ -28,7 +30,9 @@ public final class MoneyPayload implements CardPayload {
      * @param receiver the receiver of the transfer
      * @throws IllegalArgumentException if the amount is negative
      */
-    public MoneyPayload(final int amount, final String receiver) {
+    @JsonCreator
+    public MoneyPayload(@JsonProperty("amount") final int amount, 
+                        @JsonProperty("receiver") final String receiver) {
         if (amount < this.ERR_VALUE) {
             throw new IllegalArgumentException(this.ERR_MSG);
         }
