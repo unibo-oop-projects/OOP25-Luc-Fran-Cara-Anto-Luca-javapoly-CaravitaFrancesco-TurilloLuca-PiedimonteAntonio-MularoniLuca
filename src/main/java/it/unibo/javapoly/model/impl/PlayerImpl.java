@@ -67,6 +67,9 @@ public class PlayerImpl implements Player {
      *
      * @param name      the name of the player.
      * @param tokenType the type of token associated with the player.
+     * @throws NullPointerException     if {@code name} or {@code tokenType} is
+     *                                  null.
+     * @throws IllegalArgumentException if {@code name} is blank.
      */
     public PlayerImpl(final String name, final TokenType tokenType) {
         this(name, DEFAULT_STARTING_BALANCE, tokenType);
