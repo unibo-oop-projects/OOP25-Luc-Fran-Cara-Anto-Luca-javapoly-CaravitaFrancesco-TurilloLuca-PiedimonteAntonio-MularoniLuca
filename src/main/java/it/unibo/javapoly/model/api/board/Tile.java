@@ -6,12 +6,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import it.unibo.javapoly.model.impl.board.tile.FreeParkingTile;
 import it.unibo.javapoly.model.impl.board.tile.GoToJailTile;
 import it.unibo.javapoly.model.impl.board.tile.JailTile;
-import it.unibo.javapoly.model.impl.board.tile.LandPropertyTile;
+import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.model.impl.board.tile.StartTile;
-import it.unibo.javapoly.model.impl.board.tile.StationPropertyTile;
 import it.unibo.javapoly.model.impl.board.tile.TaxTile;
 import it.unibo.javapoly.model.impl.board.tile.UnexpectedTile;
-import it.unibo.javapoly.model.impl.board.tile.UtilityPropertyTile;
 
 /**
  * Represents a tile on the board.
@@ -19,9 +17,9 @@ import it.unibo.javapoly.model.impl.board.tile.UtilityPropertyTile;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = StartTile.class, name = "START"),
-    @JsonSubTypes.Type(value = LandPropertyTile.class, name = "PROPERTY"),
-    @JsonSubTypes.Type(value = StationPropertyTile.class, name = "RAILROAD"),
-    @JsonSubTypes.Type(value = UtilityPropertyTile.class, name = "UTILITY"),
+    @JsonSubTypes.Type(value = PropertyTile.class, name = "PROPERTY"),
+    @JsonSubTypes.Type(value = PropertyTile.class, name = "RAILROAD"),
+    @JsonSubTypes.Type(value = PropertyTile.class, name = "UTILITY"),
     @JsonSubTypes.Type(value = TaxTile.class, name = "TAX"),
     @JsonSubTypes.Type(value = JailTile.class, name = "JAIL"),
     @JsonSubTypes.Type(value = FreeParkingTile.class, name = "FREE_PARKING"),
