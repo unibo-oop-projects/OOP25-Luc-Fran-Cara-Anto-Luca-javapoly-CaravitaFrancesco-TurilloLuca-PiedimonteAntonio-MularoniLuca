@@ -1,6 +1,7 @@
 package it.unibo.javapoly.utils;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Utility class for common validation checks.
@@ -14,6 +15,19 @@ public final class ValidationUtils {
      * Private constructor to prevent instantiation of this utility class.
      */
     private ValidationUtils() {
+    }
+
+    /**
+     * Validates that an object is not null.
+     *
+     * @param <T>     the type of the object
+     * @param obj     the object to validate
+     * @param message the error message to display if validation fails
+     * @return the validated object
+     * @throws NullPointerException if the object is {@code null}
+     */
+    public static <T> T requireNonNull(T obj, String message) {
+        return Objects.requireNonNull(obj, message);
     }
 
     /**
