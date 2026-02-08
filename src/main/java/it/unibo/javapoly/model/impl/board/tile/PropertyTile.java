@@ -11,28 +11,25 @@ import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 import it.unibo.javapoly.model.impl.property.PropertyImpl;
 
-/**
- * Represents a tile associated with a utility property.
- */
-@JsonRootName("UtilityPropertyTile")
-public final class UtilityPropertyTile extends AbstractTile {
+@JsonRootName("PropertyTile")
+public class PropertyTile extends AbstractTile{
 
     private final Property property;
 
     /**
-     * Creates a utility property tile.
+     * Creates a land property tile.
      *
      * @param position the position of the tile on the board
      * @param name the tile name
-     * @param property the utility property associated with this tile
+     * @param property the property associated with this tile
      */
     @JsonCreator
-    public UtilityPropertyTile(
-            @JsonProperty("position") final int position,
-            @JsonProperty("name") final String name,
-            @JsonProperty("property") final Property property) {
-        super(position, TileType.UTILITY, name);
+    public PropertyTile(@JsonProperty("position") final int position,
+                            @JsonProperty("name") final String name,
+                            @JsonProperty("property") final Property property) {
+        super(position, TileType.PROPERTY, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
+
     }
 
     /**
@@ -45,11 +42,11 @@ public final class UtilityPropertyTile extends AbstractTile {
     }
 
     /**
-     * Returns the property group of the utility.
+     * Returns the property group (color) of this tile.
      *
      * @return the property group
      */
-    public PropertyGroup getPropertyGroup() {
+    public PropertyGroup getPropertyColor() {
         return this.property.getCard().getGroup();
     }
 
@@ -61,4 +58,5 @@ public final class UtilityPropertyTile extends AbstractTile {
     public String getPropertyID() {
         return this.property.getId();
     }
+    
 }
