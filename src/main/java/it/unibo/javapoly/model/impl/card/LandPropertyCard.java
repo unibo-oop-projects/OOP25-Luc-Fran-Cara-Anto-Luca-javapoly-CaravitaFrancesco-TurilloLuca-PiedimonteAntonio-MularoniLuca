@@ -7,11 +7,9 @@ import java.util.NoSuchElementException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
-import it.unibo.javapoly.utils.LandPropertyCardDeserializer;
 
 /**
  * Representation of a land/property card in the Monopoly-like game.
@@ -21,7 +19,6 @@ import it.unibo.javapoly.utils.LandPropertyCardDeserializer;
  * together with the costs to build houses and hotels.
  */
 @JsonRootName("LandPropertyCard")
-@JsonDeserialize(using = LandPropertyCardDeserializer.class)
 public class LandPropertyCard extends AbstractPropertyCard {
 
     /**
@@ -30,7 +27,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
     private static final int ALL_LAND = 2;
 
     // FIXME: Valutare se trasformalo in una Map<Integer, Integer> -> <numHouse, numHouseRent>
-    private final List<Integer> rentNumberHouses;
+    private final List<Integer> rents;
 
     private final int housePrice;
     private final int hotelPrice;
@@ -44,7 +41,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @param propertyCost the cost of the property
      * @param color the property color
      * @param baseRent the base rent
-     * @param multiProroprietyRent the list of rents for houses
+     * @param rents the list of rents for houses
      * @param hotelRent the hotel rent
      * @param houseCost the cost to build a house
      * @param hotelCost the cost to build a hotel
@@ -57,14 +54,14 @@ public class LandPropertyCard extends AbstractPropertyCard {
             @JsonProperty("propertyCost") final int propertyCost,
             @JsonProperty("color") final PropertyGroup color,
             @JsonProperty("baseRent") final int baseRent,
-            @JsonProperty("multiProroprietyRent") final List<Integer> multiProroprietyRent,
+            @JsonProperty("rents") final List<Integer> rents,
             @JsonProperty("hotelRent") final int hotelRent,
             @JsonProperty("houseCost") final int houseCost,
             @JsonProperty("hotelCost") final int hotelCost) {
         super(id, name, description, propertyCost, color);
-        this.rentNumberHouses = new LinkedList<>(multiProroprietyRent);
-        this.rentNumberHouses.addFirst(baseRent);
-        this.rentNumberHouses.addLast(hotelRent);
+        this.rents = new LinkedList<>(rents);
+        this.rents.addFirst(baseRent);
+        this.rents.addLast(hotelRent);
         this.housePrice = houseCost;
         this.hotelPrice = hotelCost;
     }
@@ -80,7 +77,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
-        return this.rentNumberHouses.get(0);
+        return this.rents.get(0);
     }
 
     /**
@@ -92,7 +89,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
-        return this.rentNumberHouses.get(this.rentNumberHouses.size() - 1);
+        return this.rents.get(this.rents.size() - 1);
     }
 
     /**
@@ -126,7 +123,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkIsHotel(houseNumber)) {
             return getHotelRent();
         }
-        return this.rentNumberHouses.get(houseNumber);
+        return this.rents.get(houseNumber);
     }
 
     /**
@@ -139,7 +136,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
             // FIXME: Valutare se restituire un errore o semplicemente restituire una lista vuota
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
-        return new LinkedList<>(this.rentNumberHouses);
+        return new LinkedList<>(this.rents);
     }
 
     //#endregion
@@ -168,7 +165,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @return true if the number is out of bounds, false otherwise.
      */
     private boolean checkNumberHouse(final int number) {
-        return number < 0 || number >= this.rentNumberHouses.size();
+        return number < 0 || number >= this.rents.size();
     }
 
     /**
@@ -193,7 +190,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkNumberHouse(number)) {
             throw new IndexOutOfBoundsException(ERR_INDEX_OUT_LIMITS + number);
         }
-        return number == this.rentNumberHouses.size() - 1;
+        return number == this.rents.size() - 1;
     }
 
     /**
@@ -202,10 +199,10 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @return true if the rent list is empty, false otherwise.
      */
     private boolean checkListIsEmpty() {
-        if (this.rentNumberHouses == null) {
+        if (this.rents == null) {
             throw new IllegalStateException(ERR_LIST_IS_NULL);
         }
-        return this.rentNumberHouses.isEmpty();
+        return this.rents.isEmpty();
     }
 
     //#endregion

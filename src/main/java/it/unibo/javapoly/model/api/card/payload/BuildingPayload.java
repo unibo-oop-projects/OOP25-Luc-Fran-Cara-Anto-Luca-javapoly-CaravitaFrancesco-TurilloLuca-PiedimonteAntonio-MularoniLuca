@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * It contains the amount that a player need to pay per house and hotel built.
  */
 @JsonRootName("PayloadBuilding")
-public class BuildingPayload  implements CardPayload {
+public class BuildingPayload implements CardPayload {
     /**
      * Contains the minimum value that the amounts must have.
      */

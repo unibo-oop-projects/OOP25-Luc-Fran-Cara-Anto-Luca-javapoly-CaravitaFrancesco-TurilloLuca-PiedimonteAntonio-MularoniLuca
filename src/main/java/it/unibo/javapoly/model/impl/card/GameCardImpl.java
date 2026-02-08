@@ -119,14 +119,14 @@ public class GameCardImpl implements GameCard {
      */
     @Override
         public String toString() {
-            return "GameCardImpl{" +
-                    "id='" + id + '\'' +
-                    ", name='" + name + '\'' +
-                    ", description='" + description + '\'' +
-                    ", type=" + type +
-                    ", payload=" + payload +
-                    ", keepUntilUsed=" + keepUntilUsed +
-                    '}';
+            return "GameCardImpl{" 
+                    + "id='" + id + '\''
+                    + ", name='" + name + '\''
+                    + ", description='" + description + '\''
+                    + ", type=" + type
+                    + ", payload=" + payload
+                    + ", keepUntilUsed=" + keepUntilUsed
+                    + '}';
         }
 
 }

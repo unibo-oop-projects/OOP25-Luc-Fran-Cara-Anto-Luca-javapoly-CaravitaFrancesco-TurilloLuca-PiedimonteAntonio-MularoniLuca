@@ -36,14 +36,14 @@ public interface Property {
     AbstractPropertyCard getCard(); // FIXME: valutare il tipo restituito 
 
     /**
-     * Return the Group type of the property
+     * Return the Group type of the property.
      * 
      * @return the propriety group of the proprety
      */
     PropertyGroup getPropertyGroup();
 
     /**
-     * Return the number of houses built
+     * Return the number of houses built.
      * 
      * @return the number of houses built
      */

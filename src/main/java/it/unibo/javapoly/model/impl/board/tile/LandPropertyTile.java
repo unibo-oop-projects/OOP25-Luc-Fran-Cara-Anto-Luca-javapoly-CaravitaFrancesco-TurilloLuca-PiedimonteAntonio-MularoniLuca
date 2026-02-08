@@ -27,10 +27,9 @@ public final class LandPropertyTile extends AbstractTile {
      * @param property the property associated with this tile
      */
     @JsonCreator
-    public LandPropertyTile(
-            @JsonProperty("position") int position,
-            @JsonProperty("name") String name,
-            @JsonProperty("property") Property property) {
+    public LandPropertyTile(@JsonProperty("position") final int position,
+                            @JsonProperty("name") final String name,
+                            @JsonProperty("property") final Property property) {
         super(position, TileType.PROPERTY, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
 
