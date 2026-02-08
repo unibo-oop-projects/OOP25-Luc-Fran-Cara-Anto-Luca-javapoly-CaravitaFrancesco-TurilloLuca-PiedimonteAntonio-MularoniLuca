@@ -43,6 +43,8 @@ import it.unibo.javapoly.model.api.TokenType;
  */
 public class PlayerImpl implements Player {
 
+    private static final int DEFAULT_STARTING_BALANCE = 1500;
+
     private final String name;
     private int balance;
     private final Token token;
@@ -52,16 +54,54 @@ public class PlayerImpl implements Player {
     private final List<PlayerObserver> observers = new ArrayList<>();
 
     /**
-     * Constructs a new PlayerImpl with a specified name, initial balance, and
-     * token type.
+     * Constructs a new {@link PlayerImpl} with a specified name and token type.
+     * This constructor initializes the player with the default starting balance of
+     * {@value #DEFAULT_STARTING_BALANCE}.
+     * 
+     * <p>
+     * This constructor is intended to be used by controllers and views, hiding
+     * rule implementation details (such as the specific starting balance) from
+     * components that do not need to know them, effectively applying standard
+     * game rules.
+     * </p>
+     *
+     * @param name      the name of the player.
+     * @param tokenType the type of token associated with the player.
+     */
+    public PlayerImpl(final String name, final TokenType tokenType) {
+        this(name, DEFAULT_STARTING_BALANCE, tokenType);
+    }
+
+    /**
+     * Constructs a new {@link PlayerImpl} with a specified name, initial balance,
+     * and token type.
+     * 
+     * <p>
      * The player starts in the {@link FreeState} and at position 0.
+     * </p>
+     * 
+     * <p>
+     * <strong>Usage Note:</strong>
+     * Unlike the primary constructor which uses default game values, this
+     * constructor allows full customization of the initial balance. Ideally, it
+     * should be used for:
+     * <ul>
+     * <li><strong>Unit Testing:</strong> To create scenarios with specific balance
+     * conditions.</li>
+     * <li><strong>Serialization/Persistence:</strong> To load a player's state from
+     * a saved game (e.g., via JSON) preserving their exact balance.</li>
+     * <li><strong>Custom Variations:</strong> To support house rules or specific
+     * configurations where starting money differs from the standard rules.</li>
+     * </ul>
+     * </p>
      *
      * @param name           the name of the player.
      * @param initialBalance the starting balance of the player.
      * @param tokenType      the type of token associated with the player.
-     * @throws NullPointerException     if name or tokenType is null.
-     * @throws IllegalArgumentException if name is blank or initialBalance is
-     *                                  negative.
+     * @throws NullPointerException     if {@code name} or {@code tokenType} is
+     *                                  null.
+     * @throws IllegalArgumentException if {@code name} is blank or
+     *                                  {@code initialBalance} is negative.
      * @see FreeState
      * @see TokenFactory
      */
@@ -81,12 +121,6 @@ public class PlayerImpl implements Player {
         this.currentState = FreeState.getInstance();
         this.currentPosition = 0;
     }
-
-    // TODO add constructor with only name and token type, with default balance, for
-    // easier usage in view menu, considering that the balance is not relevant for
-    // the view at the start of the game. And add a new state for the view menu,
-    // like "not-initialized" or something like that, to avoid that the player can
-    // play before the game starts.
 
     /**
      * {@inheritDoc}
@@ -201,7 +235,7 @@ public class PlayerImpl implements Player {
         }
     }
 
-    // --- Getter e Setter ---
+    // --- Getter and Setter ---
 
     /**
      * {@inheritDoc}
