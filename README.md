@@ -14,14 +14,32 @@ Il codice è diviso in:
 
 ### 1. Creazione di un Giocatore
 
-Per istanziare un giocatore, usa la classe PlayerImpl. È necessario specificare il nome, il bilancio iniziale e il tipo di pedina.
+La classe `PlayerImpl` offre due costruttori per coprire diverse esigenze di utilizzo:
+
+#### 1. Costruttore Standard (Default)
+
+Da utilizzare per l'avvio di una **nuova partita standard**. Inizializza automaticamente il giocatore con il bilancio iniziale previsto dalle regole (es. 1500$), nascondendo questo dettaglio implementativo al chiamante (Controller o View).
 
 ```java
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.TokenType;
 import it.unibo.javapoly.model.impl.PlayerImpl;
 
-Player p1 = new PlayerImpl("Luca", 1500, TokenType.CAR);
+// Crea un giocatore con nome, pedina e bilancio standard
+Player p1 = new PlayerImpl("Luca", TokenType.CAR);
+```
+
+#### 2. Costruttore Avanzato (Custom Balance)
+
+Permette di specificare manualmente il bilancio iniziale. Basandosi sulla Javadoc, questo costruttore è progettato per:
+
+- **Unit Testing**: Per creare scenari di test con condizioni di bilancio specifiche.
+- **Persistenza/Serializzazione**: Per ricaricare lo stato di un giocatore da un salvataggio (es. JSON), preservando i soldi che aveva.
+- **Varianti del Gioco**: Per supportare regole della casa con soldi iniziali diversi.
+
+```java
+// Crea un giocatore con un bilancio specifico (es. 500$)
+Player p2 = new PlayerImpl("Mario", 500, TokenType.HAT);
 ```
 
 ### 2. Gestione del Turno (Integrazione Controller)
