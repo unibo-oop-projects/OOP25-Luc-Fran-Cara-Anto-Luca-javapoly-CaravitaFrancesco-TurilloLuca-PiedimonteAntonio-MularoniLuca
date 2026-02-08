@@ -1,9 +1,8 @@
 package it.unibo.javapoly.model.impl;
 
-import java.util.Objects;
-
 import it.unibo.javapoly.model.api.Token;
 import it.unibo.javapoly.model.api.TokenType;
+import it.unibo.javapoly.utils.ValidationUtils;
 
 /**
  * Factory class responsible for creating {@link Token} instances.
@@ -34,7 +33,7 @@ public final class TokenFactory {
      * @see TokenType
      */
     public static Token createToken(final TokenType type) {
-        Objects.requireNonNull(type, "The token type cannot be null");
+        ValidationUtils.requireNonNull(type, "The token type cannot be null");
 
         switch (type) {
             case CAR -> {
