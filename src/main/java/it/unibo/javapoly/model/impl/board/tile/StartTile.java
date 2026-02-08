@@ -19,13 +19,13 @@ public final class StartTile extends AbstractTile {
      *
      * @param position the position of the tile on the board
      * @param name the tile name
-     * @param amount the reward gained when passing the tile
+     * @param reward the reward gained when passing the tile
      */
     @JsonCreator
     public StartTile(
-            @JsonProperty("position") int position,
-            @JsonProperty("name") String name,
-            @JsonProperty("reward") int reward) {
+            @JsonProperty("position") final int position,
+            @JsonProperty("name") final String name,
+            @JsonProperty("reward") final int reward) {
         super(position, TileType.START, name);
         this.reward = reward;
     }

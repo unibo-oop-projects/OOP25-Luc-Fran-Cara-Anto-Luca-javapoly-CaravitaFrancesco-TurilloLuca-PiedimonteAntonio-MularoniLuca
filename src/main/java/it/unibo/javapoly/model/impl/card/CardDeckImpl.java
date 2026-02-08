@@ -95,7 +95,7 @@ public class CardDeckImpl implements CardDeck {
 
         final GameCard card = isHeldsByPlayer(type, playerID);
 
-        if(Objects.isNull(card)){
+        if (Objects.isNull(card)) {
             return false;
         }
 
@@ -125,9 +125,9 @@ public class CardDeckImpl implements CardDeck {
         return drawPile.isEmpty() && discardPile.isEmpty();
     }
 
-    private GameCard isHeldsByPlayer(final CardType type, final String playerID){
-        for (GameCard card : this.heldCards.keySet()) {
-            if(this.heldCards.get(card).equals(playerID) && card.getType() == type){
+    private GameCard isHeldsByPlayer(final CardType type, final String playerID) {
+        for (final GameCard card : this.heldCards.keySet()) {
+            if (this.heldCards.get(card).equals(playerID) && card.getType() == type) {
                 return card;
             }
         }

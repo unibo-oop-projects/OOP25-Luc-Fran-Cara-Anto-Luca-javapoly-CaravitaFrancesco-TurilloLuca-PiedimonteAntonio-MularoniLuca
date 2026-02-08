@@ -113,7 +113,7 @@ public final class PropertyImpl implements Property {
      * {@inheritDoc}
      */
     @Override
-    public PropertyGroup getPropertyGroup(){
+    public PropertyGroup getPropertyGroup() {
         return this.card.getGroup();
     }
 
@@ -121,7 +121,7 @@ public final class PropertyImpl implements Property {
      * {@inheritDoc}
      */
     @Override
-    public int getBuiltHouses(){
+    public int getBuiltHouses() {
         return this.state.getHouses();
     }
 

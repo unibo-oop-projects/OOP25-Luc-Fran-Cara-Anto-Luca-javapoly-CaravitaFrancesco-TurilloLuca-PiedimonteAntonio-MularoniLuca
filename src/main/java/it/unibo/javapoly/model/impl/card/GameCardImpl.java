@@ -118,15 +118,15 @@ public class GameCardImpl implements GameCard {
      * @return a string representation of the game card
      */
     @Override
-    public String toString() {
-        return "GameCardImpl{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", type=" + type +
-                ", payload=" + payload +
-                ", keepUntilUsed=" + keepUntilUsed +
-                '}';
-    }
+        public String toString() {
+            return "GameCardImpl{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", description='" + description + '\'' +
+                    ", type=" + type +
+                    ", payload=" + payload +
+                    ", keepUntilUsed=" + keepUntilUsed +
+                    '}';
+        }
 
 }
