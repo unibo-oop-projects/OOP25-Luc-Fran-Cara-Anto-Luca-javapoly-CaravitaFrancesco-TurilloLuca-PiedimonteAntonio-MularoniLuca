@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.impl.board.tile;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import it.unibo.javapoly.model.api.board.TileType;
@@ -19,9 +21,11 @@ public final class GoToJailTile extends AbstractTile {
      * @param name the tile name
      * @param jailPos the position of the jail tile
      */
-    public GoToJailTile(final int position,
-                        final String name,
-                        final int jailPos) {
+    @JsonCreator
+    public GoToJailTile(
+            @JsonProperty("position") final int position,
+            @JsonProperty("name") final String name,
+            @JsonProperty("jailPos") final int jailPos) {
         super(position, TileType.GO_TO_JAIL, name);
         this.jailPos = jailPos;
     }

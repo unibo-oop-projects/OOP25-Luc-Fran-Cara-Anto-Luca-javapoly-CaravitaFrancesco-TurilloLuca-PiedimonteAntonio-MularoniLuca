@@ -2,6 +2,8 @@ package it.unibo.javapoly.model.impl.card;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import it.unibo.javapoly.model.api.card.CardType;
@@ -33,13 +35,13 @@ public class GameCardImpl implements GameCard {
      * @param payload the data associated with the card
      * @param keepUntilUsed whether the card should be kept by the player until used (e.g., Get Out of Jail Free)
      */
-    public GameCardImpl(final String id,
-                        final String name,
-                        final String description,
-                        final CardType type,
-                        final CardPayload payload,
-                        final boolean keepUntilUsed) {
-
+    @JsonCreator
+    public GameCardImpl(@JsonProperty("id") final String id,
+                        @JsonProperty("name") final String name,
+                        @JsonProperty("description") final String description,
+                        @JsonProperty("type") final CardType type,
+                        @JsonProperty("payload") final CardPayload payload,
+                        @JsonProperty("keepUntilUsed") final boolean keepUntilUsed) {
         this.id = Objects.requireNonNull(id);
         this.name = Objects.requireNonNull(name);
         this.description = description == null ? "" : description;
@@ -117,6 +119,14 @@ public class GameCardImpl implements GameCard {
      */
     @Override
     public String toString() {
-        return "GameCard[" + this.id + "," + this.type + "," + this.name + "]";
+        return "GameCardImpl{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                ", payload=" + payload +
+                ", keepUntilUsed=" + keepUntilUsed +
+                '}';
     }
+
 }

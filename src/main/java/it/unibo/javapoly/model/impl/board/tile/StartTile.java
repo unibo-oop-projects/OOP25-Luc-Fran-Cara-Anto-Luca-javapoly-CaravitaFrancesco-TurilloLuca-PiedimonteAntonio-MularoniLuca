@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.impl.board.tile;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import it.unibo.javapoly.model.api.board.TileType;
@@ -19,11 +21,13 @@ public final class StartTile extends AbstractTile {
      * @param name the tile name
      * @param amount the reward gained when passing the tile
      */
-    public StartTile(final int position,
-                     final String name,
-                     final int amount) {
+    @JsonCreator
+    public StartTile(
+            @JsonProperty("position") int position,
+            @JsonProperty("name") String name,
+            @JsonProperty("reward") int reward) {
         super(position, TileType.START, name);
-        this.reward = amount;
+        this.reward = reward;
     }
 
     /**

@@ -12,18 +12,6 @@ import it.unibo.javapoly.model.api.board.TileType;
  * <p>
  * This class provides common state and behavior for all tile implementations.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = StartTile.class, name = "start"),
-    @JsonSubTypes.Type(value = LandPropertyTile.class, name = "land_property"),
-    @JsonSubTypes.Type(value = StationPropertyTile.class, name = "station_property"),
-    @JsonSubTypes.Type(value = UtilityPropertyTile.class, name = "utility_property"),
-    @JsonSubTypes.Type(value = TaxTile.class, name = "tax"),
-    @JsonSubTypes.Type(value = JailTile.class, name = "jail"),
-    @JsonSubTypes.Type(value = FreeParkingTile.class, name = "free_parking"),
-    @JsonSubTypes.Type(value = GoToJailTile.class, name = "go_to_jail"),
-    @JsonSubTypes.Type(value = UnexpectedTile.class, name = "unexpected")
-})
 public abstract class AbstractTile implements Tile {
 
     private final int position;

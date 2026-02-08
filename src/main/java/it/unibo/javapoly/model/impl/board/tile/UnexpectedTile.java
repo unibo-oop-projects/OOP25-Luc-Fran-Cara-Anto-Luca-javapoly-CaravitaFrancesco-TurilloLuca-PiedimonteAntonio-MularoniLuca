@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.impl.board.tile;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import it.unibo.javapoly.model.api.board.TileType;
@@ -19,9 +21,11 @@ public final class UnexpectedTile extends AbstractTile {
      * @param deckCardID the ID of the deck
      * @param name the tile name
      */
-    public UnexpectedTile(final int position,
-                          final String name,
-                          final String deckCardID) {
+    @JsonCreator
+    public UnexpectedTile(
+            @JsonProperty("position") final int position,
+            @JsonProperty("name") final String name,
+            @JsonProperty("deckCardID") final String deckCardID) {
 
         super(position, TileType.UNEXPECTED, name);
         this.deckCardID = deckCardID;

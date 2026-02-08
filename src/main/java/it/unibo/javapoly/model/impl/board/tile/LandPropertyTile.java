@@ -2,6 +2,8 @@ package it.unibo.javapoly.model.impl.board.tile;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import it.unibo.javapoly.model.api.board.TileType;
@@ -24,9 +26,11 @@ public final class LandPropertyTile extends AbstractTile {
      * @param name the tile name
      * @param property the property associated with this tile
      */
-    public LandPropertyTile(final int position,
-                            final String name,
-                            final Property property) {
+    @JsonCreator
+    public LandPropertyTile(
+            @JsonProperty("position") int position,
+            @JsonProperty("name") String name,
+            @JsonProperty("property") Property property) {
         super(position, TileType.PROPERTY, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
 

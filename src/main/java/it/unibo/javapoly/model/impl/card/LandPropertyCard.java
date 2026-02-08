@@ -4,10 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
+import it.unibo.javapoly.utils.LandPropertyCardDeserializer;
 
 /**
  * Representation of a land/property card in the Monopoly-like game.
@@ -17,6 +21,7 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
  * together with the costs to build houses and hotels.
  */
 @JsonRootName("LandPropertyCard")
+@JsonDeserialize(using = LandPropertyCardDeserializer.class)
 public class LandPropertyCard extends AbstractPropertyCard {
 
     /**
@@ -44,16 +49,18 @@ public class LandPropertyCard extends AbstractPropertyCard {
      * @param houseCost the cost to build a house
      * @param hotelCost the cost to build a hotel
      */
-    public LandPropertyCard(final String id,
-                            final String name,
-                            final String description,
-                            final int propertyCost,
-                            final PropertyGroup color,
-                            final int baseRent,
-                            final List<Integer> multiProroprietyRent,
-                            final int hotelRent,
-                            final int houseCost,
-                            final int hotelCost) {
+    @JsonCreator
+    public LandPropertyCard(
+            @JsonProperty("id") final String id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("propertyCost") final int propertyCost,
+            @JsonProperty("color") final PropertyGroup color,
+            @JsonProperty("baseRent") final int baseRent,
+            @JsonProperty("multiProroprietyRent") final List<Integer> multiProroprietyRent,
+            @JsonProperty("hotelRent") final int hotelRent,
+            @JsonProperty("houseCost") final int houseCost,
+            @JsonProperty("hotelCost") final int hotelCost) {
         super(id, name, description, propertyCost, color);
         this.rentNumberHouses = new LinkedList<>(multiProroprietyRent);
         this.rentNumberHouses.addFirst(baseRent);

@@ -1,5 +1,9 @@
 package it.unibo.javapoly.model.impl.property;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import java.util.Objects;
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.Property;
@@ -12,6 +16,7 @@ import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
  * This class manages the property's ownership, rent calculation, and house construction.
  *
  */
+@JsonTypeName("PROPERTYIMPL")
 public final class PropertyImpl implements Property {
 
     private final String id;
@@ -26,7 +31,11 @@ public final class PropertyImpl implements Property {
      * @param position board index
      * @param card associated card
      */
-    public PropertyImpl(final String id, final int position, final AbstractPropertyCard card) {
+    @JsonCreator
+    public PropertyImpl(
+            @JsonProperty("id") final String id, 
+            @JsonProperty("position") final int position, 
+            @JsonProperty("card") final AbstractPropertyCard card) {
         this.id = Objects.requireNonNull(id);
         this.position = position;
         this.card = Objects.requireNonNull(card);
@@ -36,7 +45,7 @@ public final class PropertyImpl implements Property {
     /**
      * Constructor to create a copy of a passed instance.
      *
-     * @param property istance from which to create a copy
+     * @param property instance from which to create a copy
      */
     public PropertyImpl(final Property property) {
         this(property.getId(), property.getPosition(), property.getCard());
@@ -49,6 +58,7 @@ public final class PropertyImpl implements Property {
      * 
      * @return the unique identifier of the property
      */
+    @JsonProperty
     @Override
     public String getId() {
         return this.id;
@@ -114,8 +124,6 @@ public final class PropertyImpl implements Property {
     public int getBuiltHouses(){
         return this.state.getHouses();
     }
-
- 
 
     //#endregion
 
