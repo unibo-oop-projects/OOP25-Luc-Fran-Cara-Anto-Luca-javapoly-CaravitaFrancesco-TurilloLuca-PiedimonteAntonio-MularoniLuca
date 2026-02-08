@@ -181,4 +181,3 @@ p1.removeObserver(observer);
 - **Salvataggio Automatico**: Per salvare lo stato di gioco dopo ogni cambio significativo.
 
 **Nota**: Un singolo giocatore può avere più observer registrati contemporaneamente. Tutti riceveranno le notifiche nello stesso ordine di registrazione.
- Modulo Player (Branch: LucaTurillo)
