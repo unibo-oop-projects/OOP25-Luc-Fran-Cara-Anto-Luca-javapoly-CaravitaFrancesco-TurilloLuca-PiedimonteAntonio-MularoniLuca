@@ -39,32 +39,52 @@ package it.unibo.javapoly.model.api;
  * @see PlayerState
  */
 public interface PlayerObserver {
+
     /**
      * Called when a player moves to a new position on the game board.
      * 
-     * @param player      the player who moved
-     * @param oldPosition the player's previous position
-     * @param newPosition the player's new position
-     * @see Player
+     * <p>
+     * This method is invoked after the player's position has been successfully
+     * updated in the model.
+     * </p>
+     * 
+     * @param player      the player instance that moved
+     * @param oldPosition the index of the player's previous position
+     * @param newPosition the index of the player's new position
+     * @see Player#move(int)
      */
     void onPlayerMoved(Player player, int oldPosition, int newPosition);
 
     /**
-     * Called when a player's balance changes.
+     * Called when a player's balance changes due to a financial transaction.
+     * 
+     * <p>
+     * This method is invoked after the player's balance has been successfully
+     * updated in the model, typically following a payment attempt or receiving
+     * money.
+     * </p>
      * 
      * @param player     the player whose balance changed
-     * @param newBalance the player's new balance
-     * @see Player
+     * @param newBalance the player's new balance after the transaction
+     * @see Player#tryToPay(int)
+     * @see Player#receiveMoney(int)
      */
     void onBalanceChanged(Player player, int newBalance);
 
     /**
-     * Called when a player's state changes.
+     * Called when a player's state changes to a different type of state.
+     * 
+     * <p>
+     * This method is invoked when the player transitions from one logical state
+     * to another (e.g., from FreeState to JailedState). Note that, based on the
+     * implementation, this event is triggered only if the class of the new state
+     * is different from the class of the previous state.
+     * </p>
      * 
      * @param player   the player whose state changed
      * @param oldState the player's previous state
      * @param newState the player's new state
-     * @see Player
+     * @see Player#setState(PlayerState)
      * @see PlayerState
      */
     void onStateChanged(Player player, PlayerState oldState, PlayerState newState);

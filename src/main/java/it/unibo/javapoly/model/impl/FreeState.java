@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.impl;
 
+import java.util.Objects;
+
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerState;
 
@@ -9,6 +11,8 @@ import it.unibo.javapoly.model.api.PlayerState;
  * Singleton pattern, ensuring that only one instance of the free state exists.
  * In this state, the player is allowed to move normally based on the dice roll
  * result.
+ * 
+ * @see PlayerState
  */
 public final class FreeState implements PlayerState {
 
@@ -34,21 +38,36 @@ public final class FreeState implements PlayerState {
 
     /**
      * Executes the standard turn logic for a free player.
-     * The player moves by the number of steps indicated by the dice result.
-     * A message is logged to the standard output indicating the movement.
+     * The player moves to the new position indicated by the potential destination.
      *
-     * @param player     the player currently in this state.
-     * @param diceResult the result of the dice roll.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param player               the player currently in this state.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
+     * @throws NullPointerException     if the player is null.
+     * @throws IllegalArgumentException if the potential destination is negative.
      */
     @Override
-    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
-        System.out.println("[Stato Libero] Il giocatore si muove di " + diceResult); // NOPMD
-        player.move(diceResult);
+    public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
+        Objects.requireNonNull(player, "The player cannot be null");
+        if (potentialDestination < 0) {
+            throw new IllegalArgumentException("Potential destination cannot be negative: " + potentialDestination);
+        }
+        player.move(potentialDestination);
+
+        // TODO try to understand if the roll of a double has to be handled in the
+        // player or in the game, considering that the player can only know if he rolled
+        // a double or not, but not how many times he rolled a double in a row, which is
+        // relevant for the game logic. Maybe the player can have a counter of
+        // consecutive doubles rolled, but it seems to be more related to the game logic
+        // than to the player logic, so maybe it's better to handle it in the game and
+        // just pass the information to the player when he has to play his turn.
+
+        System.out.println("[Stato Libero] Il giocatore si muove a " + potentialDestination); // NOPMD
     }
 
     /**
-     * Checks if the player is allowed to move in this state.
+     * {@inheritDoc}
      *
      * @return {@code true} as the player is in a free state and can always move.
      */

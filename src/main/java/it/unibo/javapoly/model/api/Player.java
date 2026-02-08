@@ -3,44 +3,166 @@ package it.unibo.javapoly.model.api;
 /**
  * Represents a player in the Javapoly game.
  * This interface defines the core behaviors and properties of a player,
- * including their identity, financial status, position on the board, and state
- * management.
- * Players can move around the board, manage their money, and interact with the
- * game through their turns.
+ * acting as the main entity that interacts with the game board.
  * 
  * <p>
- * Also implements the Observer pattern to allow monitoring of player state
- * changes.
+ * A player is characterized by:
+ * <ul>
+ * <li><strong>Identity:</strong> A unique name and a specific {@link Token}
+ * representing them on the board.</li>
+ * <li><strong>Financial Status:</strong> A balance of money that changes
+ * through transactions (paying rent, receiving salary, etc.).</li>
+ * <li><strong>Position:</strong> A current location index on the game
+ * board.</li>
+ * <li><strong>State:</strong> A {@link PlayerState} object (e.g., Free, Jailed)
+ * that dictates behavior during turns.</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
+ * The player delegates the specific logic of playing a turn to its current
+ * state via the State pattern.
+ * It also implements the Observer pattern, allowing external components (like
+ * the UI or Game Controller) to react to changes in the player's position,
+ * balance, or state.
  * </p>
  * 
  * @see PlayerState
  * @see Token
  * @see TokenType
  * @see PlayerObserver
- * 
  */
 public interface Player {
 
     /**
-     * Registers an observer to monitor changes in the player's state.
+     * Executes the player's turn by delegating the logic to the current
+     * {@link PlayerState}.
+     * The specific action taken depends on the player's current state (e.g., moving
+     * normally if free, checking release conditions if in jail).
+     * 
+     * <p>
+     * This method ensures the destination is valid before delegating the turn
+     * handling to the active state object, to determine if and how the player
+     * moves.
+     * </p>
+     * 
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
+     * @throws IllegalArgumentException if the potential destination is negative.
+     * @see PlayerState
+     */
+    void playTurn(int potentialDestination, boolean isDouble);
+
+    /**
+     * Updates the player's current position on the board.
+     * 
+     * <p>
+     * This method sets the internal position of the player to the specified value
+     * and notifies all registered observers about the movement.
+     * It ensures that the new position is valid (non-negative).
+     * </p>
+     * 
+     * <p>
+     * <strong>Important:</strong> The {@link #move(int)} method should not be
+     * called directly from outside the player implementation, as it would break the
+     * state management logic.
+     * Use {@link #playTurn(int, boolean)} instead to properly execute a player's
+     * turn.
+     * </p>
+     * 
+     * <p>
+     * <strong>Exception:</strong> This method can be called directly only when a
+     * card instructs the player to move without rolling the dice.
+     * In such cases, the caller should verify that the player can move by checking
+     * their current state using {@link #getState()} before invoking this method.
+     * </p>
+     * 
+     * @param newPosition the new position index to set.
+     * @throws IllegalArgumentException if the new position is negative.
+     */
+    void move(int newPosition);
+
+    /**
+     * Attempts to pay a specified amount from the player's balance.
+     * 
+     * <p>
+     * If the player has sufficient funds, the balance is decreased, registered
+     * observers are notified about the balance change, and the method
+     * returns true.
+     * Otherwise, the balance remains unchanged and it returns false.
+     * </p>
+     *
+     * @param amount the amount of money to pay.
+     * @return {@code true} if the player has enough balance and the payment was
+     *         successful;
+     *         {@code false} otherwise.
+     * @throws IllegalArgumentException if the amount is negative.
+     */
+    boolean tryToPay(int amount);
+
+    /**
+     * Adds a specified amount of money to the player's balance.
+     * 
+     * <p>
+     * This method increases the player's funds by the given amount and notifies
+     * registered observers about the updated balance.
+     * </p>
+     *
+     * @param amount the amount of money to receive.
+     * @throws IllegalArgumentException if the amount is negative.
+     */
+    void receiveMoney(int amount);
+
+    /**
+     * Registers an observer to monitor the player's activities and status changes.
+     * The observer will be notified when the player moves to a new position,
+     * their financial balance changes, or their game state transitions.
      * 
      * @param observer the {@link PlayerObserver} to be added.
+     * @throws NullPointerException if the observer is null.
      * @see PlayerObserver
      */
     void addObserver(PlayerObserver observer);
 
     /**
-     * Unregisters an observer from monitoring changes in the player's state.
+     * Unregisters an observer, stopping it from receiving notifications about
+     * the player's movement, financial balance, or game state changes.
      * 
      * @param observer the {@link PlayerObserver} to be removed.
+     * @throws NullPointerException if the observer is null.
      * @see PlayerObserver
      */
     void removeObserver(PlayerObserver observer);
 
     /**
+     * Updates the current state of the player.
+     * 
+     * <p>
+     * This method transitions the player to a new {@link PlayerState}.
+     * If the new state is different from the current one (based on class equality),
+     * all registered {@link PlayerObserver}s are notified of the state change.
+     * </p>
+     *
+     * @param state the new {@link PlayerState} to set.
+     * @throws NullPointerException if the provided state is null.
+     * @see PlayerState
+     * @see PlayerObserver#onStateChanged(Player, PlayerState, PlayerState)
+     */
+    void setState(PlayerState state);
+
+    /**
+     * Retrieves the current state of the player.
+     *
+     * @return the current {@link PlayerState} of the player.
+     * @see PlayerState
+     */
+    PlayerState getState();
+
+    /**
      * Retrieves the name of the player.
      *
-     * @return the name of the player as a String.
+     * @return the name of the player as a {@link String}.
      */
     String getName();
 
@@ -55,6 +177,7 @@ public interface Player {
      * Retrieves the token associated with the player.
      *
      * @return the {@link Token} object representing the player on the board.
+     * @see Token
      */
     Token getToken();
 
@@ -64,73 +187,4 @@ public interface Player {
      * @return the index of the cell where the player is currently located.
      */
     int getCurrentPosition();
-
-    /**
-     * Manages the turn logic based on the player's current state:
-     * in jail, free, or bankrupt.
-     * The method handle the player's actions, including moving the player and
-     * updating their state.
-     * The logic for the turn is delegated to the current {@link PlayerState} of the
-     * player, ensuring that the correct behavior is executed based on the player's
-     * situation.
-     * 
-     * @param diceResult the total value obtained from rolling the dice.
-     * @param isDouble   indicates if the dice roll was a double.
-     * @see PlayerState
-     */
-    void playTurn(int diceResult, boolean isDouble);
-
-    /**
-     * Moves the player a specified number of steps on the game board.
-     * 
-     * <strong>Important:</strong> The {@link #move(int)} method should not be
-     * called directly from outside the player implementation, as it would break the
-     * state management logic.
-     * Use {@link #playTurn(int, boolean)} instead to properly execute a player's
-     * turn.
-     * 
-     * <strong>Exception:</strong> This method can be called directly only when a
-     * card instructs the player to move without rolling the dice.
-     * In such cases, the caller should verify that the player can move by checking
-     * their current state using {@link #getState()} before invoking this method.
-     * 
-     * @param steps the number of spaces to move forward.
-     * @see PlayerState
-     */
-    void move(int steps);
-
-    /**
-     * Attempts to pay a specified amount from the player's balance.
-     * If the player has sufficient funds, the balance is decreased and the method
-     * returns true.
-     * Otherwise, the balance remains unchanged and it returns false.
-     *
-     * @param amount the amount of money to pay.
-     * @return true if the player has enough balance and the payment was successful
-     *         false otherwise.
-     */
-    boolean tryToPay(int amount);
-
-    /**
-     * Adds a specified amount of money to the player's balance.
-     *
-     * @param amount the amount of money to receive.
-     */
-    void receiveMoney(int amount);
-
-    /**
-     * Updates the current state of the player.
-     *
-     * @param state the new {@link PlayerState} to set.
-     * @see PlayerState
-     */
-    void setState(PlayerState state);
-
-    /**
-     * Retrieves the current state of the player.
-     *
-     * @return the current {@link PlayerState} of the player.
-     * @see PlayerState
-     */
-    PlayerState getState();
 }

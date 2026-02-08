@@ -36,20 +36,20 @@ public final class BankruptState implements PlayerState {
 
     /**
      * Handles the logic for the player's turn when they are bankrupt.
-     * In this state, the method simply logs that the player is out of the game
-     * and performs no other actions.
+     * In this state, the method performs no actions.
      *
-     * @param player     the player currently in this state.
-     * @param diceResult the result of the dice roll.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param player               the player currently in this state.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
      */
     @Override
-    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
+    public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
         System.out.println("[Bancarotta] Il giocatore " + player.getName() + " è fuori dal gioco."); // NOPMD
     }
 
     /**
-     * Determines if the player is allowed to move in this state.
+     * {@inheritDoc}
      *
      * @return {@code false} as a bankrupt player cannot move.
      */

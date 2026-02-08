@@ -8,7 +8,7 @@ package it.unibo.javapoly.model.api;
  * <ul>
  * <li><strong>In Jail:</strong> The player is currently in jail and has
  * specific rules governing their actions, such as attempting to roll doubles to
- * get out or paying a fine.</li>
+ * get out or reaching the maximum number of turns in jail.</li>
  * <li><strong>Free:</strong> The player is not in jail and can move freely
  * around the board, manage their properties, and interact with other
  * players.</li>
@@ -23,25 +23,37 @@ package it.unibo.javapoly.model.api;
 public interface PlayerState {
 
     /**
-     * Executes the logic for the player's turn based on the dice roll.
-     * The behavior of the player during their turn is determined by their current
-     * state, such as being in jail, free, or bankrupt.
-     * The method handles the player's actions, including moving the player and
-     * updating their state as necessary.
-     * The logic for the turn is delegated to the current {@link PlayerState} of the
-     * player, ensuring that the correct behavior is executed based on the player's
-     * situation.
+     * Executes the turn logic specific to the player's current state.
+     * This method determines if and how the player interacts with the game board
+     * during their turn.
+     * 
+     * <p>
+     * Implementation behavior:
+     * <ul>
+     * <li>{@link it.unibo.javapoly.model.impl.FreeState}: The player moves to the
+     * specified {@code potentialDestination}.</li>
+     * <li>{@link it.unibo.javapoly.model.impl.JailedState}: The method handles
+     * detention turns, checks for release conditions
+     * (such as rolling doubles or reaching the maximum number of turns in jail),
+     * and transitions the player to a free state if applicable.</li>
+     * <li>{@link it.unibo.javapoly.model.impl.BankruptState}: The player is out of
+     * the game and performs no actions.</li>
+     * </ul>
+     * </p>
      *
-     * @param player     the player performing the turn.
-     * @param diceResult the total value obtained from rolling the dice.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param player               the player performing the turn.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double, which
+     *                             can influence state transitions (e.g., leaving
+     *                             jail).
      */
-    void playTurn(Player player, int diceResult, boolean isDouble);
+    void playTurn(Player player, int potentialDestination, boolean isDouble);
 
     /**
-     * checks if the player is allowed to move from their current position.
+     * Checks if the player is allowed to move from their current position.
      *
-     * @return true if the player can move, false otherwise.
+     * @return {@code true} if the player can move, {@code false} otherwise.
      */
     boolean canMove();
 

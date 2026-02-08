@@ -1,16 +1,18 @@
 package it.unibo.javapoly.model.impl;
 
+import java.util.Objects;
+
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerState;
 
 /**
  * Represents the state of a {@link Player} when they are in jail.
  * In this state, a player cannot move freely. They must wait for a specific
- * condition to be met
- * (rolling a double or waiting for a maximum number of turns) to be released
- * and transition back to the {@link FreeState}.
+ * condition to be met (rolling a double or waiting for a maximum number of
+ * turns) to be released and transition back to the {@link FreeState}.
  * 
  * @see FreeState
+ * @see PlayerState
  */
 public final class JailedState implements PlayerState {
 
@@ -44,13 +46,22 @@ public final class JailedState implements PlayerState {
      * immediately move.
      * Otherwise, they remain in jail.
      *
-     * @param player     the player currently in this state.
-     * @param diceResult the result of the dice roll.
-     * @param isDouble   indicates if the dice roll was a double.
+     * @param player               the player currently in this state.
+     * @param potentialDestination the potential new position of the player based on
+     *                             the dice roll.
+     * @param isDouble             indicates if the dice roll was a double.
+     * @throws NullPointerException     if the player is null.
+     * @throws IllegalArgumentException if the potential destination is negative.
      * @see FreeState
      */
     @Override
-    public void playTurn(final Player player, final int diceResult, final boolean isDouble) {
+    public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
+        Objects.requireNonNull(player, "The player cannot be null");
+        if (potentialDestination < 0) {
+            throw new IllegalArgumentException("Potential destination cannot be negative: " + potentialDestination);
+        }
+        player.move(potentialDestination);
+
         turnsInJail++;
         System.out.println("[Prigione] Turno " + turnsInJail + " di detenzione."); // NOPMD
 
@@ -58,14 +69,22 @@ public final class JailedState implements PlayerState {
             System.out.println(player.getName() + " esce di prigione!"); // NOPMD
 
             player.setState(FreeState.getInstance());
-            player.move(diceResult);
+            player.move(potentialDestination);
         } else {
             System.out.println("Resta in prigione."); // NOPMD
         }
+
+        // TODO understand if there are other release conditions, such as paying a
+        // fine or using a "Get Out of Jail Free" card.
+        // Understand if I need to handle this, especially for the "Get Out of Jail
+        // Free" card, or if it is the player who decides when to use it, and in that
+        // case how do I communicate it to them, since they do not manage their state,
+        // but the state manages them. Or if it should be handled by who manages all
+        // the cards, that is Francesco.
     }
 
     /**
-     * Indicates whether the player can move freely in this state.
+     * {@inheritDoc}
      *
      * @return {@code false}, as jailed players cannot move freely.
      */
