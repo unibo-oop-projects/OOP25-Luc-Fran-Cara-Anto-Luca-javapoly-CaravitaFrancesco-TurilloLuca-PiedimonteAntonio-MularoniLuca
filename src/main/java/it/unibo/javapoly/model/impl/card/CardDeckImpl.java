@@ -93,7 +93,7 @@ public class CardDeckImpl implements CardDeck {
     @Override
     public boolean discardByType(final CardType type, final String playerID) {
 
-        final GameCard card = isHeldsByPlayer(type, playerID);
+        final GameCard card = playerHeldsCardType(type, playerID);
 
         if (Objects.isNull(card)) {
             return false;
@@ -125,10 +125,21 @@ public class CardDeckImpl implements CardDeck {
         return drawPile.isEmpty() && discardPile.isEmpty();
     }
 
-    private GameCard isHeldsByPlayer(final CardType type, final String playerID) {
-        for (final GameCard card : this.heldCards.keySet()) {
-            if (this.heldCards.get(card).equals(playerID) && card.getType() == type) {
-                return card;
+    /**
+     * Checks if a player holds a card of a specific type among the cards they possess.
+     * 
+     * <p>
+     * This method search in the map {@code heldCards} the card by the playerID.
+     * if any of the cards match the specified type, he will also check if he is the owner
+     *
+     * @param type the type of card being searched
+     * @param playerID the ID of the player
+     * @return the card found that matches the specified type and player ID, or {@code null} otherwise
+     */
+    private GameCard playerHeldsCardType(final CardType type, final String playerID) {
+        for (final Map.Entry<GameCard, String> entry : this.heldCards.entrySet()) {
+            if (entry.getValue().equals(playerID) && entry.getKey().getType() == type) {
+                return entry.getKey();
             }
         }
 
