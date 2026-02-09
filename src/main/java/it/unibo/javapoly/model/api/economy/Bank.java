@@ -34,4 +34,13 @@ public interface Bank {
      * @return {@code true} if the transfer was successful, {@code false} if insufficient funds
      */
     boolean transferFunds(Player payer, Player payee, int amount);
+
+    /**
+     * Check if a player can afford to spend the specified amount.
+     *
+     * @param player player to check.
+     * @param amount the amount to check.
+     * @return {@code true} if can afford, {@code false} otherwise.
+     */
+    boolean canAfford(Player player, int amount);
 }
