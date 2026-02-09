@@ -65,7 +65,7 @@ public class MenuViewImpl implements MenuView {
     /**
      * Loads the window icon if available.
      */
-    private void loadIcon() {
+    private void loadIcon() { // T >
         final var iconStream = getClass().getResourceAsStream(ICON_PATH);
         if (iconStream == null) {
             System.err.println("Icon loading failed."); // NOPMD
@@ -74,7 +74,7 @@ public class MenuViewImpl implements MenuView {
         final Image icon = new Image(iconStream);
         this.stage.getIcons().add(icon);
         System.err.println("Icon loading failed."); // NOPMD
-    }
+    } // < T
 
     /**
      * Create, builds and arranges UI section in the root BorderPane.
