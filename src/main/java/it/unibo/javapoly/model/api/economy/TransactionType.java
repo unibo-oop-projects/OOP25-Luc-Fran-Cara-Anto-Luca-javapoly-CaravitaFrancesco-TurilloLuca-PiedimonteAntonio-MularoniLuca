@@ -7,7 +7,7 @@ package it.unibo.javapoly.model.api.economy;
 public enum TransactionType {
     BUY_PROPERTY,
     SELL_PROPERTY,
-    BUILD_HOUSE,
+    BUY_HOUSE,
     SELL_HOUSE,
     PAY_RENT,
     WITHDRAW_TO_BANK,
