@@ -124,7 +124,7 @@ public class BoardControllerImpl implements BoardController {
                     final PropertyTile prop = (PropertyTile) tile;
 
                     if (this.propertyController.checkPayRent(player, prop.getPropertyID())) {
-                        this.bank.payRent(player.getName(), prop.getProperty().getIdOwner(), diceRoll);
+                        this.bank.payRent(player, prop.getProperty().getIdOwner(), prop.getProperty(), diceRoll);
                     }
                 }
                 break;
