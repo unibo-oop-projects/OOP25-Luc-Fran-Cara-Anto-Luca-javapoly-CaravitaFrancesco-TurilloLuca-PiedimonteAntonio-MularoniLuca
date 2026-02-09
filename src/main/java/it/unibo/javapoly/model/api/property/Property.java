@@ -50,6 +50,13 @@ public interface Property {
     int getBuiltHouses();
 
     /**
+     * Return the id of the owner.
+     * 
+     * @return the id of the owner
+     */
+    String getIdOwner();
+
+    /**
      * Read-only view of the property's dynamic state.
      * 
      * @return the state of the property
@@ -122,7 +129,9 @@ public interface Property {
      * This method checks if playerID is the owner.
      * The owner must be different from the bank.
      * 
+     * @param playerID the id of the player
+     * 
      * @return true if there is the owner (!= bank), false otherwise
      */
-    boolean playerIsTheOwner(final String playerID);
+    boolean playerIsTheOwner(String playerID);
 }

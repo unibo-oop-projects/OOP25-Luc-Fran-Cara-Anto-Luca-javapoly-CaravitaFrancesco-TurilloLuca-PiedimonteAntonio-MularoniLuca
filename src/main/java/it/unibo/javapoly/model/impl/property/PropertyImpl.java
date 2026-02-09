@@ -121,6 +121,14 @@ public final class PropertyImpl implements Property {
      * {@inheritDoc}
      */
     @Override
+    public String getIdOwner() {
+        return this.state.getOwnerId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getBuiltHouses() {
         return this.state.getHouses();
     }
@@ -200,7 +208,7 @@ public final class PropertyImpl implements Property {
      * {@inheritDoc}
      */
     @Override
-    public boolean playerIsTheOwner(final String playerID){
+    public boolean playerIsTheOwner(final String playerID) {
         return this.state.getOwnerId().equals(playerID);
     }
 
