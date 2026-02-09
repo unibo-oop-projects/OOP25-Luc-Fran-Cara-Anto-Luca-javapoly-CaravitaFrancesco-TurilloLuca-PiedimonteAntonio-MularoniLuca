@@ -1,22 +1,26 @@
 package it.unibo.javapoly.view.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
 import it.unibo.javapoly.controller.api.MenuController;
+import it.unibo.javapoly.model.api.TokenType;
 import it.unibo.javapoly.view.api.PlayerSetupView;
+import static it.unibo.javapoly.view.impl.MenuViewImpl.BG_COLOR;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import static it.unibo.javapoly.view.impl.MenuViewImpl.BG_COLOR;
 
 /**
  * Class that represent the view for the setup of player.
@@ -34,6 +38,7 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
     private final List<TextField> playerTextFields;
     private final ChoiceBox<Integer> playerCountChoice;
     private final Button confirmButton;
+    private final List<ComboBox<TokenType>> playerTokenSelectors; // T
 
     private Stage stage;
     private MenuController controller;
@@ -47,6 +52,7 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
         playerFields.setAlignment(Pos.CENTER);
         playerFields.setSpacing(0);
         this.playerTextFields = new ArrayList<>();
+        this.playerTokenSelectors = new ArrayList<>(); // T
         this.playerCountChoice = new ChoiceBox<>();
         this.confirmButton = new Button("Confirm");
         initializeUI();
@@ -114,16 +120,40 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
     private void updatePlayerFields(final int count) {
         playerFields.getChildren().clear();
         playerTextFields.clear();
+        playerTokenSelectors.clear(); // T
+
         playerFields.spacingProperty().bind(root.heightProperty().multiply(SPACING));
+
         for (int i = 1; i <= count; i++) {
+            HBox row = new HBox(10);
+            row.setAlignment(Pos.CENTER);
+
             final TextField field = new TextField();
             field.setPromptText("Player" + i + "'s name");
             field.maxWidthProperty().bind(this.stage.widthProperty().multiply(WIDTH_TEXT_FIELDS));
             field.prefHeightProperty().bind(this.stage.heightProperty().multiply(HEIGHT_TEXT_FIELDS));
+
+            final ComboBox<TokenType> tokenBox = new ComboBox<>(); // T >
+            tokenBox.getItems().addAll(TokenType.values());
+            tokenBox.setPromptText("Token");
+            tokenBox.prefHeightProperty().bind(this.stage.heightProperty().multiply(HEIGHT_TEXT_FIELDS));
+            if (i - 1 < TokenType.values().length) {
+                tokenBox.setValue(TokenType.values()[i - 1]);
+            } // < T
+
             playerTextFields.add(field);
-            playerFields.getChildren().add(field);
+            playerTokenSelectors.add(tokenBox); // T
+
+            row.getChildren().addAll(field, tokenBox); // T
+            playerFields.getChildren().add(row); // T
         }
     }
+
+    private List<TokenType> getTokenList() { // T >
+        return playerTokenSelectors.stream()
+                .map(ComboBox::getValue)
+                .toList();
+    } // < T
 
     /**
      * Validates all player names.
@@ -149,6 +179,20 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
             showError("Player name can contain only 20 letters");
             return false;
         }
+
+        final List<TokenType> tokens = getTokenList(); // T >
+
+        if (tokens.stream().anyMatch(Objects::isNull)) {
+            showError("All players must select a token");
+            return false;
+        }
+
+        final Set<TokenType> uniqueTokens = new HashSet<>(tokens);
+        if (uniqueTokens.size() != tokens.size()) {
+            showError("Players cannot choose the same token");
+            return false;
+        } // < T
+
         return true;
     }
 
@@ -170,7 +214,7 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
                 return;
             }
             if (this.controller != null) {
-                controller.playerSetupConfirmed(getNameList());
+                controller.playerSetupConfirmed(getNameList(), getTokenList()); // T
             }
         });
     }
