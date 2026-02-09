@@ -20,4 +20,9 @@ public interface MenuView {
      * @param message the error message to display.
      */
     void showError(String message);
+
+    /**
+     * Transitions the application to the Player Setup view.
+     */
+    void showPlayerSetupView();
 }
