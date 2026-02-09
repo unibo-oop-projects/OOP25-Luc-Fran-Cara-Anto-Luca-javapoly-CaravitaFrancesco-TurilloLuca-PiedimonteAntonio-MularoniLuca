@@ -11,8 +11,11 @@ import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 import it.unibo.javapoly.model.impl.property.PropertyImpl;
 
+/**
+ * Represents a tile associated with a station/utility/land property.
+ */
 @JsonRootName("PropertyTile")
-public class PropertyTile extends AbstractTile{
+public class PropertyTile extends AbstractTile {
 
     private final Property property;
 
@@ -58,5 +61,5 @@ public class PropertyTile extends AbstractTile{
     public String getPropertyID() {
         return this.property.getId();
     }
-    
+
 }
