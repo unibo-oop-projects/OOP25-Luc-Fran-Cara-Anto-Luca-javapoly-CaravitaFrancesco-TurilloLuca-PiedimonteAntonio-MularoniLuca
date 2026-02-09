@@ -218,7 +218,6 @@ public class MatchControllerImpl implements MatchController {
     @Override
     public void handlePropertyLanding() {
         final Player currentPlayer = getCurrentPlayer();
-        final Tile currentTile = gameBoard.getTileAt(currentPlayer.getCurrentPosition());
         if(currentTile.getType() == TileType.PROPERTY || currentTile.getType() == TileType.RAILROAD || currentTile.getType() == TileType.UTILITY){
             Property prop = (Property) currentTile;
             if
