@@ -149,6 +149,11 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
         }
     }
 
+    /**
+     * Get the list of selected tokens.
+     * 
+     * @return list of tokens.
+     */
     private List<TokenType> getTokenList() { // T >
         return playerTokenSelectors.stream()
                 .map(ComboBox::getValue)
@@ -214,7 +219,7 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
                 return;
             }
             if (this.controller != null) {
-                controller.playerSetupConfirmed(getNameList(), getTokenList()); // T
+                controller.playerSetupConfirmed(getNameList());
             }
         });
     }
