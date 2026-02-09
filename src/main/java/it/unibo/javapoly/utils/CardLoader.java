@@ -1,0 +1,52 @@
+package it.unibo.javapoly.utils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import it.unibo.javapoly.model.impl.card.GameCardImpl;
+import it.unibo.javapoly.model.api.card.GameCard;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * CardLoader is a utility class that helps load and write GameCard objects from and to JSON files.
+ * It uses Jackson's ObjectMapper for deserialization and serialization of cards.
+ */
+public final class CardLoader {
+
+    /**
+     * Constructs a new CardLoader.
+     */
+    private CardLoader() {
+        // Private constructor to prevent instantiation
+    }
+
+    /**
+     * Loads a list of GameCard objects from a file.
+     * 
+     * @param filePath The path to the file containing the JSON data.
+     * @return A List of GameCard objects.
+     * @throws IOException If there is an error reading from the file.
+     */
+    public static List<GameCard> loadCardsFromFile(final String filePath) throws IOException {
+        final ObjectMapper mapper = JsonUtils.mapper();
+        final File file = new File(filePath);
+        return mapper.readValue(file, 
+            mapper.getTypeFactory().constructCollectionType(List.class, GameCardImpl.class));
+    }
+
+    /**
+     * Writes a list of GameCard objects to a file in JSON format.
+     * 
+     * @param cards The List of GameCard objects to write.
+     * @param filePath The path to the file where the cards will be saved.
+     * @throws IOException If there is an error writing to the file.
+     */
+    public static void writeCardsToFile(final List<GameCard> cards, final String filePath) throws IOException {
+        final ObjectMapper mapper = JsonUtils.mapper();
+        final File file = new File(filePath);
+        mapper.writeValue(file, cards);
+    }
+}
+

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 
@@ -23,16 +26,16 @@ public class StationPropertyCard extends AbstractPropertyCard {
      * @param name the card name.
      * @param description the card description.
      * @param propetyCost the cost of the property.
-     * @param group the property group.
      * @param rents the list of rents for 1..n stations (ordered).
      */
-    public StationPropertyCard(final String id,
-                              final String name,
-                              final String description,
-                              final int propetyCost,
-                              final PropertyGroup group,
-                              final List<Integer> rents) {
-        super(id, name, description, propetyCost, group);
+    @JsonCreator
+    public StationPropertyCard(
+            @JsonProperty("id") final String id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("propertyCost") final int propetyCost,
+            @JsonProperty("rents") final List<Integer> rents) {
+        super(id, name, description, propetyCost, PropertyGroup.RAILROAD);
         this.rentNumberSation = new ArrayList<>(rents);
     }
 

@@ -1,6 +1,10 @@
 package it.unibo.javapoly.model.impl.property;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import it.unibo.javapoly.model.api.property.PropertyState;
 
 /**
@@ -38,7 +42,8 @@ public final class PropertyStateImpl implements PropertyState {
      *
      * @param purchasePrice the purchase price taken from the card
      */
-    public PropertyStateImpl(final int purchasePrice) {
+    @JsonCreator
+    public PropertyStateImpl(@JsonProperty("purchasePrice") final int purchasePrice) {
         this.purchasePrice = Objects.requireNonNull(purchasePrice);
         this.ownerID = this.BANK_OWN;
         this.houses = this.HOUSE_DEF;

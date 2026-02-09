@@ -33,9 +33,10 @@ public final class JsonUtils {
         m.enable(SerializationFeature.INDENT_OUTPUT);
         m.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
+        m.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // These two lines enable the @JsonRootName of the classes.
         m.enable(SerializationFeature.WRAP_ROOT_VALUE);
-        m.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        // m.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         return m;
     }
 

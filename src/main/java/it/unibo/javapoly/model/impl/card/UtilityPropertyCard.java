@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 
@@ -23,13 +26,18 @@ public class UtilityPropertyCard extends AbstractPropertyCard {
      * @param name                the card name.
      * @param description         the card description.
      * @param propertyCost        the cost of the property.
-     * @param utility             the utility group identifier.
      * @param oneOwnedMultiplier  multiplier when one utility is owned.
      * @param bothOwnedMultiplier multiplier when both utilities are owned.
      */
-    public UtilityPropertyCard(final String id, final String name, final String description, final int propertyCost,
-            final PropertyGroup utility, final int oneOwnedMultiplier, final int bothOwnedMultiplier) {
-        super(id, name, description, propertyCost, utility);
+    @JsonCreator
+    public UtilityPropertyCard(
+            @JsonProperty("id") final String id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("propertyCost") final int propertyCost,
+            @JsonProperty("oneOwnedMultiplier") final int oneOwnedMultiplier,
+            @JsonProperty("bothOwnedMultiplier") final int bothOwnedMultiplier) {
+        super(id, name, description, propertyCost, PropertyGroup.UTILITY);
         this.oneOwnedMultiplier = oneOwnedMultiplier;
         this.bothOwnedMultiplier = bothOwnedMultiplier;
     }

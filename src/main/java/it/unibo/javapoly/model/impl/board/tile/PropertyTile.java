@@ -2,30 +2,37 @@ package it.unibo.javapoly.model.impl.board.tile;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import it.unibo.javapoly.model.api.board.TileType;
 import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 import it.unibo.javapoly.model.impl.property.PropertyImpl;
 
 /**
- * Represents a tile associated with a station property.
+ * Represents a tile associated with a station/utility/land property.
  */
-public final class StationPropertyTile extends AbstractTile {
+@JsonRootName("PropertyTile")
+public class PropertyTile extends AbstractTile {
 
     private final Property property;
 
     /**
-     * Creates a station property tile.
+     * Creates a land property tile.
      *
      * @param position the position of the tile on the board
      * @param name the tile name
-     * @param property the station property associated with this tile
+     * @param property the property associated with this tile
      */
-    public StationPropertyTile(final int position,
-                               final String name,
-                               final Property property) {
-        super(position, TileType.RAILROAD, name);
+    @JsonCreator
+    public PropertyTile(@JsonProperty("position") final int position,
+                            @JsonProperty("name") final String name,
+                            @JsonProperty("property") final Property property) {
+        super(position, TileType.PROPERTY, name);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
+
     }
 
     /**
@@ -38,11 +45,11 @@ public final class StationPropertyTile extends AbstractTile {
     }
 
     /**
-     * Returns the property group of the station.
+     * Returns the property group (color) of this tile.
      *
      * @return the property group
      */
-    public PropertyGroup getPropertyGroup() {
+    public PropertyGroup getPropertyColor() {
         return this.property.getCard().getGroup();
     }
 
@@ -54,4 +61,5 @@ public final class StationPropertyTile extends AbstractTile {
     public String getPropertyID() {
         return this.property.getId();
     }
+
 }

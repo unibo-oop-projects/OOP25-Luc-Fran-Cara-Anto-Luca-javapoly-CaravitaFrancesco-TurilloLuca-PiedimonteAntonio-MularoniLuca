@@ -7,21 +7,18 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.javapoly.model.api.RentContext;
-import it.unibo.javapoly.model.api.property.PropertyGroup;
-import it.unibo.javapoly.model.impl.Card.StationPropertyCard;
 
 class StationPropertyCardTest {
 
     private static final String ID = "S1";
     private static final String NAME = "Stazione Centrale";
     private static final String DESCRIPTION = "Stazione principale";
-    private static final PropertyGroup GROUP = PropertyGroup.RAILROAD;
 
     private static final int PROPERTY_COST = 200;
     private static final List<Integer> STATION_RENTS = List.of(25, 50, 100, 200);
 
     private StationPropertyCard createStation() {
-        return new StationPropertyCard(ID, NAME, DESCRIPTION, PROPERTY_COST, GROUP, STATION_RENTS);
+        return new StationPropertyCard(ID, NAME, DESCRIPTION, PROPERTY_COST, STATION_RENTS);
     }
 
     @Test

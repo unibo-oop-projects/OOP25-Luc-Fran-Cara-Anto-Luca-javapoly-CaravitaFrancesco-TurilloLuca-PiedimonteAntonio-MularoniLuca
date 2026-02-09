@@ -1,6 +1,7 @@
 package it.unibo.javapoly.model.impl.Card;
 
 import it.unibo.javapoly.model.api.card.CardDeck;
+import it.unibo.javapoly.model.api.card.CardType;
 import it.unibo.javapoly.model.api.card.GameCard;
 
 import java.util.Deque;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -18,10 +20,11 @@ import java.util.Random;
  */
 public class CardDeckImpl implements CardDeck {
 
-    private final Deque<GameCard> drawPile = new ArrayDeque<>();
-    private final Deque<GameCard> discardPile = new ArrayDeque<>();
-    private final Map<GameCard, String> heldCards = new HashMap<>();
-    private final Random random = new Random();
+    private final Deque<GameCard> drawPile;
+    private final Deque<GameCard> discardPile;
+    private final Map<GameCard, String> heldCards;
+    private final Random random;
+    private final List<GameCard> cards;
 
     /**
      * Constructs a new CardDeckImpl with the provided list of cards.
@@ -32,8 +35,24 @@ public class CardDeckImpl implements CardDeck {
      * @param cards the list of cards to initialize the deck with
      */
     public CardDeckImpl(final List<GameCard> cards) {
-        this.discardPile.addAll(cards);
+        this.drawPile = new ArrayDeque<>();
+        this.discardPile = new ArrayDeque<>(cards);
+        this.heldCards = new HashMap<>();
+        random = new Random();
+        this.cards = new ArrayList<>(cards);
     }
+
+    //#region Getter
+    /**
+     * Returns a copy of the list containing all the cards in the deck.
+     * This includes both the cards in the draw pile and discard pile.
+     *
+     * @return a list of all the GameCard objects in the deck
+     */
+    public List<GameCard> getAllCards() {
+        return new ArrayList<>(this.cards);
+    }
+    //#endregion
 
     /**
      * Draws a card from the draw pile for the given player.
@@ -69,6 +88,22 @@ public class CardDeckImpl implements CardDeck {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean discardByType(final CardType type, final String playerID) {
+
+        final GameCard card = playerHeldsCardType(type, playerID);
+
+        if (Objects.isNull(card)) {
+            return false;
+        }
+
+        discard(card);
+        return true;
+    }
+
+    /**
      * Shuffles the cards in the draw pile.
      * The deck is shuffled using a random generator.
      */
@@ -88,6 +123,27 @@ public class CardDeckImpl implements CardDeck {
     @Override
     public boolean isEmpty() {
         return drawPile.isEmpty() && discardPile.isEmpty();
+    }
+
+    /**
+     * Checks if a player holds a card of a specific type among the cards they possess.
+     * 
+     * <p>
+     * This method search in the map {@code heldCards} the card by the playerID.
+     * if any of the cards match the specified type, he will also check if he is the owner
+     *
+     * @param type the type of card being searched
+     * @param playerID the ID of the player
+     * @return the card found that matches the specified type and player ID, or {@code null} otherwise
+     */
+    private GameCard playerHeldsCardType(final CardType type, final String playerID) {
+        for (final Map.Entry<GameCard, String> entry : this.heldCards.entrySet()) {
+            if (entry.getValue().equals(playerID) && entry.getKey().getType() == type) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
     }
 
     /**

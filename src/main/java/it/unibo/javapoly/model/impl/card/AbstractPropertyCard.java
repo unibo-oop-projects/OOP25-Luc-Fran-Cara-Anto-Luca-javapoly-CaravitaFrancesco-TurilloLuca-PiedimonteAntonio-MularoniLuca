@@ -1,5 +1,7 @@
 package it.unibo.javapoly.model.impl.Card;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -57,11 +59,13 @@ public abstract class AbstractPropertyCard implements Card {
      * @param propertyCost the purchase cost of the property.
      * @param group the color / group of the property.
      */
-    public AbstractPropertyCard(final String id,
-                                final String name,
-                                final String description,
-                                final int propertyCost,
-                                final PropertyGroup group) {
+    @JsonCreator
+    public AbstractPropertyCard(
+            @JsonProperty("id") final String id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("propertyCost") final int propertyCost,
+            @JsonProperty("group") final PropertyGroup group) {
         this.id = id;
         this.name = name;
         this.description = description;

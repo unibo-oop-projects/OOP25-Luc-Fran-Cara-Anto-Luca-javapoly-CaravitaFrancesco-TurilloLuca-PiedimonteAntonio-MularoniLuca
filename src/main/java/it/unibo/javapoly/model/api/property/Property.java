@@ -1,8 +1,11 @@
 package it.unibo.javapoly.model.api.property;
 
-// import it.unibo.javapoly.model.api.card.Card;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import it.unibo.javapoly.model.api.RentContext;
-import it.unibo.javapoly.model.impl.Card.AbstractPropertyCard;
+import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
+import it.unibo.javapoly.model.impl.property.PropertyImpl;
 
 /**
  * Contract for a property on the board.
@@ -12,6 +15,10 @@ import it.unibo.javapoly.model.impl.Card.AbstractPropertyCard;
  * call AFTER performing domain checks (e.g., checking if the player has enough money).
  * The Property does NOT manage the player's money.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = PropertyImpl.class, name = "PROPERTYIMPL")
+})
 public interface Property {
 
     /**
@@ -29,6 +36,27 @@ public interface Property {
     AbstractPropertyCard getCard(); // FIXME: valutare il tipo restituito 
 
     /**
+     * Return the Group type of the property.
+     * 
+     * @return the propriety group of the proprety
+     */
+    PropertyGroup getPropertyGroup();
+
+    /**
+     * Return the number of houses built.
+     * 
+     * @return the number of houses built
+     */
+    int getBuiltHouses();
+
+    /**
+     * Return the id of the owner.
+     * 
+     * @return the id of the owner
+     */
+    String getIdOwner();
+
+    /**
      * Read-only view of the property's dynamic state.
      * 
      * @return the state of the property
@@ -41,6 +69,13 @@ public interface Property {
      * @return the position of the property on the board
      */
     int getPosition();
+
+    /**
+     * Check if an hotel is built on proerty.
+     * 
+     * @return true if there is, false otherwise
+     */
+    Boolean hotelIsBuilt();
 
     /**
      * Assigns the owner via ID.
@@ -88,4 +123,22 @@ public interface Property {
      * @return the purchase price of the property
      */
     int getPurchasePrice();
+
+    /**
+     * This method checks if the property has an owner.
+     * The owner must be different from the bank.
+     * 
+     * @return true if there is an owner (!= bank), false otherwise
+     */
+    boolean isOwnedByPlayer();
+
+    /**
+     * This method checks if playerID is the owner.
+     * The owner must be different from the bank.
+     * 
+     * @param playerID the id of the player
+     * 
+     * @return true if there is the owner (!= bank), false otherwise
+     */
+    boolean playerIsTheOwner(String playerID);
 }

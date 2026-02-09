@@ -3,6 +3,9 @@ package it.unibo.javapoly.model.impl.board;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
 
@@ -18,7 +21,8 @@ public final class BoardImpl implements Board {
      *
      * @param tiles the tiles composing the board
      */
-    public BoardImpl(final List<Tile> tiles) {
+    @JsonCreator
+    public BoardImpl(@JsonProperty("tiles") final List<Tile> tiles) {
         this.tiles = new ArrayList<>(tiles);
     }
 

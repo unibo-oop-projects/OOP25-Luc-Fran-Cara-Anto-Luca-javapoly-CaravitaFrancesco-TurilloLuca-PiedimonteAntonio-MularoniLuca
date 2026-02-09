@@ -1,5 +1,9 @@
 package it.unibo.javapoly.model.impl.property;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import java.util.Objects;
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.Property;
@@ -12,7 +16,10 @@ import it.unibo.javapoly.model.impl.Card.AbstractPropertyCard;
  * This class manages the property's ownership, rent calculation, and house construction.
  *
  */
+@JsonTypeName("PROPERTYIMPL")
 public final class PropertyImpl implements Property {
+
+    private static final int IS_HOTEL = 5;
 
     private final String id;
     private final int position;
@@ -26,7 +33,11 @@ public final class PropertyImpl implements Property {
      * @param position board index
      * @param card associated card
      */
-    public PropertyImpl(final String id, final int position, final AbstractPropertyCard card) {
+    @JsonCreator
+    public PropertyImpl(
+            @JsonProperty("id") final String id, 
+            @JsonProperty("position") final int position, 
+            @JsonProperty("card") final AbstractPropertyCard card) {
         this.id = Objects.requireNonNull(id);
         this.position = position;
         this.card = Objects.requireNonNull(card);
@@ -36,7 +47,7 @@ public final class PropertyImpl implements Property {
     /**
      * Constructor to create a copy of a passed instance.
      *
-     * @param property nstance from which to create a copy
+     * @param property instance from which to create a copy
      */
     public PropertyImpl(final Property property) {
         this(property.getId(), property.getPosition(), property.getCard());
@@ -49,15 +60,14 @@ public final class PropertyImpl implements Property {
      * 
      * @return the unique identifier of the property
      */
+    @JsonProperty
     @Override
     public String getId() {
         return this.id;
     }
 
     /**
-     * Gets the card associated with this property.
-     * 
-     * @return the associated card
+     * {@inheritDoc}
      */
     @Override
     public AbstractPropertyCard getCard() {
@@ -75,9 +85,7 @@ public final class PropertyImpl implements Property {
     }
 
     /**
-     * Gets the position of the property on the board.
-     * 
-     * @return the position of the property
+     * {@inheritDoc}
      */
     @Override
     public int getPosition() {
@@ -85,10 +93,7 @@ public final class PropertyImpl implements Property {
     }
 
     /**
-     * Calculates the rent to be paid for this property, given the rent context.
-     * 
-     * @param ctx the context of the rent calculation
-     * @return the calculated rent
+     * {@inheritDoc}
      */
     @Override
     public int getRent(final RentContext ctx) {
@@ -99,16 +104,46 @@ public final class PropertyImpl implements Property {
     }
 
     /**
-     * Gets the purchase price of this property.
-     * 
-     * @return the purchase price of the property
+     * {@inheritDoc}
      */
     @Override
     public int getPurchasePrice() {
         return this.state.getPurchasePrice();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PropertyGroup getPropertyGroup() {
+        return this.card.getGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getIdOwner() {
+        return this.state.getOwnerId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getBuiltHouses() {
+        return this.state.getHouses();
+    }
+
     //#endregion
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isOwnedByPlayer() {
+        return this.state.isOwnedByPlayer();
+    }
 
     /**
      * Build one house on this property for the provided owner.
@@ -125,7 +160,7 @@ public final class PropertyImpl implements Property {
 
         Objects.requireNonNull(ownerID);
 
-        if (!this.state.isOwnedByPlayer() || !this.state.getOwnerId().equals(ownerID)) {
+        if (!this.state.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
             throw new IllegalStateException("player is not the owner");
         }
 
@@ -133,11 +168,7 @@ public final class PropertyImpl implements Property {
     }
 
     /**
-     * Destroy one house on this property for the provided owner.
-     * 
-     * @param ownerID the owner who wants to remove a house
-     * @return true if a house/hotel has been removed, false otherwise
-     * @throws IllegalStateException if owner is not the property's owner
+     * {@inheritDoc}
      */
     @Override
     public boolean destroyHouse(final String ownerID) {
@@ -147,7 +178,7 @@ public final class PropertyImpl implements Property {
 
         Objects.requireNonNull(ownerID);
 
-        if (!this.state.isOwnedByPlayer() || !this.state.getOwnerId().equals(ownerID)) {
+        if (!this.state.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
             throw new IllegalStateException("player is not the owner");
         }
 
@@ -155,15 +186,11 @@ public final class PropertyImpl implements Property {
     }
 
     /**
-     * This method sells this property to {@code buyerID}.
-     * Sets {@code buyerID} as new owner only if the bank owns it.
-     *
-     * @param buyerID the player trying to buy
-     * @return true if the new owner is a player, false otherwise
+     * {@inheritDoc}
      */
     @Override
     public boolean assignOwner(final String buyerID) {
-        if (this.state.isOwnedByPlayer()) {
+        if (isOwnedByPlayer()) {
             return false;
         }
 
@@ -172,11 +199,27 @@ public final class PropertyImpl implements Property {
     }
 
     /**
-     * Clears the owner of this property and sets the bank as the new owner.
+     * {@inheritDoc}
      */
     @Override
     public void clearOwner() {
         this.state.bankIsNewOwnerID();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean playerIsTheOwner(final String playerID) {
+        return this.state.getOwnerId().equals(playerID);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean hotelIsBuilt() {
+        return this.getBuiltHouses() == this.IS_HOTEL;
     }
 
     /** 

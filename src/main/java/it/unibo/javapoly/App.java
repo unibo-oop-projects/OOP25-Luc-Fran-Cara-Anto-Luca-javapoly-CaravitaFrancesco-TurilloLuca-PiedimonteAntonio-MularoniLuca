@@ -1,53 +1,80 @@
 package it.unibo.javapoly;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
-import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.controller.impl.MatchControllerImpl;
-import it.unibo.javapoly.model.api.TokenType;
-import it.unibo.javapoly.model.api.board.Board;
-import it.unibo.javapoly.model.api.board.Tile;
-import it.unibo.javapoly.model.api.economy.Bank;
-import it.unibo.javapoly.model.api.Player;
-import it.unibo.javapoly.model.impl.PlayerImpl;
+import it.unibo.javapoly.model.api.card.GameCard;
+import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.impl.board.BoardImpl;
-import it.unibo.javapoly.model.impl.economy.BankImpl;
-import javafx.application.Application;
-import javafx.stage.Stage;
+import it.unibo.javapoly.utils.BoardLoader;
+import it.unibo.javapoly.utils.CardLoader;
 
 /**
  * Main application entry-point's class.
  */
-public final class App extends Application{
+public final class App {
 
-    @Override
-    public void start(Stage primaryStage) {
-        List<Tile> tiles = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            final int pos = i;
-            // Usiamo una classe anonima per non dover creare 40 file diversi ora
-            tiles.add(new it.unibo.javapoly.model.impl.board.tile.AbstractTile(pos, 
-                it.unibo.javapoly.model.api.board.TileType.PROPERTY, "Casella " + pos) {
-                // Classe astratta implementata al volo per il test
-            });
-        }
-        Board board = new BoardImpl(tiles); 
-        Bank bank = new BankImpl();   
-        List<Player> players = List.of(
-            new PlayerImpl("Gigi", 1500, TokenType.CAR),
-            new PlayerImpl("Mario", 1500, TokenType.DOG)
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+
+    private App() { }
+
+    /**
+     * Main application entry-point.
+     *
+     * @param args passed to JavaFX.
+     */
+    public static void main(final String[] args) {
+        /*
+        final List<Integer> rents = List.of(35, 90, 170, 260);
+
+        final AbstractPropertyCard p = new LandPropertyCard(
+            "VIA_ROMA",
+            "Via Roma",
+            "Descrizione",
+            100,
+            PropertyGroup.RED,
+            10,
+            rents,
+            10,
+            10,
+            10
         );
 
-        MatchController controller = new MatchControllerImpl(players, board, bank);
-        
-        controller.getMainView().start(primaryStage);
+        try {
+            final String json = JsonUtils.mapper().writeValueAsString(p);
+            LOGGER.info(json);
+        } catch (final JsonProcessingException e) {
+            LOGGER.log(Level.SEVERE, "Failed to serialize property card", e);
+        } */
 
+        try {
+            final String pathCards = "src/main/resources/Card/UnexpectedCards.json";
+            final List<GameCard> cards = CardLoader.loadCardsFromFile(pathCards);
+            LOGGER.info("Cards loaded: " + cards.size());
 
-        controller.startGame(); 
-    }
+        } catch (final IOException e) {
+            LOGGER.severe("Error loading Cards: " + e.getMessage());
+        }
 
-    public static void main(final String[] args) {
-        launch(args); 
+        try {
+
+            final String pathBoardJson = "src/main/resources/Card/BoardTiles.json";
+            final BoardImpl board = BoardLoader.loadBoardFromJson(pathBoardJson);
+            final Map<String, Property> properties = BoardLoader.loadPropertiesFromJson(pathBoardJson);
+
+            LOGGER.info("Board loaded with " + board.size() + " tiles");
+            LOGGER.info("Total properties: " + properties.size());
+
+            final Property vicoloCorto = properties.get("vicolo_corto");
+            if (vicoloCorto != null) {
+                LOGGER.info("Property: " + vicoloCorto.getCard().getName());
+                LOGGER.info("Price: " + vicoloCorto.getPurchasePrice());
+            }
+
+        } catch (final IOException e) {
+            LOGGER.severe("Error loading board or properties: " + e.getMessage());
+        }
     }
 }

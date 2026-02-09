@@ -8,15 +8,12 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.javapoly.model.api.RentContext;
-import it.unibo.javapoly.model.api.property.PropertyGroup;
-import it.unibo.javapoly.model.impl.Card.UtilityPropertyCard;
 
 class UtilityPropertyCardTest {
 
     private static final String ID = "U1";
     private static final String NAME = "Compagnia Elettrica";
     private static final String DESCRIPTION = "Forniamo corrente";
-    private static final PropertyGroup GROUP = PropertyGroup.UTILITY;
 
     private static final int PROPERTY_COST = 150;
 
@@ -34,7 +31,6 @@ class UtilityPropertyCardTest {
             NAME,
             DESCRIPTION,
             PROPERTY_COST,
-            GROUP,
             ONE_MULTIPLIER,
             TWO_MULTIPLIER
         );
@@ -54,7 +50,6 @@ class UtilityPropertyCardTest {
             NAME,
             DESCRIPTION,
             PROPERTY_COST,
-            GROUP,
             ONE_MULTIPLIER,
             TWO_MULTIPLIER
         );
@@ -74,7 +69,6 @@ class UtilityPropertyCardTest {
             NAME,
             DESCRIPTION,
             PROPERTY_COST,
-            GROUP,
             ONE_MULTIPLIER,
             TWO_MULTIPLIER
         );

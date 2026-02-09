@@ -1,0 +1,332 @@
+[ {
+  "id" : "1",
+  "name" : "Avanzate fino al Via. Ritirate 200.",
+  "description" : "",
+  "type" : "MOVE_TO",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 0
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "2",
+  "name" : "Avanzate fino alla più vicina stazione. Se non è vostra pagate il doppio dell’affitto.",
+  "description" : "",
+  "type" : "MOVE_TO_NEAREST",
+  "payload" : {
+    "type" : "PayLoadMoveToNearest",
+    "category" : "RAILROAD"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "3",
+  "name" : "Avanzate fino alla più vicina società. Se non è vostra pagate 10 volte il valore dei dadi.",
+  "description" : "",
+  "type" : "MOVE_TO_NEAREST",
+  "payload" : {
+    "type" : "PayLoadMoveToNearest",
+    "category" : "UTILITY"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "4",
+  "name" : "Avanzate fino a Parco della Vittoria.",
+  "description" : "",
+  "type" : "MOVE_TO",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 34
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "5",
+  "name" : "Andate indietro di tre caselle.",
+  "description" : "",
+  "type" : "MOVE_RELATIVE",
+  "payload" : {
+    "type" : "PayLoadMoveRelative",
+    "delta" : 3
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "6",
+  "name" : "Andate in prigione. Senza passare dal Via.",
+  "description" : "",
+  "type" : "GO_TO_JAIL",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 10
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "7",
+  "name" : "Uscite gratis di prigione.",
+  "description" : "",
+  "type" : "GET_OUT_OF_JAIL_FREE",
+  "payload" : null,
+  "keepUntilUsed" : true
+}, {
+  "id" : "8",
+  "name" : "Riparazioni agli edifici. Pagate 25 per ogni casa e 100 per ogni albergo.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayloadBuilding",
+    "house" : 25,
+    "hotel" : 100
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "9",
+  "name" : "Pagate una multa di 15.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 15,
+    "receiver" : "BANK"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "10",
+  "name" : "Avanzate fino a Stazione Nord.",
+  "description" : "",
+  "type" : "MOVE_TO_NEAREST",
+  "payload" : {
+    "type" : "PayLoadMoveToNearest",
+    "category" : "RAILROAD"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "11",
+  "name" : "Avanzate fino a Viale dei Giardini.",
+  "description" : "",
+  "type" : "MOVE_TO",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 37
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "12",
+  "name" : "Avanzate fino a Largo Colombo.",
+  "description" : "",
+  "type" : "MOVE_TO",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 24
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "13",
+  "name" : "La banca vi paga un dividendo di 50.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 50,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "14",
+  "name" : "Pagate spese di riparazione. 150.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 150,
+    "receiver" : "BANK"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "15",
+  "name" : "Avanzate fino alla più vicina stazione.",
+  "description" : "",
+  "type" : "MOVE_TO_NEAREST",
+  "payload" : {
+    "type" : "PayLoadMoveToNearest",
+    "category" : "RAILROAD"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "16",
+  "name" : "Avanzate fino a Vicolo Corto.",
+  "description" : "",
+  "type" : "MOVE_TO",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 1
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "17",
+  "name" : "Avanzate fino al Via. Ritirate 200.",
+  "description" : "",
+  "type" : "MOVE_TO",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 0
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "18",
+  "name" : "Errore della banca a vostro favore. Ritirate 200.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 200,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "19",
+  "name" : "Spese mediche. Pagate 50.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 50,
+    "receiver" : "BANK"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "20",
+  "name" : "Avete venduto azioni. Ritirate 50.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 50,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "21",
+  "name" : "Uscite gratis di prigione gratis.",
+  "description" : "",
+  "type" : "GET_OUT_OF_JAIL_FREE",
+  "payload" : null,
+  "keepUntilUsed" : true
+}, {
+  "id" : "22",
+  "name" : "Andate in prigione. Andate direttamente in prigione senza passare dal Via.",
+  "description" : "",
+  "type" : "GO_TO_JAIL",
+  "payload" : {
+    "type" : "PayLoadMoveTo",
+    "targetPosition" : 10
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "23",
+  "name" : "Eredità. Ritirate 100.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 100,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "24",
+  "name" : "Reddito annuale. Ritirate 100.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 100,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "25",
+  "name" : "Rimborso tasse. Ritirate 20.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 20,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "26",
+  "name" : "Pagate l’assicurazione sulla vita. Pagate 50.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 50,
+    "receiver" : "BANK"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "27",
+  "name" : "Pagate spese scolastiche. Pagate 50.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 50,
+    "receiver" : "BANK"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "28",
+  "name" : "Avete vinto un concorso di bellezza. Ritirate 10.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 10,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "29",
+  "name" : "Ricevete una rendita. Ritirate 25.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 25,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "30",
+  "name" : "Riparazioni stradali. Pagate 40 per ogni casa e 115 per ogni albergo.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayloadBuilding",
+    "house" : 40,
+    "hotel" : 115
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "31",
+  "name" : "Ricevete 10 per ogni giocatore.",
+  "description" : "",
+  "type" : "RECEIVE_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 10,
+    "receiver" : "PLAYER"
+  },
+  "keepUntilUsed" : false
+}, {
+  "id" : "32",
+  "name" : "Pagate una multa di 10.",
+  "description" : "",
+  "type" : "PAY_BANK",
+  "payload" : {
+    "type" : "PayLoadMoney",
+    "amount" : 15,
+    "receiver" : "BANK"
+  },
+  "keepUntilUsed" : false
+} ]
