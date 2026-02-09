@@ -1,10 +1,12 @@
 package it.unibo.javapoly.controller.impl;
 
-import java.lang.Thread.State;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import it.unibo.javapoly.controller.api.EconomyController;
 import it.unibo.javapoly.controller.api.MatchController;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerState;
@@ -31,6 +33,10 @@ public class MatchControllerImpl implements MatchController {
     private final Board gameBoard;
     private final Bank bank;     
     private final MainView gui;
+    private final Map<Player, Integer> jailTurnCounter = new HashMap<>();
+
+    private EconomyController economyController;
+    private PropertyController propertyController;
 
     private int currentPlayerIndex;
     private int consecutiveDoubles;
@@ -71,6 +77,10 @@ public class MatchControllerImpl implements MatchController {
         for (Player p : this.players) {
             p.addObserver(this); 
         }
+    }
+
+    public MatchControllerImpl(final List<Player> players){
+        this.players = players;
     }
 
     /**
@@ -125,9 +135,28 @@ public class MatchControllerImpl implements MatchController {
         final int steps = diceThrow.throwAll();
         final boolean isDouble = diceThrow.isDouble();
 
+        if(currentPlayer.getState() instanceof JailedState){
+            int turns = jailTurnCounter.getOrDefault(currentPlayer, 0);
+            if(isDouble){
+                updateGui(g -> g.addLog(currentPlayer.getName() + " esce col DOPPIO (" + steps + ")!"));
+                currentPlayer.setState(FreeState.getInstance());
+                jailTurnCounter.remove(currentPlayer);
+            }else if(turns >= 2){
+                updateGui(g -> g.addLog(currentPlayer.getName() + " fallisce il 3° tentativo. Paga 50€ ed esce!"));
+                currentPlayer.tryToPay(50);
+                currentPlayer.setState(FreeState.getInstance());
+                jailTurnCounter.remove(currentPlayer);
+            }else{
+                jailTurnCounter.put(currentPlayer, turns + 1);
+                updateGui(g -> g.addLog(currentPlayer.getName() + " resta in prigione (Tentativo " + (turns + 1) + "/3)"));
+                this.hasRolled = true;
+                return;
+                }
+            }
+
         updateGui(g -> g.addLog(currentPlayer.getName() + " lancia: " + steps + (isDouble ? " (DOPPIO!)" : "")));
         
-        if(isDouble){
+        if(isDouble && !(currentPlayer.getState() instanceof JailedState)){
             this.consecutiveDoubles++;
             if(this.consecutiveDoubles == MAX_DOUBLES){
                 updateGui(g -> g.addLog("3 doppi! In prigione."));
@@ -135,13 +164,13 @@ public class MatchControllerImpl implements MatchController {
                 this.hasRolled = true;
                 return;
             }
-        }else {
+        } else {
             this.consecutiveDoubles = 0;
             this.hasRolled = true;
         }
 
-       int potentialPos = gameBoard.normalizePosition(currentPlayer.getCurrentPosition() + steps);
-       currentPlayer.playTurn(potentialPos, isDouble);
+        int potentialPos = gameBoard.normalizePosition(currentPlayer.getCurrentPosition() + steps);
+        currentPlayer.playTurn(potentialPos, isDouble);
     }
 
     @Override
@@ -183,8 +212,12 @@ public class MatchControllerImpl implements MatchController {
         final Player currentPlayer = getCurrentPlayer();
         final Tile currentTile = gameBoard.getTileAt(currentPlayer.getCurrentPosition());
 
-        if (currentTile.getType() == TileType.TAX) {
-            updateGui(g -> g.addLog("Tassa pagata!"));
+        if (currentTile.getType() == TileType.TAX && currentPlayer.getCurrentPosition() == 4) {
+            currentPlayer.tryToPay(200);
+            updateGui(g -> g.addLog(currentPlayer.getName() + " paga la Tassa Patrimoniale di 200€"));
+        }else if(currentTile.getType() == TileType.TAX){
+            currentPlayer.tryToPay(100);
+            updateGui(g -> g.addLog(currentPlayer.getName() + " paga la Tassa di Lusso di 100€"));
         }
         if (currentTile.getType() == TileType.GO_TO_JAIL) {
             handlePrison();
@@ -247,11 +280,20 @@ public class MatchControllerImpl implements MatchController {
         if(p.getState() instanceof JailedState){
             if(p.tryToPay(50)){
                 p.setState(FreeState.getInstance());
+                jailTurnCounter.remove(p);
                 updateGui(g -> {
                     g.addLog(p.getName() + " paga 50€ ed è libero!");
                     g.refreshAll();
                 });
             }
         }
+    }
+
+    public EconomyController getEconomyController() {
+        return this.economyController;
+    }
+
+    public PropertyController getPropertyController() {
+        return this.propertyController;
     }
 }
