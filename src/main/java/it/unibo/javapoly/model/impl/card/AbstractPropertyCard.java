@@ -143,7 +143,7 @@ public abstract class AbstractPropertyCard implements Card {
     @Override
     public String toString() {     // FIXME: Model can't use utils
         try {
-            return JsonUtils.mapper().writeValueAsString(this);
+            return JsonUtils.getInstance().mapper().writeValueAsString(this);
         } catch (final JsonProcessingException e) {
             return "{\"error\":\"Serialization failed\"}";
         }
