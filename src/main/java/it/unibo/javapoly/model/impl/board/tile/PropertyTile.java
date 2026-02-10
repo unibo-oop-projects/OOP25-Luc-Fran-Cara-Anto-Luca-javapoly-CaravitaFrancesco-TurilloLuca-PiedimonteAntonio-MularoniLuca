@@ -46,7 +46,7 @@ public class PropertyTile extends AbstractTile {
     }
 
     /**
-     * Returns the property group (color) of this tile.
+     * Returns the property group (e.g. color) of this tile.
      *
      * @return the property group
      */
