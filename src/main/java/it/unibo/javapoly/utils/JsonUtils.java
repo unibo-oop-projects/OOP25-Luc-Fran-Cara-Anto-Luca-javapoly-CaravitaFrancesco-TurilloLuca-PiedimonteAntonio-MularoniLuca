@@ -3,6 +3,7 @@ package it.unibo.javapoly.utils;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -15,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * through {@link #mapper()} to avoid accidental cross-thread/state mutation.
  */
 public final class JsonUtils {
-    private static final ObjectMapper MAPPER = create();
+    private final ObjectMapper mapper;
 
     private JsonUtils() {
-        // Prevent instantiation
+        this.mapper = create();
     }
 
     /**
@@ -34,7 +35,7 @@ public final class JsonUtils {
         m.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
         m.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        // These two lines enable the @JsonRootName of the classes.
+        // These one lines enable the @JsonRootName of the classes.
         m.enable(SerializationFeature.WRAP_ROOT_VALUE);
         // m.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         return m;
@@ -45,7 +46,25 @@ public final class JsonUtils {
      *
      * @return a copy of the configured ObjectMapper to be used for (de)serialization.
      */
-    public static ObjectMapper mapper() {
-        return MAPPER.copy();
+    public ObjectMapper mapper() {
+        return mapper.copy();
     }
+
+    /**
+     * This method return the only istance of this class.
+     *
+     * @return the only one existing istance.
+     */
+    public static JsonUtils getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+
+    /**
+     * Static class containing the single JsonUtils instance.
+     * The instance will only be created when actually requested.
+     */
+    private static final class SingletonHelper {
+        private static final JsonUtils INSTANCE = new JsonUtils();
+    }
+
 }
