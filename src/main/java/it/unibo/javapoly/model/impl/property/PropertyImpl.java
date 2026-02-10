@@ -49,7 +49,7 @@ public final class PropertyImpl implements Property {
      *
      * @param property instance from which to create a copy
      */
-    public PropertyImpl(final Property property) {
+    public PropertyImpl(final Property property) { // FIXME: non aggiunge lo state.
         this(property.getId(), property.getPosition(), property.getCard());
     }
 
