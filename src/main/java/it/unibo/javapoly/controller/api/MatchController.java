@@ -1,6 +1,7 @@
 package it.unibo.javapoly.controller.api;
 
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerObserver;
@@ -60,4 +61,20 @@ public interface MatchController extends PlayerObserver{
     List<Player> getPlayers();
 
     void payToExitJail();
+
+    int getCurrentPlayerIndex();
+
+    int getConsecutiveDoubles();
+
+    void setCurrentPlayerIndex(int indx);
+
+    void setConsecutiveDoubles(int d);
+
+    void setHasRolled(boolean b);
+
+    void restoreJailTurnCounter(final Map<String, Integer> map, final List<Player> players);
+
+    EconomyController getEconomyController();
+
+    PropertyController getPropertyController();
 }

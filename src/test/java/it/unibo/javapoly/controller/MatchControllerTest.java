@@ -1,7 +1,9 @@
 package it.unibo.javapoly.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +13,12 @@ import it.unibo.javapoly.controller.impl.MatchControllerImpl;
 import it.unibo.javapoly.model.api.TokenType;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
-import it.unibo.javapoly.model.api.economy.Bank;
+import it.unibo.javapoly.model.api.board.TileType;
+import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.impl.JailedState;
 import it.unibo.javapoly.model.impl.PlayerImpl;
 import it.unibo.javapoly.model.impl.board.BoardImpl;
-import it.unibo.javapoly.model.impl.economy.BankImpl;
+import it.unibo.javapoly.model.impl.board.tile.AbstractTile;
 
 public class MatchControllerTest {
     private MatchControllerImpl controller;
@@ -27,17 +30,16 @@ public class MatchControllerTest {
         List<Tile> tiles = new ArrayList<>();
         for (int i = 0; i < 40; i++) {
             final int pos = i;
-            tiles.add(new it.unibo.javapoly.model.impl.board.tile.AbstractTile(pos, 
-                it.unibo.javapoly.model.api.board.TileType.PROPERTY, "Tile " + pos) {});
+            tiles.add(new AbstractTile(pos, TileType.FREE_PARKING, "Tile " + pos) {});
         }
 
         Board board = new BoardImpl(tiles);
-        Bank bank = new BankImpl();
+        Map<String, Property> properties = new HashMap<>();
         p1 = new PlayerImpl("Gigi", 1500, TokenType.CAR);
         p2 = new PlayerImpl("Mario", 1500, TokenType.DOG);
 
         // PASSIAMO 'null' ALLA GUI: così JUnit non proverà ad aprire finestre!
-        controller = new MatchControllerImpl(List.of(p1, p2), board, bank, null);
+        controller = new MatchControllerImpl(List.of(p1, p2), board, properties);
     }
 
     @Test

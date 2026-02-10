@@ -109,4 +109,8 @@ public class MainView {
     public void clearLog(){
         this.logContainer.getChildren().clear();
     }
+
+    public BorderPane getRoot(){
+        return this.root;
+    }
 }
