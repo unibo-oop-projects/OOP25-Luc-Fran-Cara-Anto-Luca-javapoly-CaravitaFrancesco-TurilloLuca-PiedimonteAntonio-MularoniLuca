@@ -33,7 +33,7 @@ public interface Property {
      * 
      * @return the associated card
      */
-    AbstractPropertyCard getCard(); // FIXME: valutare il tipo restituito 
+    AbstractPropertyCard getCard();
 
     /**
      * Return the Group type of the property.
