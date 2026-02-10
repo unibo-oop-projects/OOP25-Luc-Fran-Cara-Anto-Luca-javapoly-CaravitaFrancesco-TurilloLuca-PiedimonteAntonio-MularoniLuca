@@ -20,7 +20,8 @@ public final class JailTile extends AbstractTile {
      */
     @JsonCreator
     public JailTile(@JsonProperty("position") final int position,
-                    @JsonProperty("name") final String name) {
-        super(position, TileType.JAIL, name);
+                    @JsonProperty("name") final String name,
+                    @JsonProperty("description") final String desc) {
+        super(position, TileType.JAIL, name, desc);
     }
 }

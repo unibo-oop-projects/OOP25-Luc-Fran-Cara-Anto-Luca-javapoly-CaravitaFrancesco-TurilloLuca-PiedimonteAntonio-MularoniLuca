@@ -25,8 +25,9 @@ public final class TaxTile extends AbstractTile {
     public TaxTile(
             @JsonProperty("position") final int position,
             @JsonProperty("name") final String name,
-            @JsonProperty("amountTax") final int amount) {
-        super(position, TileType.TAX, name);
+            @JsonProperty("amountTax") final int amount,
+            @JsonProperty("description") final String desc) {
+        super(position, TileType.TAX, name, desc);
         this.amountTax = amount;
     }
 

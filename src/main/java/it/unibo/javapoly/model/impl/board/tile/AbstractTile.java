@@ -14,6 +14,7 @@ public abstract class AbstractTile implements Tile {
     private final int position;
     private final TileType type;
     private final String name;
+    private final String description;
 
     /**
      * Creates a tile with the given position, type and name.
@@ -22,10 +23,11 @@ public abstract class AbstractTile implements Tile {
      * @param type the tile type
      * @param name the tile name
      */
-    protected AbstractTile(final int position, final TileType type, final String name) {
+    protected AbstractTile(final int position, final TileType type, final String name, final String desc) {
         this.position = position;
         this.type = type;
         this.name = name;
+        this.description = desc;
     }
 
     /**
@@ -33,7 +35,7 @@ public abstract class AbstractTile implements Tile {
      */
     @Override
     public int getPosition() {
-        return position;
+        return this.position;
     }
 
     /**
@@ -41,7 +43,7 @@ public abstract class AbstractTile implements Tile {
      */
     @Override
     public TileType getType() {
-        return type;
+        return this.type;
     }
 
     /**
@@ -49,6 +51,14 @@ public abstract class AbstractTile implements Tile {
      */
     @Override
     public String getName() {
-        return name;
+        return this.name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+        return this.description;
     }
 }

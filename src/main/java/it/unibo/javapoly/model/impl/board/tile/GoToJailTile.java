@@ -25,8 +25,9 @@ public final class GoToJailTile extends AbstractTile {
     public GoToJailTile(
             @JsonProperty("position") final int position,
             @JsonProperty("name") final String name,
-            @JsonProperty("jailPos") final int jailPos) {
-        super(position, TileType.GO_TO_JAIL, name);
+            @JsonProperty("jailPos") final int jailPos,
+            @JsonProperty("description") final String desc) {
+        super(position, TileType.GO_TO_JAIL, name, desc);
         this.jailPos = jailPos;
     }
 

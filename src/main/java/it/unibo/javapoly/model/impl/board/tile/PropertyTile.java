@@ -29,8 +29,9 @@ public class PropertyTile extends AbstractTile {
     @JsonCreator
     public PropertyTile(@JsonProperty("position") final int position,
                             @JsonProperty("name") final String name,
-                            @JsonProperty("property") final Property property) {
-        super(position, TileType.PROPERTY, name);
+                            @JsonProperty("property") final Property property,
+                            @JsonProperty("description") final String desc) {
+        super(position, TileType.PROPERTY, name, desc);
         this.property = new PropertyImpl(Objects.requireNonNull(property));
 
     }

@@ -48,4 +48,11 @@ public interface Tile {
      * @return the tile name
      */
     String getName();
+
+    /**
+     * Returns the description of the tile.
+     *
+     * @return the description
+     */
+    String getDescription();
 }

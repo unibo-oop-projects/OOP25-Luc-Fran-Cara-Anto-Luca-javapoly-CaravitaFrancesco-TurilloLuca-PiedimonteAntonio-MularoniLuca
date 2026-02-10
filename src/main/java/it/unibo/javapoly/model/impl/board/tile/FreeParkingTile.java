@@ -20,8 +20,9 @@ public final class FreeParkingTile extends AbstractTile {
      */
     @JsonCreator
     public FreeParkingTile(@JsonProperty("position") final int position,
-                           @JsonProperty("name") final String name) {
-        super(position, TileType.FREE_PARKING, name);
+                           @JsonProperty("name") final String name,
+                           @JsonProperty("description") final String desc) {
+        super(position, TileType.FREE_PARKING, name, desc);
     }
 
 }

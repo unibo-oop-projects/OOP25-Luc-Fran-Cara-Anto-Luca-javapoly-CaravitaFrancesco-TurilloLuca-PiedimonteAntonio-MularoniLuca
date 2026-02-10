@@ -25,9 +25,10 @@ public final class UnexpectedTile extends AbstractTile {
     public UnexpectedTile(
             @JsonProperty("position") final int position,
             @JsonProperty("name") final String name,
-            @JsonProperty("deckCardID") final String deckCardID) {
+            @JsonProperty("deckCardID") final String deckCardID,
+            @JsonProperty("description") final String desc) {
 
-        super(position, TileType.UNEXPECTED, name);
+        super(position, TileType.UNEXPECTED, name, desc);
         this.deckCardID = deckCardID;
     }
 

@@ -25,8 +25,9 @@ public final class StartTile extends AbstractTile {
     public StartTile(
             @JsonProperty("position") final int position,
             @JsonProperty("name") final String name,
-            @JsonProperty("reward") final int reward) {
-        super(position, TileType.START, name);
+            @JsonProperty("reward") final int reward,
+            @JsonProperty("description") final String desc) {
+        super(position, TileType.START, name, desc);
         this.reward = reward;
     }
 
