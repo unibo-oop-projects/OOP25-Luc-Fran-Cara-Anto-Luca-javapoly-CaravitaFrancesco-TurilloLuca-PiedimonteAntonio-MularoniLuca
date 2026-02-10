@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.card.Card;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
-import it.unibo.javapoly.utils.JsonUtils;
 
 /**
  * Base representation of a property card.
@@ -141,11 +139,14 @@ public abstract class AbstractPropertyCard implements Card {
      * @return the JSON string representing this card; if serialization fails a short JSON error object is returned.
      */
     @Override
-    public String toString() {     // FIXME: Model can't use utils
-        try {
-            return JsonUtils.getInstance().mapper().writeValueAsString(this);
-        } catch (final JsonProcessingException e) {
-            return "{\"error\":\"Serialization failed\"}";
-        }
+    public String toString() {
+        return "AbstractPropertyCard{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", propertyCost=" + propertyCost +
+                ", group=" + group +
+                '}';
     }
+
 }
