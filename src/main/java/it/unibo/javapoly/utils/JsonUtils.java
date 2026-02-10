@@ -61,7 +61,6 @@ public final class JsonUtils {
 
     /**
      * Static class containing the single JsonUtils instance.
-     * The instance will only be created when actually requested.
      */
     private static final class SingletonHelper {
         private static final JsonUtils INSTANCE = new JsonUtils();
