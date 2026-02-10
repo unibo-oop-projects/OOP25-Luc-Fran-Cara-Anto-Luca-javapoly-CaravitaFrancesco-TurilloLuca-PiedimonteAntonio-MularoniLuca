@@ -29,6 +29,8 @@ public class BoardControllerImpl implements BoardController {
     private final EconomyController bank;
     private final CardController cardController;
 
+    private String message;
+
     /**
      * Constructs a new BoardControllerImpl.
      *
@@ -43,6 +45,7 @@ public class BoardControllerImpl implements BoardController {
         this.bank = bank;
         this.propertyController = propertyController;
         this.cardController = new CardControllerImpl(bank, this, this.propertyController);
+        this.message = "";
     }
 
     /**
@@ -131,6 +134,8 @@ public class BoardControllerImpl implements BoardController {
             default:
                 break;
         }
+
+        this.message = tile.getDescription();
     }
 
     /**
@@ -140,6 +145,17 @@ public class BoardControllerImpl implements BoardController {
     public Tile sendPlayerToJail(final Player player) {
         player.setState(new JailedState());
         return movePlayerToTile(player, this.JAIL_POSITION);
+    }
+
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMessagePrint() {
+        final String tmp = this.message;
+        this.message = ""; 
+        return tmp;
     }
 
     /**
@@ -193,4 +209,5 @@ public class BoardControllerImpl implements BoardController {
            || tile.getType() == TileType.RAILROAD 
            || tile.getType() == TileType.UTILITY;
     }
+
 }

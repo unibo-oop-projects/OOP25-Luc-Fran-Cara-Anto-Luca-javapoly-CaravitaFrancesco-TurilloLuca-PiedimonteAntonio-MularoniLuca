@@ -67,4 +67,11 @@ public interface BoardController {
      * @return true if the movement passes through "Go", false otherwise
      */
     boolean passedThroughGo(int fromPosition, int toPosition);
+
+    /**
+     * This method return a message that need to print on the view.
+     * 
+     * @return the meessage
+     */
+    String getMessagePrint();
 }
