@@ -30,7 +30,7 @@ public final class CardLoader {
      * @throws IOException If there is an error reading from the file.
      */
     public static List<GameCard> loadCardsFromFile(final String filePath) throws IOException {
-        final ObjectMapper mapper = JsonUtils.mapper();
+        final ObjectMapper mapper = JsonUtils.getInstance().mapper();
         final File file = new File(filePath);
         return mapper.readValue(file, 
             mapper.getTypeFactory().constructCollectionType(List.class, GameCardImpl.class));
@@ -44,7 +44,7 @@ public final class CardLoader {
      * @throws IOException If there is an error writing to the file.
      */
     public static void writeCardsToFile(final List<GameCard> cards, final String filePath) throws IOException {
-        final ObjectMapper mapper = JsonUtils.mapper();
+        final ObjectMapper mapper = JsonUtils.getInstance().mapper();
         final File file = new File(filePath);
         mapper.writeValue(file, cards);
     }

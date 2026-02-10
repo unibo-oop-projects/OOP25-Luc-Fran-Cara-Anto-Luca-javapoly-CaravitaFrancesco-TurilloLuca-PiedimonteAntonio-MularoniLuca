@@ -31,7 +31,7 @@ public final class BoardLoader {
      * @throws IOException if an I/O error occurs during file reading or parsing
      */
     public static BoardImpl loadBoardFromJson(final String jsonFilePath) throws IOException {
-        final ObjectMapper mapper = JsonUtils.mapper();
+        final ObjectMapper mapper = JsonUtils.getInstance().mapper();
 
         final JsonNode root = mapper.readTree(new File(jsonFilePath));
 
@@ -58,7 +58,7 @@ public final class BoardLoader {
      * @throws IOException if an I/O error occurs during file reading or parsing
      */
     public static Map<String, Property> loadPropertiesFromJson(final String jsonFilePath) throws IOException {
-        final ObjectMapper mapper = JsonUtils.mapper();
+        final ObjectMapper mapper = JsonUtils.getInstance().mapper();
 
         final JsonNode root = mapper.readTree(new File(jsonFilePath));
         final JsonNode tilesNode = root.path("tiles");
