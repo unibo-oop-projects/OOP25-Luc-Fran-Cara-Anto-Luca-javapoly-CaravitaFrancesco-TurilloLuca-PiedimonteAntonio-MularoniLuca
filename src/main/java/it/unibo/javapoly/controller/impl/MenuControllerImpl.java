@@ -81,7 +81,7 @@ public class MenuControllerImpl implements MenuController {
             return;
         }
         try {
-            final MatchController matchController = MatchSerializationUtils.loadMatch(saveFile);
+            final MatchController matchController = MatchSnapshotter.loadMatch(saveFile);
             final MainView mainView = matchController.getMainView();
             final Stage stage = this.menuView.getStage();
             stage.getScene().setRoot(mainView.getRoot());
