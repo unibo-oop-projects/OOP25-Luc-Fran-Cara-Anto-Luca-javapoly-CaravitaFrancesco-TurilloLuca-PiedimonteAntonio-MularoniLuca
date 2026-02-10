@@ -187,4 +187,18 @@ public interface Player {
      * @return the index of the cell where the player is currently located.
      */
     int getCurrentPosition();
+
+    /**
+     * Set the position of the player.
+     *
+     * @param position in the board of the player
+     */
+    void setPosition(int position);
+
+    /**
+     * Get the token type chose by the player.
+     *
+     * @return token type chose by the player
+     */
+    TokenType getTokenType();
 }
