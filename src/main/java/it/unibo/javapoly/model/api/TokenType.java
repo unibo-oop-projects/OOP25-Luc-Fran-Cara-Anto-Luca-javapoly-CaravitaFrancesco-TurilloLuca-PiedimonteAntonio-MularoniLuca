@@ -9,10 +9,14 @@ package it.unibo.javapoly.model.api;
  * @see Token
  */
 public enum TokenType {
+    BOAT,
+    BOOT,
     CAR,
-    HAT,
+    CAT,
     DOG,
-    SHOE,
-    SHIP,
-    CAT
+    DUCK,
+    HAT,
+    IRON,
+    THIMBLE,
+    WHEELBARROW
 }
