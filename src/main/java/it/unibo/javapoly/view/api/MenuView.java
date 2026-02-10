@@ -1,6 +1,7 @@
 package it.unibo.javapoly.view.api;
 
 import it.unibo.javapoly.controller.api.MenuController;
+import javafx.stage.Stage;
 
 /**
  * Interface for the main menu view of the JavaPoly game.
@@ -25,4 +26,16 @@ public interface MenuView {
      * Transitions the application to the Player Setup view.
      */
     void showPlayerSetupView();
+
+    /**
+     * Create file picker dialog.
+     */
+    void showLoadGameView();
+
+    /**
+     * Get stage.
+     *
+     * @return stage.
+     */
+    Stage getStage();
 }
