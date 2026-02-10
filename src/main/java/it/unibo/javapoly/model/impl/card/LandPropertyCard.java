@@ -77,7 +77,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(this.ERR_LIST_IS_EMPTY);
         }
-        return this.rents.get(0);
+        return this.rents.getFirst();
     }
 
     /**
@@ -89,7 +89,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(this.ERR_LIST_IS_EMPTY);
         }
-        return this.rents.get(this.rents.size() - 1);
+        return this.rents.getLast();
     }
 
     /**
@@ -108,22 +108,6 @@ public class LandPropertyCard extends AbstractPropertyCard {
      */
     public int getHotelCost() {
         return this.hotelPrice;
-    }
-
-    /**
-     * This method returns the rent based on the number of houses built.
-     *
-     * @param houseNumber the number of houses built
-     * @return the rent for the given number of houses.
-     */
-    public int getHouseRentByNumber(final int houseNumber) {
-        if (checkListIsEmpty()) {
-            throw new NoSuchElementException(this.ERR_LIST_IS_EMPTY);
-        }
-        if (checkIsHotel(houseNumber)) {
-            return getHotelRent();
-        }
-        return this.rents.get(houseNumber);
     }
 
     /**
@@ -157,6 +141,22 @@ public class LandPropertyCard extends AbstractPropertyCard {
     }
 
     //#region Private method
+
+    /**
+     * This method returns the rent based on the number of houses built.
+     *
+     * @param houseNumber the number of houses built
+     * @return the rent for the given number of houses.
+     */
+    private int getHouseRentByNumber(final int houseNumber) {
+        if (checkListIsEmpty()) {
+            throw new NoSuchElementException(this.ERR_LIST_IS_EMPTY);
+        }
+        if (checkIsHotel(houseNumber)) {
+            return getHotelRent();
+        }
+        return this.rents.get(houseNumber);
+    }
 
     /**
      * This method checks if the passed number is out of the list limits.
