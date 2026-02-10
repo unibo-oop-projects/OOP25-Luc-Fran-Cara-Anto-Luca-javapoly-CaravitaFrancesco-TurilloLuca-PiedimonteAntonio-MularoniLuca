@@ -61,7 +61,7 @@ public class MatchControllerImpl implements MatchController {
         this.players = List.copyOf(players);
         this.gameBoard = Objects.requireNonNull(gameBoard);
         this.propertyController = new PropertyControllerImpl(properties);
-        this.economyController = new EconomyControllerImpl(propertyController, this.players);
+        this.economyController = new EconomyControllerImpl(propertyController, players);
         this.boardController = new BoardControllerImpl(gameBoard, economyController, propertyController);
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
         this.gui = new MainView(this);
@@ -176,9 +176,7 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     public void handlePrison() {
-        final Player currentPlayer = getCurrentPlayer();
-        currentPlayer.move(10);
-        currentPlayer.setState(new JailedState());
+        this.boardController.sendPlayerToJail(getCurrentPlayer());
     }
 
     /**
@@ -190,12 +188,10 @@ public class MatchControllerImpl implements MatchController {
         final Player currentPlayer = getCurrentPlayer();
         final Tile currentTile = gameBoard.getTileAt(currentPlayer.getCurrentPosition());
 
-        updateGui(g -> g.addLog(currentPlayer.getName() + " è su " + currentTile.getName()));
-        this.boardController.executeTileLogic(currentPlayer, currentTile, this.lastDiceResult);
         if(currentTile instanceof PropertyTile){
             Property prop =  ((PropertyTile) currentTile).getProperty();
             if(prop.getIdOwner() == null){
-                updateGui(g -> g.addLog("Questa proprietà è libera! Prezzo: " + prop.getPurchasePrice()));
+                updateGui(g -> g.addLog("Puoi acquistare " + prop.getId() + " per " + prop.getPurchasePrice() + "€"));
                 // Qui la GUI dovrebbe abilitare il tasto "Acquista"
             }
         }
@@ -211,7 +207,7 @@ public class MatchControllerImpl implements MatchController {
 
             if(this.economyController.purchaseProperty(currentPlayer, prop)){
                 updateGui(g -> {
-                    g.addLog(currentPlayer.getName() + " ha acquistato " + prop.getId());
+                    g.addLog(currentPlayer.getName() + " ha acquistato " + prop.getId() + " per " + prop.getPurchasePrice() + "€");
                     g.refreshAll();
                 });
             }else {
@@ -221,23 +217,34 @@ public class MatchControllerImpl implements MatchController {
     }
 
     public void buildHouseOnProperty(Property property){
-        if(this.economyController.purchaseHouse(getCurrentPlayer(), property)){
-            updateGui(g -> {
-                g.addLog("Costruita una casa su " + property.getId());
-                g.refreshAll();
-            });
-        }else {
-            updateGui(g -> g.addLog("Impossibile costruire su " + property.getId()));
+        try {
+            if(this.economyController.purchaseHouse(getCurrentPlayer(), property)){
+                updateGui(g -> {
+                    g.addLog("Costruita una casa su " + property.getId());
+                    g.refreshAll();
+                });
+            }else {
+                updateGui(g -> g.addLog("Impossibile costruire su " + property.getId()));
+            }
+        } catch (IllegalStateException e) {
+            updateGui(g -> g.addLog("Errore: " + e.getMessage()));
+
+        } catch (IllegalArgumentException e) {
+            updateGui(g -> g.addLog("Non puoi costruire su questa tipologia di casella."));
         }
     }
 
     @Override
     public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
-        updateGui(g -> {
-            g.refreshAll();
-            g.addLog(player.getName() + " si è spostato sulla casella " + gameBoard.getTileAt(newPosition).getName());
-        });
+        updateGui(g -> g.refreshAll());
 
+        final Tile currentTile = gameBoard.getTileAt(newPosition);
+
+        this.boardController.executeTileLogic(player, currentTile, this.lastDiceResult);
+        final String boardMessage = this.boardController.getMessagePrint();
+        if(boardMessage != null && !boardMessage.isEmpty()){
+            updateGui(g -> g.addLog(boardMessage));
+        }
         handlePropertyLanding();
     }
 
@@ -285,6 +292,10 @@ public class MatchControllerImpl implements MatchController {
         return !hasRolled; 
     }
 
+    public Map<Player, Integer> getJailTurnCounter() {
+        return this.jailTurnCounter;
+    }
+
     private void updateGui(Consumer<MainView> action) {
         if (this.gui != null) action.accept(this.gui);
     }
@@ -298,7 +309,7 @@ public class MatchControllerImpl implements MatchController {
     public void onStateChanged(Player player, PlayerState oldState, PlayerState newState) {
         updateGui(g -> {
             g.addLog(player.getName() + " ora è in stato: " + newState.getClass().getSimpleName());
-            g.refreshAll();;
+            g.refreshAll();
         });
     }
 
@@ -335,10 +346,5 @@ public class MatchControllerImpl implements MatchController {
                 this.jailTurnCounter.put(owner, entry.getValue());
             }
         }
-    }
-
-    //TODO
-    private void handleBankRuptcy(Player bankruptPlayer){
-        updateGui(g -> g.addLog("!!! BANCAROTTA per " + bankruptPlayer.getName() + " !!!"));
     }
 }
