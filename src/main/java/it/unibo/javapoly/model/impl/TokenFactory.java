@@ -66,7 +66,7 @@ public final class TokenFactory {
             case WHEELBARROW -> {
                 return new TokenImpl("Wheelbarrow");
             }
-            default -> throw new IllegalArgumentException("Unsupported token type: " + type);
         }
+        throw new IllegalArgumentException("Unsupported token type: " + type);
     }
 }
