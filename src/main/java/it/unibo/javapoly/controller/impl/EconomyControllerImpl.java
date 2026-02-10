@@ -29,6 +29,7 @@ import static it.unibo.javapoly.model.api.economy.TransactionType.BUY_PROPERTY;
 public final class EconomyControllerImpl implements EconomyController {
 
     private final Bank bank;
+    private final List<Player> players;
     private final PropertyController propertyController;
     private final List<Transaction> transactionHistory = new ArrayList<>();
     private int nextTransactionId = 1;
@@ -38,10 +39,12 @@ public final class EconomyControllerImpl implements EconomyController {
      * Creates an EconomyController with the given list of properties.
      *
      * @param propertyController property controller.
+     * @param players list of all player.
      */
-    public EconomyControllerImpl(final PropertyController propertyController) {
+    public EconomyControllerImpl(final PropertyController propertyController, final List<Player> players) {
         this.bank = new BankImpl();
         this.propertyController = propertyController;
+        this.players = players;
     }
 
     /**
@@ -88,7 +91,8 @@ public final class EconomyControllerImpl implements EconomyController {
      * {@inheritDoc}
      */
     @Override
-    public boolean payRent(final Player payer, final Player payee, final Property property, final int diceRoll) {
+    public boolean payRent(final Player payer, final String payeeId, final Property property, final int diceRoll) {
+        final Player payee = getPlayerByID(payeeId);
         final int rent = this.propertyController.getRent(payer, property.getId(), diceRoll);
         if (this.bank.transferFunds(payer, payee, rent)) {
             recordTransaction(new Transaction(this.nextTransactionId,
@@ -211,5 +215,18 @@ public final class EconomyControllerImpl implements EconomyController {
     @Override
     public void removeLiquidationObserver(final LiquidationObserver observer) {
         this.liquidationObservers.remove(observer);
+    }
+
+    /**
+     * Return player with the same playerID from input.
+     *
+     * @param playerId id of the player
+     * @return player with the same playerID from input.
+     */
+    private Player getPlayerByID(final String playerId) {
+        return players.stream()
+                .filter(p -> p.getName().equals(playerId))
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -79,12 +79,12 @@ public interface EconomyController {
      * Pay rent to payee.
      *
      * @param payer the player who make payment.
-     * @param payee the player who collect payment.
+     * @param payeeId the player id who collect payment.
      * @param property property where is the payer (owned by payee).
      * @param diceRoll the dice roll used to calculate rent (especially for utilities).
      * @return {@code true} if successful, {@code false} if insufficient funds (bankruptcy).
      */
-    boolean payRent(Player payer, Player payee, Property property, int diceRoll);
+    boolean payRent(Player payer, String payeeId, Property property, int diceRoll);
 
     /**
      * Add LiquidationObserver for manager before bankruptcy.
