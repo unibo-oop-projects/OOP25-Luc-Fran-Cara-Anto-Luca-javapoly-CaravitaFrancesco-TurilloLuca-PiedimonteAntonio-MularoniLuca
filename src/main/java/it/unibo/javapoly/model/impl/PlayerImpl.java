@@ -3,6 +3,8 @@ package it.unibo.javapoly.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerObserver;
 import it.unibo.javapoly.model.api.PlayerState;
@@ -48,6 +50,7 @@ public class PlayerImpl implements Player {
     private final String name;
     private int balance;
     private final Token token;
+    private final TokenType tokenType;
     private PlayerState currentState;
     private int currentPosition;
 
@@ -108,7 +111,10 @@ public class PlayerImpl implements Player {
      * @see FreeState
      * @see TokenFactory
      */
-    public PlayerImpl(final String name, final int initialBalance, final TokenType tokenType) {
+    @JsonCreator
+    public PlayerImpl(@JsonProperty("name") final String name,
+                      @JsonProperty("balance") final int initialBalance,
+                      @JsonProperty("tokenType") final TokenType tokenType) {
         ValidationUtils.requireNonNull(name, "Name cannot be null");
         ValidationUtils.requireNonNull(tokenType, "Token type cannot be null");
         ValidationUtils.requireNonBlank(name, "Name cannot be blank");
@@ -116,6 +122,7 @@ public class PlayerImpl implements Player {
 
         this.name = name;
         this.balance = initialBalance;
+        this.tokenType = tokenType;
         this.token = TokenFactory.createToken(tokenType);
         this.currentState = FreeState.getInstance();
         this.currentPosition = 0;
@@ -231,6 +238,7 @@ public class PlayerImpl implements Player {
      * {@inheritDoc}
      */
     @Override
+    @JsonProperty
     public int getCurrentPosition() {
         return this.currentPosition;
     }
@@ -239,6 +247,7 @@ public class PlayerImpl implements Player {
      * {@inheritDoc}
      */
     @Override
+    @JsonProperty
     public String getName() {
         return this.name;
     }
@@ -247,8 +256,18 @@ public class PlayerImpl implements Player {
      * {@inheritDoc}
      */
     @Override
+    @JsonProperty
     public int getBalance() {
         return this.balance;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @JsonProperty
+    public TokenType getTokenType() {
+        return this.tokenType;
     }
 
     /**
@@ -263,6 +282,7 @@ public class PlayerImpl implements Player {
      * {@inheritDoc}
      */
     @Override
+    @JsonProperty
     public PlayerState getState() {
         return this.currentState;
     }
@@ -278,6 +298,14 @@ public class PlayerImpl implements Player {
             notifyStateChanged(oldState, state);
         }
         System.out.println("Stato cambiato in: " + state.getClass().getSimpleName()); // NOPMD
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPosition(final int position) {
+        this.currentPosition = position;
     }
 
     /**

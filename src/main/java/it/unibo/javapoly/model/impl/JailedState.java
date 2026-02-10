@@ -34,6 +34,15 @@ public final class JailedState implements PlayerState {
     }
 
     /**
+     * Constructs a new {@link JailedState}  with the turn counter equal turnsInJail.
+     *
+     * @param turnsInJail number of turns in jail.
+     */
+    public JailedState(final Integer turnsInJail) {
+        this.turnsInJail = turnsInJail;
+    }
+
+    /**
      * Handles the logic for a player's turn while they are in jail.
      * Increments the turn counter. Checks if the player meets the conditions to be
      * released:
@@ -87,5 +96,14 @@ public final class JailedState implements PlayerState {
     @Override
     public boolean canMove() {
         return false;
+    }
+
+    /**
+     * Gets the number of turns spent in jail.
+     *
+     * @return the number of turns spent in jail.
+     */
+    public int getTurnsInJail() {
+        return this.turnsInJail;
     }
 }
