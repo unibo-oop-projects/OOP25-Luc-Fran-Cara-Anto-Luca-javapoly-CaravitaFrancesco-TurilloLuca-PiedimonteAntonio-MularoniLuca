@@ -52,14 +52,6 @@ public final class FreeState implements PlayerState {
         ValidationUtils.requireNonNegative(potentialDestination, "Potential destination cannot be negative");
         player.move(potentialDestination);
 
-        // TODO try to understand if the roll of a double has to be handled in the
-        // player or in the game, considering that the player can only know if he rolled
-        // a double or not, but not how many times he rolled a double in a row, which is
-        // relevant for the game logic. Maybe the player can have a counter of
-        // consecutive doubles rolled, but it seems to be more related to the game logic
-        // than to the player logic, so maybe it's better to handle it in the game and
-        // just pass the information to the player when he has to play his turn.
-
         System.out.println("[Stato Libero] Il giocatore si muove a " + potentialDestination); // NOPMD
     }
 
