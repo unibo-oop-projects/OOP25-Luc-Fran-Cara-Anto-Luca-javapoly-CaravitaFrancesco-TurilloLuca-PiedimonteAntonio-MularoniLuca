@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
-import it.unibo.javapoly.model.impl.Card.AbstractPropertyCard;
+import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
 
 
 class PropertyImplTest {
@@ -19,7 +19,7 @@ class PropertyImplTest {
     private static final int NUM_SEVEN = 7;
     private static final PropertyGroup GROUP_BLUE = PropertyGroup.DARK_BLUE;
     private static final int PURCHASE_PRICE = 180;
-    private static final String BANK = "Bank";
+    private static final String BANK = "BANK";
     private static final String OWNER_BOB = "bob";
 
     private static AbstractPropertyCard testCard(final PropertyGroup group, final int purchasePrice) {
@@ -60,7 +60,7 @@ class PropertyImplTest {
         assertTrue(assigned);
         final PropertyStateImpl stateAfter = (PropertyStateImpl) p.getState();
         assertEquals("player-1", stateAfter.getOwnerId());
-        assertTrue(stateAfter.isOwnedByPlayer());
+        assertTrue(p.isOwnedByPlayer());
 
         assertFalse(p.assignOwner("player-2"));
 

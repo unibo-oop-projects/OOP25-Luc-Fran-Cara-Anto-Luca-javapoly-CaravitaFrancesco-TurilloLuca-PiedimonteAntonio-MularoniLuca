@@ -49,8 +49,15 @@ public final class PropertyImpl implements Property {
      *
      * @param property instance from which to create a copy
      */
-    public PropertyImpl(final Property property) { // FIXME: non aggiunge lo state.
+    public PropertyImpl(final Property property) {
         this(property.getId(), property.getPosition(), property.getCard());
+
+        if (!property.isOwnedByPlayer()) {
+            return;
+        }
+
+        this.state.setNewOwnerID(property.getState().getOwnerId());
+        this.state.setHouse(property.getState().getHouses());
     }
 
     //#region Getter
@@ -142,7 +149,7 @@ public final class PropertyImpl implements Property {
      */
     @Override
     public boolean isOwnedByPlayer() {
-        return this.state.isOwnedByPlayer();
+        return !this.state.bankIsTheOwner();
     }
 
     /**
@@ -160,7 +167,7 @@ public final class PropertyImpl implements Property {
 
         Objects.requireNonNull(ownerID);
 
-        if (!this.state.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
+        if (!this.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
             throw new IllegalStateException("player is not the owner");
         }
 
@@ -178,7 +185,7 @@ public final class PropertyImpl implements Property {
 
         Objects.requireNonNull(ownerID);
 
-        if (!this.state.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
+        if (!this.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
             throw new IllegalStateException("player is not the owner");
         }
 

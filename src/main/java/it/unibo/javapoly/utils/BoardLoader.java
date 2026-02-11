@@ -70,18 +70,15 @@ public final class BoardLoader {
 
         for (final JsonNode tileNode : tilesNode) {
             final JsonNode propNode = tileNode.get("property");
-            if (propNode == null || propNode.isNull()) {
-                continue; // FIXME: Eliminare il continue
+            if (!(propNode == null || propNode.isNull())) {
+                final Property property = mapper.convertValue(propNode, new TypeReference<>() { });
+
+                if (property == null) {
+                    continue;
+                }
+
+                map.put(property.getId(), property);
             }
-
-            final Property property = mapper.convertValue(propNode, new TypeReference<>() { });
-
-            if (property == null) {
-                continue;
-            }
-
-            // presumiamo che Property esponga getId()
-            map.put(property.getId(), property);
         }
 
         return map;

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.unibo.javapoly.controller.api.BoardController;
 import it.unibo.javapoly.controller.api.EconomyController;
+import it.unibo.javapoly.controller.api.LiquidationObserver;
 import it.unibo.javapoly.controller.api.MatchController;
 import it.unibo.javapoly.controller.api.PropertyController;
 import it.unibo.javapoly.model.api.Player;
@@ -18,6 +19,7 @@ import it.unibo.javapoly.model.api.PlayerState;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
 import it.unibo.javapoly.model.api.property.Property;
+import it.unibo.javapoly.model.impl.BankruptState;
 import it.unibo.javapoly.model.impl.DiceImpl;
 import it.unibo.javapoly.model.impl.DiceThrow;
 import it.unibo.javapoly.model.impl.FreeState;
@@ -25,12 +27,13 @@ import it.unibo.javapoly.model.impl.JailedState;
 import it.unibo.javapoly.model.impl.board.BoardImpl;
 import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.view.impl.MainView;
+import javafx.application.Platform;
 
 /**
  * MatchControllerImpl manages the flow of the game, including turns, 
  * movement, and GUI updates.
  */
-public class MatchControllerImpl implements MatchController {
+public class MatchControllerImpl implements MatchController, LiquidationObserver{
 
     private static final int MAX_DOUBLES = 3;
     private static final int JAIL_EXIT_FEE = 50;
@@ -49,6 +52,7 @@ public class MatchControllerImpl implements MatchController {
     private int consecutiveDoubles;
     private int lastDiceResult;
     private boolean hasRolled = false;
+    private Player currentCreditor;
 
     /**
      * Constructor
@@ -63,6 +67,7 @@ public class MatchControllerImpl implements MatchController {
         this.propertyController = new PropertyControllerImpl(properties);
         this.economyController = new EconomyControllerImpl(propertyController, players);
         this.boardController = new BoardControllerImpl(gameBoard, economyController, propertyController);
+        this.economyController.addLiquidationObserver(this);
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
         this.gui = new MainView(this);
         this.currentPlayerIndex = 0;
@@ -96,7 +101,10 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     public void nextTurn() {
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.size();
+        do{
+            this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.size();
+        }while(getCurrentPlayer().getState() instanceof BankruptState);
+
         this.hasRolled = false;
         this.consecutiveDoubles = 0;
 
@@ -106,6 +114,8 @@ public class MatchControllerImpl implements MatchController {
             g.addLog("Ora e' il turno di: " + current.getName());
             g.refreshAll();
         });
+
+        checkWinCondition();
     }
 
     /**
@@ -149,13 +159,17 @@ public class MatchControllerImpl implements MatchController {
                 handlePrison(); 
                 this.hasRolled = true;
                 return;
+            }else {
+                this.hasRolled = false;
+                updateGui(g -> g.addLog("Puoi lanciare ancora!"));
             }
         } else {
             this.consecutiveDoubles = 0;
             this.hasRolled = true;
         }
-
-        this.boardController.movePlayer(currentPlayer, this.lastDiceResult);
+        
+        this.handleMove(this.lastDiceResult);
+        //this.boardController.movePlayer(currentPlayer, this.lastDiceResult);
     }
 
     /**
@@ -167,7 +181,14 @@ public class MatchControllerImpl implements MatchController {
     @Override
     public void handleMove(int steps) {
         final Player currentPlayer = getCurrentPlayer();
-        this.boardController.movePlayer(currentPlayer, steps);
+        int oldPos = currentPlayer.getCurrentPosition();
+
+        int newPos = this.boardController.movePlayer(currentPlayer, steps).getPosition();
+        currentPlayer.setPosition(newPos);
+
+        this.onPlayerMoved(currentPlayer, oldPos, newPos);
+
+        updateGui(g -> g.refreshAll());
     }
 
     /**
@@ -176,7 +197,13 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     public void handlePrison() {
-        this.boardController.sendPlayerToJail(getCurrentPlayer());
+        final Player currentPlayer = getCurrentPlayer();
+
+        currentPlayer.setPosition(this.boardController.sendPlayerToJail(getCurrentPlayer()).getPosition());
+
+        updateGui(g -> {
+            g.refreshAll();
+        });
     }
 
     /**
@@ -192,7 +219,12 @@ public class MatchControllerImpl implements MatchController {
             Property prop =  ((PropertyTile) currentTile).getProperty();
             if(prop.getIdOwner() == null){
                 updateGui(g -> g.addLog("Puoi acquistare " + prop.getId() + " per " + prop.getPurchasePrice() + "€"));
-                // Qui la GUI dovrebbe abilitare il tasto "Acquista"
+            }else if(prop.getIdOwner().equals(currentPlayer.getName())){
+                updateGui(g -> {
+                    g.addLog("Sei a casa tua (" + prop.getId() + ").");
+                    // Qui la GUI potrebbe abilitare il tasto "Costruisci" 
+                    // se l'EconomyController.canBuild (o simile) è true
+                });
             }
         }
         updateGui(g -> g.refreshAll());
@@ -241,10 +273,28 @@ public class MatchControllerImpl implements MatchController {
         final Tile currentTile = gameBoard.getTileAt(newPosition);
 
         this.boardController.executeTileLogic(player, currentTile, this.lastDiceResult);
-        final String boardMessage = this.boardController.getMessagePrint();
-        if(boardMessage != null && !boardMessage.isEmpty()){
-            updateGui(g -> g.addLog(boardMessage));
+
+        if(currentTile instanceof PropertyTile pt){
+            Property prop = pt.getProperty();
+            String ownerId = prop.getIdOwner();
+
+            this.currentCreditor = players.stream()
+                                        .filter(p -> p.getName().equals(ownerId))
+                                        .findFirst()
+                                        .orElse(null);
+            if(ownerId != null && ownerId.equals(player.getName())){
+                if(this.propertyController.checkPayRent(player, prop.getId())){
+                    this.economyController.payRent(player, ownerId, prop, this.lastDiceResult);
+                }
+            }
+        }else {
+            this.currentCreditor = null;
         }
+        updateGui(g -> {
+            g.refreshAll();
+            String msg = boardController.getMessagePrint();
+            if (msg != null && !msg.isEmpty()) g.addLog(msg);
+        });
         handlePropertyLanding();
     }
 
@@ -297,7 +347,7 @@ public class MatchControllerImpl implements MatchController {
     }
 
     private void updateGui(Consumer<MainView> action) {
-        if (this.gui != null) action.accept(this.gui);
+        if (this.gui != null) Platform.runLater(() -> action.accept(this.gui));
     }
 
     @Override
@@ -345,6 +395,53 @@ public class MatchControllerImpl implements MatchController {
             if (owner != null) {
                 this.jailTurnCounter.put(owner, entry.getValue());
             }
+        }
+    }
+
+    private void checkWinCondition(){
+        List<Player> activePlayers = players.stream()
+                                            .filter(p -> !(p.getState() instanceof BankruptState))
+                                            .toList();
+        if(activePlayers.size() == 1){
+            Player winner = activePlayers.get(0);
+            updateGui(g -> {
+                g.addLog("🏆 PARTITA FINITA! Il vincitore è " + winner.getName());
+            });
+        }
+    }
+
+    @Override
+    public void onInsufficientFunds(Player player, int requiredAmount) {
+       updateGui(g -> {
+            g.addLog("⚠️ FONDI INSUFFICIENTI: " + player.getName() + " deve recuperare " + requiredAmount + "€");
+            g.showLiquidation(player, requiredAmount);
+        });
+    }
+
+    @Override
+    public void onBankruptcyDeclared(Player bankruptPlayer, Player creditor, int totalDebt) {
+        updateGui(g -> {
+            g.addLog("❌ BANCAROTTA: " + bankruptPlayer.getName() + " è fuori dai giochi!");
+            if(creditor != null){
+                g.addLog("I suoi beni passano a " + creditor.getName());
+            }else{
+                g.addLog("I suoi beni tornano alla banca.");
+            }
+        });
+        bankruptPlayer.setState(BankruptState.getInstance());
+        checkWinCondition();
+    }
+
+    public void finalizeLiquidation(Player p){
+        if(p.getBalance() >= 0){
+            updateGui(g -> {
+                g.addLog("✅ Debito saldato! " + p.getName() + " può continuare.");
+                g.refreshAll();
+            });
+            this.currentCreditor = null;
+        }else{
+            this.onBankruptcyDeclared(p, this.currentCreditor, Math.abs(p.getBalance()));
+            this.currentCreditor = null;
         }
     }
 }

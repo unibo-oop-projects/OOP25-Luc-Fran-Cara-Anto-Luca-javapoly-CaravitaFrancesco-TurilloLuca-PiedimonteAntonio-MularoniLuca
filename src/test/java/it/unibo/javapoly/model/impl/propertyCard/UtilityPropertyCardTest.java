@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.impl.card;
+package it.unibo.javapoly.model.impl.propertycard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.javapoly.model.api.RentContext;
+import it.unibo.javapoly.model.impl.card.UtilityPropertyCard;
 
 class UtilityPropertyCardTest {
 

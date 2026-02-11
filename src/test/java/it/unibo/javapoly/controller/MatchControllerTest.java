@@ -30,7 +30,7 @@ public class MatchControllerTest {
         List<Tile> tiles = new ArrayList<>();
         for (int i = 0; i < 40; i++) {
             final int pos = i;
-            tiles.add(new AbstractTile(pos, TileType.FREE_PARKING, "Tile " + pos) {});
+            tiles.add(new AbstractTile(pos, TileType.FREE_PARKING, "Tile " + pos, "Tile desc") {});
         }
 
         Board board = new BoardImpl(tiles);

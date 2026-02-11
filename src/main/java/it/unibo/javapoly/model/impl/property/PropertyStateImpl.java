@@ -16,7 +16,7 @@ public final class PropertyStateImpl implements PropertyState {
     /**
      * The identifier representing the bank as the owner of a property.
      */
-    private static final String BANK_OWN = "Bank";
+    private static final String BANK_OWN = "BANK";
 
     /**
      * The error message used when the number of houses is less than 0.
@@ -90,20 +90,8 @@ public final class PropertyStateImpl implements PropertyState {
         return this.purchasePrice;
     }
 
-    /**
-     * This method checks if the property has an owner.
-     * The owner must be different from the bank.
-     * 
-     * @return true if there is an owner (!= bank), false otherwise
-     */
-    @Override
-    public boolean isOwnedByPlayer() {
-        return !this.getOwnerId().contains(this.BANK_OWN);
-    }
-
     /* These are intentionally package-private: only PropertyImpl (same package)
-       can call them. Bank or controllers should call PropertyImpl public methods
-       such as sellTo(...) or buildHouse(...). */
+       can call them.
     /**
      * Set the owner ID of the property.
      *
@@ -162,6 +150,15 @@ public final class PropertyStateImpl implements PropertyState {
             return true;
         }
         return false;
+    }
+
+    /**
+     * This method checks if the property has owned by bank.
+     * 
+     * @return true if there the owner is bank, false otherwise
+     */
+    boolean bankIsTheOwner() {
+        return this.getOwnerId().contains(this.BANK_OWN);
     }
 
 }

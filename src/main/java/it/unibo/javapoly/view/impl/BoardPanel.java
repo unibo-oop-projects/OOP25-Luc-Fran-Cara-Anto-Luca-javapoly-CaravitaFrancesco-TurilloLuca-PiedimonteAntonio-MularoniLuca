@@ -6,6 +6,8 @@ import java.util.Objects;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
+import it.unibo.javapoly.model.api.property.Property;
+import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -15,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
@@ -32,7 +35,7 @@ public class BoardPanel {
     private final Board board;
     private List<Player> players;
 
-    public BoardPanel(final Board board, List<Player> players){
+    public BoardPanel(final Board board, List<Player> players) {
         this.board = Objects.requireNonNull(board);
         this.players = Objects.requireNonNull(players);
         this.root = new GridPane();
@@ -43,13 +46,39 @@ public class BoardPanel {
         this.renderBoard();
     }
 
-    private StackPane createTileUI(final Tile tile, final int index){
+    private String getColorForOwner(String ownerId) {
+        int hash = ownerId.hashCode();
+        String[] colors = { "#e74c3c", "#3498db", "#f1c40f", "#9b59b6", "#e67e22" };
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    private StackPane createTileUI(final Tile tile, final int index) {
         final StackPane container = new StackPane();
         final VBox tileDesign = new VBox();
         tileDesign.setStyle("-fx-border-color: black; -fx-background-color: white;");
-        tileDesign.setAlignment(Pos.CENTER);
+        tileDesign.setAlignment(Pos.TOP_CENTER);
 
-        if(tile != null){
+        if (tile instanceof PropertyTile pt) {
+            Property prop = pt.getProperty();
+            if (prop.getIdOwner() != null) {
+                Pane ownerBar = new Pane();
+                ownerBar.setPrefHeight(10);
+                ownerBar.setStyle("-fx-background-color: " + getColorForOwner(prop.getIdOwner()) + ";");
+                tileDesign.getChildren().add(ownerBar);
+            }
+
+            HBox houseContainer = new HBox(2);
+            houseContainer.setAlignment(Pos.CENTER);
+            houseContainer.setPrefHeight(15);
+
+            int houseCount = prop.getBuiltHouses();
+            for (int i = 0; i < houseCount; i++) {
+                Circle house = new Circle(4, Color.GREEN);
+                houseContainer.getChildren().add(house);
+            }
+            tileDesign.getChildren().add(houseContainer);
+        }
+        if (tile != null) {
             Label nameLabel = new Label(tile.getName());
             nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 9px;");
             nameLabel.setWrapText(true);
@@ -58,27 +87,21 @@ public class BoardPanel {
         }
         FlowPane tokenLayer = new FlowPane();
         tokenLayer.setAlignment(Pos.CENTER);
-        tokenLayer.setHgap(2);
-        tokenLayer.setVgap(2);
         tokenLayer.setPickOnBounds(false);
-
         for (Player p : players) {
-            if(p.getCurrentPosition() == index){
+            if (p.getCurrentPosition() == index) {
                 tokenLayer.getChildren().add(createToken(p));
             }
         }
-
         container.getChildren().addAll(tileDesign, tokenLayer);
         return container;
     }
 
-    // Metodo per creare la pedina (già pronto per le ombre)
     private Node createToken(Player p) {
         // 1. CARICAMENTO IMMAGINE
-        // Supponendo che le immagini siano in src/main/resources/tokens/ e si chiamino come il Token (es. CAR.png)
         try {
             String imageName = p.getToken().getType().toString().toUpperCase() + ".png";
-            Image img = new Image(getClass().getResourceAsStream("/tokens/" + imageName));
+            Image img = new Image(getClass().getResourceAsStream("/images/tokens/" + imageName));
             ImageView imageView = new ImageView(img);
 
             // 2. DIMENSIONI
@@ -86,65 +109,64 @@ public class BoardPanel {
             imageView.setPreserveRatio(true);
             imageView.setSmooth(true);
 
-            // 3. EFFETTO OMBRA 
+            // 3. EFFETTO OMBRA
             DropShadow ds = new DropShadow();
             ds.setRadius(5.0);
             ds.setOffsetX(3.0);
             ds.setOffsetY(3.0);
             ds.setColor(Color.color(0, 0, 0, 0.4)); // Ombra semi-trasparente
-            
+
             imageView.setEffect(ds);
-            
+
             return imageView;
 
-            //FIXME
-            /*Cosa devi fare adesso:
-            Cartella Resources: Crea una cartella chiamata tokens dentro src/main/resources.
-            Nomi file: Quando Francesco ti manda i file, rinominali esattamente come i tuoi TokenType (es: CAR.png, DOG.png, HAT.png).
-            Pulizia: Ho aggiunto il try-catch così, se provi a lanciare il gioco adesso e le immagini non ci sono, vedrai dei pallini rossi invece di un errore "NullPointerException". */
         } catch (Exception e) {
-            // FALLBACK: Se l'immagine non esiste ancora, disegna un cerchio colorato
-            // così il gioco funziona anche mentre aspetti i file di Francesco
             Circle circle = new Circle(10);
-            circle.setFill(Color.RED); 
+            circle.setFill(Color.RED);
             circle.setStroke(Color.BLACK);
             return circle;
-            }
         }
+    }
 
-    private int calculateX(int i){
-        if(i <= 10) return 10 - i;
-        if(i <= 20) return 0;
-        if(i <= 30) return i - 20;
+    private int calculateX(int i) {
+        if (i <= 10)
+            return 10 - i;
+        if (i <= 20)
+            return 0;
+        if (i <= 30)
+            return i - 20;
         return 10;
     }
 
-    private int calculateY(int i){
-        if(i <= 10) return 10;
-        if(i <= 20) return 10 - (i - 10);
-        if(i <= 30) return 0;
+    private int calculateY(int i) {
+        if (i <= 10)
+            return 10;
+        if (i <= 20)
+            return 10 - (i - 10);
+        if (i <= 30)
+            return 0;
         return i - 30;
     }
 
-    private void renderBoard(){
+    private void renderBoard() {
         this.root.getChildren().clear();
         this.root.getRowConstraints().clear();
         this.root.getColumnConstraints().clear();
 
         for (int i = 0; i < 11; i++) {
             ColumnConstraints col = new ColumnConstraints();
-            col.setPercentWidth(100.0 / 11); 
-            
+            col.setPercentWidth(100.0 / 11);
+
             RowConstraints row = new RowConstraints();
-            row.setPercentHeight(100.0 / 11); 
-            
+            row.setPercentHeight(100.0 / 11);
+
             this.root.getColumnConstraints().add(col);
             this.root.getRowConstraints().add(row);
         }
 
         final int size = board.size();
 
-        for(int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             final Tile tile = board.getTileAt(i);
             final StackPane tileUI = createTileUI(tile, i);
 

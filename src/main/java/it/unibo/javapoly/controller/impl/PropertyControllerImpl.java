@@ -33,6 +33,17 @@ public class PropertyControllerImpl implements PropertyController {
     }
 
     /**
+     * Constructs a new PropertyControllerImpl.
+     *
+     * @param properties map of all properties in the game (propertyId -> Property)
+     * @param propertyOwners map of all owned property (propertyId -> Player)
+     */
+    public PropertyControllerImpl(final Map<String, Property> properties, final Map<String, Player> propertyOwners) {
+        this.properties = new HashMap<>(properties);
+        this.propertyOwners = new HashMap<>(propertyOwners);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

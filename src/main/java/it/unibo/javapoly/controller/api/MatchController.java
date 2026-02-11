@@ -6,6 +6,7 @@ import java.util.Map;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerObserver;
 import it.unibo.javapoly.model.api.board.Board;
+import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.view.impl.MainView;
 
 /**
@@ -77,4 +78,12 @@ public interface MatchController extends PlayerObserver{
     EconomyController getEconomyController();
 
     PropertyController getPropertyController();
+
+    /** Acquista la proprietà sulla casella attuale. */
+    void buyCurrentProperty();
+
+    /** Costruisce una casa sulla proprietà specificata. */
+    void buildHouseOnProperty(Property property);
+
+    void finalizeLiquidation(Player p);
 }

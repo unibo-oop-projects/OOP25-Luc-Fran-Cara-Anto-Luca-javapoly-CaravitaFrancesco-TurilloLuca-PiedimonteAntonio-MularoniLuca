@@ -28,11 +28,4 @@ public interface PropertyState {
      */
     int getPurchasePrice();
 
-    /**
-     * This method checks if the property has an owner.
-     * The owner must be different from the bank.
-     * 
-     * @return true if there is an owner (!= bank), false otherwise
-     */
-    boolean isOwnedByPlayer();
 }

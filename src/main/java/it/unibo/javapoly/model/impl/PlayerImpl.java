@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerObserver;
 import it.unibo.javapoly.model.api.PlayerState;
@@ -53,7 +54,7 @@ public class PlayerImpl implements Player {
     private final TokenType tokenType;
     private PlayerState currentState;
     private int currentPosition;
-
+    private String customTokenPath;
     private final List<PlayerObserver> observers = new ArrayList<>();
 
     /**
@@ -75,7 +76,26 @@ public class PlayerImpl implements Player {
      * @throws IllegalArgumentException if {@code name} is blank.
      */
     public PlayerImpl(final String name, final TokenType tokenType) {
-        this(name, DEFAULT_STARTING_BALANCE, tokenType);
+        this(name, DEFAULT_STARTING_BALANCE, tokenType, null);
+    }
+
+    /**
+     * Constructs a new {@link PlayerImpl} with a specified name, token type, and a
+     * path for a custom token image.
+     * 
+     * <p>
+     * This constructor is intended for use when the player selects the
+     * {@link TokenType#CUSTOM} token type and uploads or selects a specific file
+     * to represent their token in the game. It initializes the player with the
+     * default starting balance.
+     * </p>
+     *
+     * @param name            the name of the player.
+     * @param tokenType       the type of token associated with the player.
+     * @param customTokenPath the file path to the custom token image.
+     */
+    public PlayerImpl(final String name, final TokenType tokenType, final String customTokenPath) {
+        this(name, DEFAULT_STARTING_BALANCE, tokenType, customTokenPath);
     }
 
     /**
@@ -84,6 +104,8 @@ public class PlayerImpl implements Player {
      * 
      * <p>
      * The player starts in the {@link FreeState} and at position 0.
+     * The parameters passed to this constructor are used for saving and loading
+     * the player's state from a JSON file.
      * </p>
      * 
      * <p>
@@ -101,9 +123,14 @@ public class PlayerImpl implements Player {
      * </ul>
      * </p>
      *
-     * @param name           the name of the player.
-     * @param initialBalance the starting balance of the player.
-     * @param tokenType      the type of token associated with the player.
+     * @param name            the name of the player (JSON property "name").
+     * @param initialBalance  the starting balance of the player (JSON property
+     *                        "balance").
+     * @param tokenType       the type of token associated with the player (JSON
+     *                        property "tokenType").
+     * @param customTokenPath the file path for a custom token image (JSON property
+     *                        "customTokenPath"), used only if {@code tokenType} is
+     *                        {@link TokenType#CUSTOM}.
      * @throws NullPointerException     if {@code name} or {@code tokenType} is
      *                                  null.
      * @throws IllegalArgumentException if {@code name} is blank or
@@ -113,8 +140,10 @@ public class PlayerImpl implements Player {
      */
     @JsonCreator
     public PlayerImpl(@JsonProperty("name") final String name,
-                      @JsonProperty("balance") final int initialBalance,
-                      @JsonProperty("tokenType") final TokenType tokenType) {
+            @JsonProperty("balance") final int initialBalance,
+            @JsonProperty("tokenType") final TokenType tokenType,
+            @JsonProperty("customTokenPath") final String customTokenPath) {
+
         ValidationUtils.requireNonNull(name, "Name cannot be null");
         ValidationUtils.requireNonNull(tokenType, "Token type cannot be null");
         ValidationUtils.requireNonBlank(name, "Name cannot be blank");
@@ -126,6 +155,7 @@ public class PlayerImpl implements Player {
         this.token = TokenFactory.createToken(tokenType);
         this.currentState = FreeState.getInstance();
         this.currentPosition = 0;
+        this.customTokenPath = customTokenPath;
     }
 
     /**
@@ -285,6 +315,23 @@ public class PlayerImpl implements Player {
     @JsonProperty
     public PlayerState getState() {
         return this.currentState;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @JsonProperty
+    public String getCustomTokenPath() {
+        return customTokenPath;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCustomTokenPath(final String path) {
+        this.customTokenPath = path;
     }
 
     /**

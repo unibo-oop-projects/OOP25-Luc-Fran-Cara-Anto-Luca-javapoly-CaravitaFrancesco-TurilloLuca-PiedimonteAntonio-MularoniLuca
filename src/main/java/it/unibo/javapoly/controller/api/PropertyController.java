@@ -66,7 +66,7 @@ public interface PropertyController {
      * @param propertyId the ID of the property
      * @return true if the house was successfully built
      */ 
-    boolean checkPayRent(Player player, String propertyId); //FIXME: cambiare il nome del metodo
+    boolean checkPayRent(Player player, String propertyId);
 
     /**
      * Returns a property to the bank (remove ownership).

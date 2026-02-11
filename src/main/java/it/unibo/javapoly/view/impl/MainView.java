@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -13,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import it.unibo.javapoly.controller.api.MatchController;
+import it.unibo.javapoly.model.api.Player;
 
 /**
  * MainFrame is the main window of the JavaPoly game.
@@ -104,6 +106,22 @@ public class MainView {
                 this.logScroll.setVvalue(1.0);
             });
         });
+    }
+
+    public void showLiquidation(Player p, int amount){
+        SellAssetViewImpl liquidationView = new SellAssetViewImpl(this.matchController);
+        liquidationView.show(p, amount);
+
+        this.root.setCenter(liquidationView.getRoot());
+
+        Button backButton = new Button("Torna al gioco");
+        backButton.setStyle("-fx-base: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+        backButton.setOnAction(e -> {
+            if(this.matchController instanceof MatchController impl){
+                impl.finalizeLiquidation(p);
+            }
+        });
+        liquidationView.getRoot().setBottom(backButton);
     }
 
     public void clearLog(){

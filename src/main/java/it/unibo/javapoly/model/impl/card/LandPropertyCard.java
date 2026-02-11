@@ -26,7 +26,6 @@ public class LandPropertyCard extends AbstractPropertyCard {
      */
     private static final int ALL_LAND = 2;
 
-    // FIXME: Valutare se trasformalo in una Map<Integer, Integer> -> <numHouse, numHouseRent>
     private final List<Integer> rents;
 
     private final int housePrice;
@@ -117,7 +116,6 @@ public class LandPropertyCard extends AbstractPropertyCard {
      */
     public List<Integer> getAllRent() {
         if (checkListIsEmpty()) {
-            // FIXME: Valutare se restituire un errore o semplicemente restituire una lista vuota
             throw new NoSuchElementException(this.ERR_LIST_IS_EMPTY);
         }
         return new LinkedList<>(this.rents);
