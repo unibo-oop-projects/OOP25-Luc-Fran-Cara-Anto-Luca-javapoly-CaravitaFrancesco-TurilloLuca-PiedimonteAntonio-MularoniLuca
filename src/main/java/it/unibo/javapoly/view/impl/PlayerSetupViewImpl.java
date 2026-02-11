@@ -1,5 +1,6 @@
 package it.unibo.javapoly.view.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -39,6 +41,7 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
     private final ChoiceBox<Integer> playerCountChoice;
     private final Button confirmButton;
     private final List<ComboBox<TokenType>> playerTokenSelectors;
+    private final List<String> customTokenPaths = new ArrayList<>();
 
     private Stage stage;
     private MenuController controller;
@@ -114,18 +117,26 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
 
     /**
      * Updates the player name input fields based on the selected count.
-     *
+     * 
      * @param count the number of player.
      */
     private void updatePlayerFields(final int count) {
         playerFields.getChildren().clear();
         playerTextFields.clear();
         playerTokenSelectors.clear();
+        customTokenPaths.clear();
+        for (int k = 0; k < count; k++) {
+            customTokenPaths.add(null);
+        }
 
         playerFields.spacingProperty().bind(root.heightProperty().multiply(SPACING));
 
+        final TokenType[] availableTokens = TokenType.values();
+
         for (int i = 1; i <= count; i++) {
-            HBox row = new HBox(10);
+            final int playerIndex = i - 1;
+
+            final HBox row = new HBox(10);
             row.setAlignment(Pos.CENTER);
 
             final TextField field = new TextField();
@@ -134,12 +145,50 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
             field.prefHeightProperty().bind(this.stage.heightProperty().multiply(HEIGHT_TEXT_FIELDS));
 
             final ComboBox<TokenType> tokenBox = new ComboBox<>();
-            tokenBox.getItems().addAll(TokenType.values());
+            tokenBox.getItems().addAll(availableTokens);
             tokenBox.setPromptText("Token");
             tokenBox.prefHeightProperty().bind(this.stage.heightProperty().multiply(HEIGHT_TEXT_FIELDS));
-            if (i - 1 < TokenType.values().length) {
-                tokenBox.setValue(TokenType.values()[i - 1]);
+
+            // --- smart default logic ---
+            final int tokenIndex = i - 1;
+            if (tokenIndex < availableTokens.length) {
+                final TokenType candidate = availableTokens[tokenIndex];
+                if (candidate != TokenType.CUSTOM) {
+                    tokenBox.setValue(candidate);
+                } else {
+                    tokenBox.setValue(TokenType.BOAT);
+                }
+            } else {
+                // fallback if there are more players than available tokens excluding CUSTOM.
+                tokenBox.setValue(TokenType.BOAT);
             }
+
+            // --- listener for custom selection ---
+            tokenBox.setOnAction(e -> {
+                if (tokenBox.getValue() == TokenType.CUSTOM) {
+                    final FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Choose token image");
+                    fileChooser.getExtensionFilters().add(
+                            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+
+                    final File file = fileChooser.showOpenDialog(this.stage);
+
+                    if (file != null) {
+                        // save the absolute path as URI
+                        customTokenPaths.set(playerIndex, file.toURI().toString());
+                        // visual feedback to indicate a custom token has been selected
+                        tokenBox.setStyle("-fx-border-color: green; -fx-border-width: 2px;");
+                    } else {
+                        // if canceled, reset to a safe value
+                        tokenBox.setValue(TokenType.CAR); // this trigger setOnAction again but goes to the else
+                        customTokenPaths.set(playerIndex, null);
+                    }
+                } else {
+                    // if the user selects a normal enum reset the path and style
+                    customTokenPaths.set(playerIndex, null);
+                    tokenBox.setStyle("");
+                }
+            });
 
             playerTextFields.add(field);
             playerTokenSelectors.add(tokenBox);
@@ -219,7 +268,7 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
                 return;
             }
             if (this.controller != null) {
-                controller.playerSetupConfirmed(getNameList(), getTokenList());
+                controller.playerSetupConfirmed(getNameList(), getTokenList(), this.customTokenPaths);
             }
         });
     }
