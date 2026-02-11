@@ -140,13 +140,13 @@ public abstract class AbstractPropertyCard implements Card {
      */
     @Override
     public String toString() {
-        return "AbstractPropertyCard{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", propertyCost=" + propertyCost +
-                ", group=" + group +
-                '}';
+        return "AbstractPropertyCard{" 
+                + "id='" + id + '\''
+                + ", name='" + name + '\''
+                + ", description='" + description + '\''
+                + ", propertyCost=" + propertyCost
+                + ", group=" + group
+                + '}';
     }
 
 }
