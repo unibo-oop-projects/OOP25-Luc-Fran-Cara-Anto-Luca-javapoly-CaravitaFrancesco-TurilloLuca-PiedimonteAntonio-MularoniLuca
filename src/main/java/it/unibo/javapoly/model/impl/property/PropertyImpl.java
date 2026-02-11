@@ -51,11 +51,11 @@ public final class PropertyImpl implements Property {
      */
     public PropertyImpl(final Property property) {
         this(property.getId(), property.getPosition(), property.getCard());
-        
-        if(!property.getState().isOwnedByPlayer()){
+
+        if (!property.isOwnedByPlayer()) {
             return;
         }
-        
+
         this.state.setNewOwnerID(property.getState().getOwnerId());
         this.state.setHouse(property.getState().getHouses());
     }
@@ -149,7 +149,7 @@ public final class PropertyImpl implements Property {
      */
     @Override
     public boolean isOwnedByPlayer() {
-        return this.state.isOwnedByPlayer();
+        return !this.state.bankIsTheOwner();
     }
 
     /**
@@ -167,7 +167,7 @@ public final class PropertyImpl implements Property {
 
         Objects.requireNonNull(ownerID);
 
-        if (!this.state.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
+        if (!this.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
             throw new IllegalStateException("player is not the owner");
         }
 
@@ -185,7 +185,7 @@ public final class PropertyImpl implements Property {
 
         Objects.requireNonNull(ownerID);
 
-        if (!this.state.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
+        if (!this.isOwnedByPlayer() || !playerIsTheOwner(ownerID)) {
             throw new IllegalStateException("player is not the owner");
         }
 
