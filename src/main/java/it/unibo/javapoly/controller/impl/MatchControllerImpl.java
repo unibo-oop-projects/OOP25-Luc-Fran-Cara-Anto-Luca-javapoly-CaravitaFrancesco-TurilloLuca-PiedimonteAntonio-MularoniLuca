@@ -154,8 +154,9 @@ public class MatchControllerImpl implements MatchController {
             this.consecutiveDoubles = 0;
             this.hasRolled = true;
         }
-
-        this.boardController.movePlayer(currentPlayer, this.lastDiceResult);
+        
+        this.handleMove(this.lastDiceResult);
+        //this.boardController.movePlayer(currentPlayer, this.lastDiceResult);
     }
 
     /**
@@ -167,7 +168,12 @@ public class MatchControllerImpl implements MatchController {
     @Override
     public void handleMove(int steps) {
         final Player currentPlayer = getCurrentPlayer();
-        this.boardController.movePlayer(currentPlayer, steps);
+        // this.boardController.movePlayer(currentPlayer, steps);
+        currentPlayer.setPosition(this.boardController.movePlayer(currentPlayer, steps).getPosition());
+
+        updateGui(g -> {
+            g.refreshAll();
+        });
     }
 
     /**
@@ -176,7 +182,13 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     public void handlePrison() {
-        this.boardController.sendPlayerToJail(getCurrentPlayer());
+        final Player currentPlayer = getCurrentPlayer();
+
+        currentPlayer.setPosition(this.boardController.sendPlayerToJail(getCurrentPlayer()).getPosition());
+
+        updateGui(g -> {
+            g.refreshAll();
+        });
     }
 
     /**

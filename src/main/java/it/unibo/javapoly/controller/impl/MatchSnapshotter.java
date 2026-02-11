@@ -73,7 +73,7 @@ public final class MatchSnapshotter {
                 propertySnapshots,
                 matchController.getCurrentPlayerIndex(),
                 matchController.getConsecutiveDoubles(),
-                matchController.hasRolled(),
+                !matchController.canCurrentPlayerRoll(),
                 jailMap
         );
     }
