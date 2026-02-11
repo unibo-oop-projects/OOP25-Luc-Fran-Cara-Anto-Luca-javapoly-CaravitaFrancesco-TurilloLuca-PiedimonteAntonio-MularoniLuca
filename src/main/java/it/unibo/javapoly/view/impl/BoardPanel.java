@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import it.unibo.javapoly.model.api.Player;
+import it.unibo.javapoly.model.api.TokenType;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
 import it.unibo.javapoly.model.api.property.Property;
@@ -33,7 +34,7 @@ public class BoardPanel {
 
     private final GridPane root;
     private final Board board;
-    private List<Player> players;
+    private final List<Player> players;
 
     public BoardPanel(final Board board, List<Player> players) {
         this.board = Objects.requireNonNull(board);
@@ -97,34 +98,74 @@ public class BoardPanel {
         return container;
     }
 
+    /**
+     * Creates a visual representation (Node) for a player's token.
+     * It attempts to load an image based on the player's token type.
+     * If loading fails, it creates a fallback graphical representation.
+     *
+     * @param p The player for whom to create the token.
+     * @return A Node containing the visual representation of the token.
+     */
     private Node createToken(Player p) {
-        // 1. CARICAMENTO IMMAGINE
-        try {
-            String imageName = p.getToken().getType().toString().toUpperCase() + ".png";
-            Image img = new Image(getClass().getResourceAsStream("/images/tokens/" + imageName));
-            ImageView imageView = new ImageView(img);
+        Image img = null;
 
-            // 2. DIMENSIONI
-            imageView.setFitWidth(35); // Regola in base alla grandezza delle tue caselle
+        try {
+            // --- new section try to load custom token ---
+            if (p.getTokenType() == TokenType.CUSTOM) {
+                String path = p.getCustomTokenPath();
+                if (path != null && !path.isBlank()) {
+                    img = new Image(path);
+                }
+            }
+
+            // --- old section standard loading ---
+            // if img is still null (because the token is CAR/DOG... or because the custom
+            // failed)
+            if (img == null || img.isError()) {
+                // build the classic name: CAR.png, DOG.png...
+                String imageName = p.getTokenType().toString().toUpperCase() + ".png";
+
+                // search in the resources
+                var stream = getClass().getResourceAsStream("/images/tokens/" + imageName);
+                if (stream != null) {
+                    img = new Image(stream);
+                }
+            }
+
+            // if even the standard resources fail, throw an error to go to the
+            // colored circle fallback
+            if (img == null || img.isError()) {
+                throw new Exception("Image not found for token: " + p.getTokenType());
+            }
+
+            // create the ImageView with the loaded image
+            ImageView imageView = new ImageView(img);
+            imageView.setFitWidth(35);
+            imageView.setFitHeight(35);
             imageView.setPreserveRatio(true);
             imageView.setSmooth(true);
 
-            // 3. EFFETTO OMBRA
+            // drop shadow effect
             DropShadow ds = new DropShadow();
             ds.setRadius(5.0);
-            ds.setOffsetX(3.0);
-            ds.setOffsetY(3.0);
-            ds.setColor(Color.color(0, 0, 0, 0.4)); // Ombra semi-trasparente
-
+            ds.setColor(Color.color(0, 0, 0, 0.4));
             imageView.setEffect(ds);
 
             return imageView;
 
         } catch (Exception e) {
-            Circle circle = new Circle(10);
-            circle.setFill(Color.RED);
+            // --- extreme fallback (if even the PNG in the resources is missing) ---
+            // draw the colored circle
+            Color fallbackColor = (p.getTokenType() == TokenType.CUSTOM)
+                    ? Color.PURPLE // purple for Custom
+                    : Color.RED; // red for broken Standard
+
+            Circle circle = new Circle(12);
+            circle.setFill(fallbackColor);
             circle.setStroke(Color.BLACK);
-            return circle;
+
+            StackPane stack = new StackPane(circle, new Label(p.getName().substring(0, 1)));
+            return stack;
         }
     }
 
