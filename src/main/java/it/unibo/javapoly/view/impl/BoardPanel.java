@@ -106,13 +106,13 @@ public class BoardPanel {
      * @param p The player for whom to create the token.
      * @return A Node containing the visual representation of the token.
      */
-    private Node createToken(Player p) {
+    private Node createToken(final Player p) {
         Image img = null;
 
         try {
             // --- new section try to load custom token ---
             if (p.getTokenType() == TokenType.CUSTOM) {
-                String path = p.getCustomTokenPath();
+                final String path = p.getCustomTokenPath();
                 if (path != null && !path.isBlank()) {
                     img = new Image(path);
                 }
@@ -123,10 +123,10 @@ public class BoardPanel {
             // failed)
             if (img == null || img.isError()) {
                 // build the classic name: CAR.png, DOG.png...
-                String imageName = p.getTokenType().toString().toUpperCase() + ".png";
+                final String imageName = p.getTokenType().toString().toUpperCase() + ".png";
 
                 // search in the resources
-                var stream = getClass().getResourceAsStream("/images/tokens/" + imageName);
+                final var stream = getClass().getResourceAsStream("/images/tokens/" + imageName);
                 if (stream != null) {
                     img = new Image(stream);
                 }
@@ -139,14 +139,14 @@ public class BoardPanel {
             }
 
             // create the ImageView with the loaded image
-            ImageView imageView = new ImageView(img);
+            final ImageView imageView = new ImageView(img);
             imageView.setFitWidth(35);
             imageView.setFitHeight(35);
             imageView.setPreserveRatio(true);
             imageView.setSmooth(true);
 
             // drop shadow effect
-            DropShadow ds = new DropShadow();
+            final DropShadow ds = new DropShadow();
             ds.setRadius(5.0);
             ds.setColor(Color.color(0, 0, 0, 0.4));
             imageView.setEffect(ds);
@@ -156,15 +156,15 @@ public class BoardPanel {
         } catch (Exception e) {
             // --- extreme fallback (if even the PNG in the resources is missing) ---
             // draw the colored circle
-            Color fallbackColor = (p.getTokenType() == TokenType.CUSTOM)
+            final Color fallbackColor = (p.getTokenType() == TokenType.CUSTOM)
                     ? Color.PURPLE // purple for Custom
                     : Color.RED; // red for broken Standard
 
-            Circle circle = new Circle(12);
+            final Circle circle = new Circle(12);
             circle.setFill(fallbackColor);
             circle.setStroke(Color.BLACK);
 
-            StackPane stack = new StackPane(circle, new Label(p.getName().substring(0, 1)));
+            final StackPane stack = new StackPane(circle, new Label(p.getName().substring(0, 1)));
             return stack;
         }
     }
