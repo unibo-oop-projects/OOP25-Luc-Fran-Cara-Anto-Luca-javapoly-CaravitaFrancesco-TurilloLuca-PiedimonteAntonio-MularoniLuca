@@ -54,7 +54,7 @@ public class BoardControllerImpl implements BoardController {
     @Override
     public Tile movePlayer(final Player player, final int steps) {
         final int currentPos = player.getCurrentPosition();
-        final int newPos = this.board.normalizePosition(steps);
+        final int newPos = this.board.normalizePosition(currentPos+steps);
 
         if (passedThroughGo(currentPos, newPos)) {
             awardGoBonus(player);
