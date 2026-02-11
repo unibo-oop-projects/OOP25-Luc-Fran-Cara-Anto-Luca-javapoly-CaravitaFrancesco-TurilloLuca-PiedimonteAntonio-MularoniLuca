@@ -18,5 +18,6 @@ public enum TokenType {
     HAT,
     IRON,
     THIMBLE,
-    WHEELBARROW
+    WHEELBARROW,
+    CUSTOM;
 }

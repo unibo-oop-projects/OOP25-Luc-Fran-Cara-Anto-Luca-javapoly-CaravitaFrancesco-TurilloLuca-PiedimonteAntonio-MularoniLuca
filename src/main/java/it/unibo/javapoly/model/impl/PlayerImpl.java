@@ -54,7 +54,7 @@ public class PlayerImpl implements Player {
     private final TokenType tokenType;
     private PlayerState currentState;
     private int currentPosition;
-
+    private String customTokenPath;
     private final List<PlayerObserver> observers = new ArrayList<>();
 
     /**
@@ -104,11 +104,14 @@ public class PlayerImpl implements Player {
      * </ul>
      * </p>
      *
-     * @param name           the name of the player (JSON property "name").
-     * @param initialBalance the starting balance of the player (JSON property
-     *                       "balance").
-     * @param tokenType      the type of token associated with the player (JSON
-     *                       property "tokenType").
+     * @param name            the name of the player (JSON property "name").
+     * @param initialBalance  the starting balance of the player (JSON property
+     *                        "balance").
+     * @param tokenType       the type of token associated with the player (JSON
+     *                        property "tokenType").
+     * @param customTokenPath the file path for a custom token image (JSON property
+     *                        "customTokenPath"), used only if {@code tokenType} is
+     *                        {@link TokenType#CUSTOM}.
      * @throws NullPointerException     if {@code name} or {@code tokenType} is
      *                                  null.
      * @throws IllegalArgumentException if {@code name} is blank or
@@ -117,8 +120,10 @@ public class PlayerImpl implements Player {
      * @see TokenFactory
      */
     @JsonCreator
-    public PlayerImpl(@JsonProperty("name") final String name, @JsonProperty("balance") final int initialBalance,
-            @JsonProperty("tokenType") final TokenType tokenType) {
+    public PlayerImpl(@JsonProperty("name") final String name,
+            @JsonProperty("balance") final int initialBalance,
+            @JsonProperty("tokenType") final TokenType tokenType,
+            @JsonProperty("customTokenPath") String customTokenPath) {
 
         ValidationUtils.requireNonNull(name, "Name cannot be null");
         ValidationUtils.requireNonNull(tokenType, "Token type cannot be null");
@@ -131,6 +136,7 @@ public class PlayerImpl implements Player {
         this.token = TokenFactory.createToken(tokenType);
         this.currentState = FreeState.getInstance();
         this.currentPosition = 0;
+        this.customTokenPath = customTokenPath;
     }
 
     /**
@@ -290,6 +296,15 @@ public class PlayerImpl implements Player {
     @JsonProperty
     public PlayerState getState() {
         return this.currentState;
+    }
+
+    @JsonProperty
+    public String getCustomTokenPath() {
+        return customTokenPath;
+    }
+
+    public void setCustomTokenPath(String path) {
+        this.customTokenPath = path;
     }
 
     /**
