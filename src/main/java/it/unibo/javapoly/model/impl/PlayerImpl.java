@@ -318,31 +318,18 @@ public class PlayerImpl implements Player {
     }
 
     /**
-     * Retrieves the file path associated with a custom token.
-     * 
-     * <p>
-     * This is used for the choice of the custom token, specifically
-     * when the player selects {@link TokenType#CUSTOM}. It provides the location of
-     * the image file representing the player's custom piece.
-     * </p>
-     * 
-     * @return the file path of the custom token image.
+     * {@inheritDoc}
      */
+    @Override
     @JsonProperty
     public String getCustomTokenPath() {
         return customTokenPath;
     }
 
     /**
-     * Sets the file path for the custom token.
-     * 
-     * <p>
-     * This method allows updating the choice of the custom token by
-     * specifying the path to the desired image.
-     * </p>
-     * 
-     * @param path the file path of the custom token image.
+     * {@inheritDoc}
      */
+    @Override
     public void setCustomTokenPath(final String path) {
         this.customTokenPath = path;
     }
