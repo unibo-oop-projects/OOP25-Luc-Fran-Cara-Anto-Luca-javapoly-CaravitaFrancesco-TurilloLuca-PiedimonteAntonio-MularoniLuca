@@ -27,5 +27,5 @@ public interface PropertyState {
      * @return purchase price
      */
     int getPurchasePrice();
-    
+
 }

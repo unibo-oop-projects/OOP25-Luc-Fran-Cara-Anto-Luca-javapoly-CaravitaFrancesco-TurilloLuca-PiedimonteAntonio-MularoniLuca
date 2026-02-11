@@ -21,7 +21,6 @@ class PropertyStateImplTest {
         assertEquals(BANK, s.getOwnerId());
         assertEquals(0, s.getHouses());
         assertEquals(PURCHASE_PRICE, s.getPurchasePrice());
-        assertFalse(!s.getOwnerId().equals(BANK));
     }
 
     @Test
@@ -48,12 +47,10 @@ class PropertyStateImplTest {
         final PropertyStateImpl s = new PropertyStateImpl(150);
         s.setNewOwnerID("player-123");
         assertEquals("player-123", s.getOwnerId());
-        assertTrue(!s.getOwnerId().equals(BANK));
 
         s.bankIsNewOwnerID();
         assertEquals("BANK", s.getOwnerId());
-        assertFalse(!s.getOwnerId().equals(BANK));
-        // bankIsNewOwnerID should reset houses to 0 as implemented
+
         assertEquals(0, s.getHouses());
     }
 
