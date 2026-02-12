@@ -22,7 +22,7 @@ import java.util.Objects;
  * in order to satisfy debt obligation.
  */
 public class SellAssetViewImpl implements SellAssetView {
-    private static final String CURRENCY = " $";
+    public static final String CURRENCY = "€";
     private final BorderPane root;
     private final GridPane propertyGrid;
     private final Label titleLabel;
@@ -135,7 +135,7 @@ public class SellAssetViewImpl implements SellAssetView {
         final Label nameLabel = new Label(property.getCard().getName() + " ");
         final Label houseCountLabel = new Label("House " + property.getState().getHouses() + " ");
         final int housePriceLabel = this.matchController.getPropertyController().getHouseCost(property) / 2;
-        final Label price = new Label("Sell for " + housePriceLabel + " $");
+        final Label price = new Label("Sell for " + housePriceLabel + CURRENCY);
         final HBox content = new HBox(nameLabel, houseCountLabel, price);
         final Button houseButton = new Button();
         houseButton.setGraphic(content);
