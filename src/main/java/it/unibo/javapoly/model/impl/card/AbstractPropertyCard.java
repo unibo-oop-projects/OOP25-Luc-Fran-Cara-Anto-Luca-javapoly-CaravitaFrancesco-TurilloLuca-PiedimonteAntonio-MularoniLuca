@@ -1,10 +1,11 @@
 package it.unibo.javapoly.model.impl.card;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import it.unibo.javapoly.model.api.RentContext;
@@ -27,6 +28,7 @@ import it.unibo.javapoly.utils.JsonUtils;
     @JsonSubTypes.Type(value = UtilityPropertyCard.class, name = "utility")
 })
 @JsonRootName("PropertyCard")
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public abstract class AbstractPropertyCard implements Card {
 
     /**

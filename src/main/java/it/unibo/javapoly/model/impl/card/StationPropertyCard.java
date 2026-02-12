@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.unibo.javapoly.model.api.RentContext;
@@ -14,6 +16,7 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
  * Representation of a station card in the Monopoly game.
  * The class stores the rents for different numbers of station.
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class StationPropertyCard extends AbstractPropertyCard {
 
     // Indicates the rents that a player needs to pay based on the number of stations owned.
@@ -49,6 +52,7 @@ public class StationPropertyCard extends AbstractPropertyCard {
      *
      * @return the list of rents for each number of stations.
      */
+    @JsonIgnore
     public List<Integer> getAllRent() {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);

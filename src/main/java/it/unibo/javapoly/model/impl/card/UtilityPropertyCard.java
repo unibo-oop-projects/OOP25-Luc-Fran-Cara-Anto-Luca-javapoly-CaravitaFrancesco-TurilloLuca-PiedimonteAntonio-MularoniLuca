@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,6 +15,7 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
  * Representation of a utility card in the Monopoly game. This card computes rent based on
  * how many utilities the owner possesses and the dice total.
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class UtilityPropertyCard extends AbstractPropertyCard {
 
     private final int oneOwnedMultiplier;

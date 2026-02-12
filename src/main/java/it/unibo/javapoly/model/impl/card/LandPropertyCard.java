@@ -4,9 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
@@ -19,6 +21,7 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
  * together with the costs to build houses and hotels.
  */
 @JsonRootName("LandPropertyCard")
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class LandPropertyCard extends AbstractPropertyCard {
 
     /**
@@ -114,6 +117,7 @@ public class LandPropertyCard extends AbstractPropertyCard {
      *
      * @return a copy of the full rent list.
      */
+    @JsonIgnore
     public List<Integer> getAllRent() {
         if (checkListIsEmpty()) {
             throw new NoSuchElementException(this.ERR_LIST_IS_EMPTY);

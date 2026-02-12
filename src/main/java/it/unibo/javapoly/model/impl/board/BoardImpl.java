@@ -3,6 +3,7 @@ package it.unibo.javapoly.model.impl.board;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,6 +13,7 @@ import it.unibo.javapoly.model.api.board.Tile;
 /**
  * Concrete implementation of the game board.
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class BoardImpl implements Board {
 
     private final List<Tile> tiles;
