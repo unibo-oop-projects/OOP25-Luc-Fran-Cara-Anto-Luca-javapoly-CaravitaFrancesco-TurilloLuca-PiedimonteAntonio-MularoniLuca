@@ -2,6 +2,7 @@ package it.unibo.javapoly.view.impl;
 
 import java.util.Objects;
 
+import it.unibo.javapoly.view.api.SellAssetView;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -99,5 +100,14 @@ public class InfoPanel {
      */
     public VBox getRoot() {
         return this.root;
+    }
+
+    /**
+     * Get sell asset view.
+     *
+     * @return sell asset view.
+     */
+    public SellAssetView getSellAssetView() {
+        return this.sellAssetView;
     }
 }

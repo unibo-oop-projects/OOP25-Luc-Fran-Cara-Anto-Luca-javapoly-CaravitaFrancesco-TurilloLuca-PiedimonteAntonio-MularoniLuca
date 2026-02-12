@@ -5,6 +5,7 @@ import it.unibo.javapoly.controller.api.MatchController;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.impl.BankruptState;
 import it.unibo.javapoly.utils.ValidationUtils;
+import it.unibo.javapoly.view.api.SellAssetView;
 
 /**
  * Implementation of LiquidationObserver.
@@ -36,7 +37,39 @@ public class LiquidationObserverImpl implements LiquidationObserver {
         this.currentCreditor = null;
         matchController.getMainView().addLog(playerNoFunds.getName() + "owns " + requiredAmount + "$. Sell your asset!!!");
         matchController.getMainView().showLiquidation(playerNoFunds, requiredAmount);
-        //TODO create response
+        final SellAssetView view = matchController.getMainView().getSellAssetView();
+        view.setCallBack((success, remainingDebt) -> {
+            onLiquidationCompleted(success, remainingDebt);
+        });
+    }
+
+    private void onLiquidationCompleted(final boolean success, final int remainingDebt) {
+        matchController.getMainView().getSellAssetView().getRoot().setVisible(false);
+                if (success) {
+                    handleSuccessfulLiquidation();
+                }
+                handleBankruptcy(remainingDebt);
+                this.player = null;
+                this.currentDebt = 0;
+                this.currentCreditor = null;
+                matchController.getMainView().refreshAll();
+    }
+
+    private void handleSuccessfulLiquidation() {
+        if (this.player.getBalance() >= this.currentDebt) {
+            final boolean paymentSuccess =
+                    matchController.getEconomyController().withdrawFromPlayer(currentCreditor, currentDebt);
+            if (paymentSuccess) {
+                matchController.getMainView().addLog(this.player.getName() + "sold is debit of " + this.currentDebt + "$");
+            }
+        } else {
+            handleBankruptcy(currentDebt - player.getBalance());
+        }
+    }
+
+    private void handleBankruptcy(final int remainingDebt) {
+        onBankruptcyDeclared(this.player, this.currentCreditor, remainingDebt);
+        matchController.getMainView().addLog(this.player.getName() + "is in Bankrupt of " + this.currentDebt + "$");
     }
 
     /**

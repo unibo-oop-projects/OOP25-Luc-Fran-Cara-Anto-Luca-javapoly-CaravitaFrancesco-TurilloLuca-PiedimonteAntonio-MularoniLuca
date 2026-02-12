@@ -1,5 +1,6 @@
 package it.unibo.javapoly.view.impl;
 
+import it.unibo.javapoly.controller.api.LiquidationCallback;
 import it.unibo.javapoly.controller.api.MatchController;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.property.Property;
@@ -31,6 +32,7 @@ public class SellAssetViewImpl implements SellAssetView {
     private Player currentPlayer;
     private int originalDebt;
     private int remainingDebt;
+    private LiquidationCallback liquidationCallback;
 
     /**
      * Constructor a new sell-asset view.
@@ -89,6 +91,7 @@ public class SellAssetViewImpl implements SellAssetView {
     private void refreshPropertyGrid() {
         this.propertyGrid.getChildren().clear();
         if (this.remainingDebt <= 0) {
+            completeLiquidation(true);
             return;
         }
         final List<Property> properties =
@@ -98,6 +101,7 @@ public class SellAssetViewImpl implements SellAssetView {
 
         if (properties.isEmpty() && houses.isEmpty()) {
             this.currentPlayer.setState(BankruptState.getInstance());
+            declareBankruptcy();
             return;
         }
         int row = 0;
@@ -215,7 +219,9 @@ public class SellAssetViewImpl implements SellAssetView {
      * @param success true if debt was full paid.
      */
     private void completeLiquidation(final boolean success) {
-
+        if (this.liquidationCallback != null) {
+            this.liquidationCallback.onLiquidationCompleted(success, Math.max(0, this.remainingDebt));
+        }
     }
 
     /**
@@ -224,5 +230,13 @@ public class SellAssetViewImpl implements SellAssetView {
     @Override
     public BorderPane getRoot() {
         return root;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCallBack(final LiquidationCallback callback) {
+        this.liquidationCallback = callback;
     }
 }

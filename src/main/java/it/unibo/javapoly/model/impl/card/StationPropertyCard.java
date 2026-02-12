@@ -20,7 +20,7 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
 public class StationPropertyCard extends AbstractPropertyCard {
 
     // Indicates the rents that a player needs to pay based on the number of stations owned.
-    private final List<Integer> rentNumberSation;
+    private final List<Integer> rents;
 
     /**
      * Creates a new {@link StationPropertyCard}.
@@ -39,7 +39,7 @@ public class StationPropertyCard extends AbstractPropertyCard {
             @JsonProperty("propertyCost") final int propetyCost,
             @JsonProperty("rents") final List<Integer> rents) {
         super(id, name, description, propetyCost, PropertyGroup.RAILROAD);
-        this.rentNumberSation = rents == null
+        this.rents = rents == null
                 ? new ArrayList<>()
                 : new ArrayList<>(rents);
     }
@@ -60,7 +60,7 @@ public class StationPropertyCard extends AbstractPropertyCard {
             throw new NoSuchElementException(ERR_LIST_IS_EMPTY);
         }
 
-        return new ArrayList<>(this.rentNumberSation);
+        return new ArrayList<>(this.rents);
     }
 
     /**
@@ -78,7 +78,7 @@ public class StationPropertyCard extends AbstractPropertyCard {
         if (checkNumberStation(stationNumber)) {
             throw new IndexOutOfBoundsException(ERR_INDEX_OUT_LIMITS + stationNumber);
         }
-        return this.rentNumberSation.get(stationNumber - 1);
+        return this.rents.get(stationNumber - 1);
     }
 
     //#endregion
@@ -92,7 +92,7 @@ public class StationPropertyCard extends AbstractPropertyCard {
      * @return true if the number is out of bounds, false otherwise.
      */
     private boolean checkNumberStation(final int number) {
-        return number < 1 || number > this.rentNumberSation.size();
+        return number < 1 || number > this.rents.size();
     }
 
     /**
@@ -101,10 +101,10 @@ public class StationPropertyCard extends AbstractPropertyCard {
      * @return true if the rent list is empty, false otherwise.
      */
     private boolean checkListIsEmpty() {
-        if (this.rentNumberSation == null) {
+        if (this.rents == null) {
             throw new IllegalStateException(ERR_LIST_IS_NULL);
         }
-        return this.rentNumberSation.isEmpty();
+        return this.rents.isEmpty();
     }
     //#endregion
 
