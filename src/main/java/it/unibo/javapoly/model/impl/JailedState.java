@@ -1,7 +1,5 @@
 package it.unibo.javapoly.model.impl;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerState;
 import it.unibo.javapoly.utils.ValidationUtils;
@@ -15,8 +13,6 @@ import it.unibo.javapoly.utils.ValidationUtils;
  * @see FreeState
  * @see PlayerState
  */
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-@JsonTypeName("JailedState")
 public final class JailedState implements PlayerState {
 
     /**
@@ -38,8 +34,14 @@ public final class JailedState implements PlayerState {
     }
 
     /**
-     * Constructs a new {@link JailedState}  with the turn counter equal turnsInJail.
-     *
+     * Constructs a new {@link JailedState} with the turn counter equal turnsInJail.
+     * 
+     * <p>
+     * This method is intended to be used for JSON serialization/deserialization to
+     * restore the number of turns a player has already spent in jail when loading a
+     * saved game from a JSON file.
+     * </p>
+     * 
      * @param turnsInJail number of turns in jail.
      */
     public JailedState(final Integer turnsInJail) {
@@ -82,14 +84,6 @@ public final class JailedState implements PlayerState {
         } else {
             System.out.println("Resta in prigione."); // NOPMD
         }
-
-        // TODO understand if there are other release conditions, such as paying a
-        // fine or using a "Get Out of Jail Free" card.
-        // Understand if I need to handle this, especially for the "Get Out of Jail
-        // Free" card, or if it is the player who decides when to use it, and in that
-        // case how do I communicate it to them, since they do not manage their state,
-        // but the state manages them. Or if it should be handled by who manages all
-        // the cards, that is Francesco.
     }
 
     /**
@@ -104,6 +98,12 @@ public final class JailedState implements PlayerState {
 
     /**
      * Gets the number of turns spent in jail.
+     * 
+     * <p>
+     * This getter is intended to be used for JSON serialization/deserialization to
+     * save and restore the number of turns a player has already spent in jail when
+     * loading a saved game from a JSON file.
+     * </p>
      *
      * @return the number of turns spent in jail.
      */

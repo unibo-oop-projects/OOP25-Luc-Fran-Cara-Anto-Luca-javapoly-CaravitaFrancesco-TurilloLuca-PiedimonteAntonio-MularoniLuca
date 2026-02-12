@@ -1,10 +1,5 @@
 package it.unibo.javapoly.model.api;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import it.unibo.javapoly.model.impl.FreeState;
-import it.unibo.javapoly.model.impl.JailedState;
-
 /**
  * Represents the state of a player in the game.
  * This interface defines the behavior of a player based on their current status
@@ -25,15 +20,6 @@ import it.unibo.javapoly.model.impl.JailedState;
  * player's actions during their turn, ensuring that the correct behavior is
  * executed based on their current state.
  */
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
-)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = JailedState.class, name = "JailedState"),
-        @JsonSubTypes.Type(value = FreeState.class, name = "FreeState")
-})
 public interface PlayerState {
 
     /**
