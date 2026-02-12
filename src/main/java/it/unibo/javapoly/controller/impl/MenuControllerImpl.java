@@ -83,7 +83,7 @@ public class MenuControllerImpl implements MenuController {
             return;
         }
         try {
-            final MatchControllerImpl matchController = MatchControllerSerializer.deserialize(saveFile);
+            final MatchControllerImpl matchController = MatchControllerDeserializer.deserialize(saveFile);
             final MainView mainView = matchController.getMainView();
             final Stage stage = this.menuView.getStage();
             stage.getScene().setRoot(mainView.getRoot());

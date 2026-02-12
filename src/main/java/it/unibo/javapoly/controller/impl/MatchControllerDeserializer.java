@@ -12,8 +12,8 @@ import java.io.IOException;
 /**
  * Utility class for serializing and deserializing MatchControllerImpl instances to and from JSON files.
  */
-public final class MatchControllerSerializer {
-    private MatchControllerSerializer() {
+public final class MatchControllerDeserializer {
+    private MatchControllerDeserializer() {
     }
 
     /**
