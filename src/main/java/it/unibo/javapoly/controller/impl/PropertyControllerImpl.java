@@ -170,6 +170,14 @@ public class PropertyControllerImpl implements PropertyController {
         return card.getHouseCost();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getOwnerByProperty(final Property property) {
+        return this.propertyOwners.get(property.getId());
+    }
+
     //#region Private Method
 
     /**
@@ -245,11 +253,6 @@ public class PropertyControllerImpl implements PropertyController {
         }
 
         return RentContext.forLand(prop.getBuiltHouses(), ownsCompleteGroup(owner.getName(), prop.getPropertyGroup()));
-    }
-
-    @Override
-    public Player getOwnerByProperty(Property property) {
-        return this.propertyOwners.get(property.getId());
     }
 
     //#endregion
