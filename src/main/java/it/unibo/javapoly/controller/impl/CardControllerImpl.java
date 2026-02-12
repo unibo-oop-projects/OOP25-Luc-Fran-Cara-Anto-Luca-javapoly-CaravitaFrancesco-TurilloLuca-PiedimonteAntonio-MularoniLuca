@@ -97,9 +97,7 @@ public class CardControllerImpl implements CardController {
             return handleMoneyPerBuilding(player, (BuildingPayload) payload);
         }
 
-        if (CardType.GO_TO_JAIL == card.getType() && !useGetOutOfJailFreeCard(player.getName())) {
-            return boardController.sendPlayerToJail(player).getPosition();
-        }
+
 
         return this.VALUE_DEF;
     }

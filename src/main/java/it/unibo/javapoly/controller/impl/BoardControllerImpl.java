@@ -8,6 +8,7 @@ import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
 import it.unibo.javapoly.model.api.board.TileType;
+import it.unibo.javapoly.model.api.card.CardType;
 import it.unibo.javapoly.model.api.card.GameCard;
 import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.model.impl.board.tile.TaxTile;
@@ -25,6 +26,7 @@ public class BoardControllerImpl implements BoardController {
     private static final int MAX_DICE = 12;
     private static final int GO_BONUS = 200;
     private static final int BOARD_SIZE = 40;
+    private static final String JAIL_FREE = "Hai usato una carta esci di prigione gratis.";
     private static final int JAIL_POSITION = 10;
 
     private final Board board;
@@ -110,8 +112,9 @@ public class BoardControllerImpl implements BoardController {
      */
     @Override
     public Tile executeTileLogic(final Player player, final int pos, final int diceRoll) {
-        
         final Tile tile = this.board.getTileAt(pos);
+        this.message += tile.getName() + "\n" + tile.getDescription() + "\n";
+
         switch (tile.getType()) {
             case TAX:
                 if (tile instanceof TaxTile) {
@@ -120,11 +123,24 @@ public class BoardControllerImpl implements BoardController {
                 }
                 break;
             case GO_TO_JAIL:
-                this.message += tile.getDescription() + "\n";
-                return sendPlayerToJail(player);
+                if (!this.cardController.useGetOutOfJailFreeCard(player.getName())){
+                    return sendPlayerToJail(player);
+                }
+                this.message += this.JAIL_FREE + "\n";
+
             case UNEXPECTED:
                 final GameCard cardDrawed = this.cardController.drawCard(player.getName());
-                this.message = tile.getDescription() + ":\n" + cardDrawed.getName() + "\n";
+
+                this.message += cardDrawed.getName() + "\n";
+
+                if (CardType.GO_TO_JAIL == cardDrawed.getType()){
+                    if (!this.cardController.useGetOutOfJailFreeCard(player.getName())){
+                        return sendPlayerToJail(player);
+                    }
+                    this.message += this.JAIL_FREE + "\n";
+                    return tile;
+                }
+
                 final int destPos = this.cardController.executeCardEffect(player, cardDrawed, BOARD_SIZE);
                 return destPos != -1 ? this.board.getTileAt(destPos) : tile;
             case PROPERTY:
@@ -143,7 +159,7 @@ public class BoardControllerImpl implements BoardController {
                 break;
         }
 
-        this.message += tile.getName() + "\n";
+
         return tile;
     }
 
