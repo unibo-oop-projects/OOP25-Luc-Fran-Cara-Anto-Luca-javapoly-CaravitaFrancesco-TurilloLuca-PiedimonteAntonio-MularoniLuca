@@ -88,6 +88,7 @@ public class SellAssetViewImpl implements SellAssetView {
     private void refreshPropertyGrid() {
         this.propertyGrid.getChildren().clear();
         if (this.remainingDebt <= 0) {
+            this.remainingDebt =0;
             completeLiquidation(true);
             return;
         }
@@ -169,12 +170,12 @@ public class SellAssetViewImpl implements SellAssetView {
      * @param housePrice the sale price.
      */
     private void sellHouse(final Property property, final int housePrice) {
-        final boolean success = matchController.getEconomyController().sellHouse(currentPlayer, property);
+        final boolean success = matchController.getEconomyController().sellHouse(this.currentPlayer, property);
         if (success) {
-            this.remainingDebt -= housePrice;
             matchController.getMainView().addLog(
                     currentPlayer.getName() + " sold house in " + property.getId() + " for " + housePrice + CURRENCY);
-            if (remainingDebt <= 0) {
+            if (this.originalDebt <= this.currentPlayer.getBalance()) {
+                this.remainingDebt = 0;
                 completeLiquidation(true);
             }
             debtDisplay();
@@ -191,10 +192,10 @@ public class SellAssetViewImpl implements SellAssetView {
     private void sellProperty(final Property property, final int pricePropertyToSell) {
         final boolean success = matchController.getEconomyController().sellProperty(this.currentPlayer, property);
         if (success) {
-            this.remainingDebt -= pricePropertyToSell;
             matchController.getMainView().addLog(
             currentPlayer.getName() + " sold " + property.getId() + " for " + pricePropertyToSell + this.CURRENCY);
-            if (remainingDebt <= 0) {
+            if (this.originalDebt <= this.currentPlayer.getBalance()) {
+                this.remainingDebt = 0;
                 completeLiquidation(true);
             }
             debtDisplay();

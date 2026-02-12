@@ -13,7 +13,7 @@ import it.unibo.javapoly.view.impl.MainView;
  * Interface representing the main controller for a Monopoly match.
  * It manages the game loop, player actions, and turn logic.
  */
-public interface MatchController extends PlayerObserver, LiquidationObserver {
+public interface MatchController extends PlayerObserver {
     /**
      * Starts the game, initializing the board and the first player's turn.
      */

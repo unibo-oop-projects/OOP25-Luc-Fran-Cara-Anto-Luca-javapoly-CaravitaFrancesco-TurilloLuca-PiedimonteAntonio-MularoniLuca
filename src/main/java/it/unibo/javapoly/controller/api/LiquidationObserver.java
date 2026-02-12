@@ -13,9 +13,10 @@ public interface LiquidationObserver {
      * This event is triggered before bankruptcy is declared.
      *
      * @param player the player who cannot fulfill the payment due to insufficient balance.
+     * @param creditor the player owed the unpaid debt.
      * @param requiredAmount the amount needed now.
      */
-    void onInsufficientFunds(Player player, int requiredAmount);
+    void onInsufficientFunds(Player player, Player creditor, int requiredAmount);
 
     /**
      * Notifies that a player has entered formal bankruptcy state.

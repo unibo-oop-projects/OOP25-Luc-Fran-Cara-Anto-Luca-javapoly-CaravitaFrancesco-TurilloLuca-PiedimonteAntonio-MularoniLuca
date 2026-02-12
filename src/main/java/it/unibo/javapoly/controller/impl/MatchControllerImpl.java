@@ -38,8 +38,8 @@ import javafx.application.Platform;
 @JsonIgnoreProperties(value = {"gui","economyController", "mainView", ""}, ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class MatchControllerImpl implements MatchController{
-    private static final int MAX_DOUBLES = 3;
-    private static final int JAIL_EXIT_FEE = 50;
+    private static final int MAX_DOUBLES = 1;
+    private static final int JAIL_EXIT_FEE = 1400;
 
     private final List<Player> players;
     private final DiceThrow diceThrow;
@@ -72,11 +72,12 @@ public class MatchControllerImpl implements MatchController{
     public MatchControllerImpl(final List<Player> players, final Board gameBoard, final Map<String, Property> properties){
         this.players = List.copyOf(players);
         this.gameBoard = Objects.requireNonNull(gameBoard);
-        this.propertyController = new PropertyControllerImpl(properties);
-        this.economyController = new EconomyControllerImpl(propertyController, players);
-        this.boardController = new BoardControllerImpl(gameBoard, economyController, propertyController);
         this.liquidationObserver = new LiquidationObserverImpl(this);
+        this.propertyController = new PropertyControllerImpl(properties);
+        this.economyController = new EconomyControllerImpl(propertyController, this.players);
         this.economyController.setLiquidationObserver(this.liquidationObserver);
+
+        this.boardController = new BoardControllerImpl(gameBoard, economyController, propertyController);
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
         this.gui = new MainView(this);
         this.currentPlayerIndex = 0;
@@ -110,7 +111,7 @@ public class MatchControllerImpl implements MatchController{
         this.propertyController = propertyController != null ? propertyController : new PropertyControllerImpl(new HashMap<>());
         this.liquidationObserver = new LiquidationObserverImpl(this);
         this.economyController = new EconomyControllerImpl(this.propertyController, this.players);
-        this.economyController.setLiquidationObserver(this);
+        this.economyController.setLiquidationObserver(this.liquidationObserver);
         this.boardController = new BoardControllerImpl(this.gameBoard, this.economyController, this.propertyController);
         this.diceThrow = diceThrow != null ? diceThrow : new DiceThrow(new DiceImpl(), new DiceImpl());
         this.gui = new MainView(this);
@@ -448,7 +449,7 @@ public class MatchControllerImpl implements MatchController{
             });
             this.currentCreditor = null;
         }else{
-            this.onBankruptcyDeclared(p, this.currentCreditor, Math.abs(p.getBalance()));
+            this.liquidationObserver.onBankruptcyDeclared(p, this.currentCreditor, Math.abs(p.getBalance()));
             this.currentCreditor = null;
         }
     }
@@ -515,21 +516,6 @@ public class MatchControllerImpl implements MatchController{
     public void handleEndTurn() {
 
     }
-    // LiquidationObserver implementations
-    @Override
-    public void onInsufficientFunds(Player player, int amount) {
-        if (this.liquidationObserver != null) {
-            this.liquidationObserver.onInsufficientFunds(player, amount);
-        }
-    }
-
-    @Override
-    public void onBankruptcyDeclared(Player payer, Player payee, int amount) {
-        if (this.liquidationObserver != null) {
-            this.liquidationObserver.onBankruptcyDeclared(payer, payee, amount);
-        }
-    }
-
     //#endregion
 
 }

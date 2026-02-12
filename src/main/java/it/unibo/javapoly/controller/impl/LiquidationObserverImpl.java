@@ -29,12 +29,12 @@ public class LiquidationObserverImpl implements LiquidationObserver {
      * {@inheritDoc}
      */
     @Override
-    public void onInsufficientFunds(final Player playerNoFunds, final int requiredAmount) {
+    public void onInsufficientFunds(final Player playerNoFunds, final Player payee, final int requiredAmount) {
         ValidationUtils.requireNonNull(playerNoFunds, "player cannot be null");
         ValidationUtils.requirePositive(requiredAmount, "requiredAmount must be positive");
         this.player = playerNoFunds;
         this.currentDebt = requiredAmount;
-        this.currentCreditor = null;
+        this.currentCreditor = payee;
         matchController.getMainView().addLog(playerNoFunds.getName() + "owes " + requiredAmount + "$. Sell your asset!!!");
         matchController.getMainView().showLiquidation();
         final SellAssetView view = matchController.getMainView().getSellAssetView();
@@ -47,7 +47,7 @@ public class LiquidationObserverImpl implements LiquidationObserver {
 
     private void onLiquidationCompleted(final boolean success, final int remainingDebt) {
         matchController.getMainView().hideLiquidation();
-                if (success) {
+                if (success && remainingDebt == 0) {
                     handleSuccessfulLiquidation();
                 } else {
                     handleBankruptcy(remainingDebt);
@@ -60,19 +60,21 @@ public class LiquidationObserverImpl implements LiquidationObserver {
 
     private void handleSuccessfulLiquidation() {
         if (this.player.getBalance() >= this.currentDebt) {
-            final boolean paymentSuccess =
-                    matchController.getEconomyController().withdrawFromPlayer(this.player, this.currentDebt);
-            if (paymentSuccess) {
-                matchController.getMainView().addLog(this.player.getName() + "sold is debit of " + this.currentDebt + "$");
+            if (this.currentCreditor != null) {
+                matchController.getEconomyController()
+                        .payPlayer(this.player, this.currentCreditor, this.currentDebt);
+                matchController.getMainView().addLog(
+                        this.player.getName() + " sold is debit with " + this.currentCreditor + " of " + this.currentDebt + " $");
+            } else {
+                matchController.getEconomyController().withdrawFromPlayer(this.player, this.currentDebt);
+                matchController.getMainView().addLog(this.player.getName() + " sold is debit of " + this.currentDebt + "$");
             }
-        } else {
-            handleBankruptcy(this.currentDebt - this.player.getBalance());
         }
     }
 
     private void handleBankruptcy(final int remainingDebt) {
         onBankruptcyDeclared(this.player, this.currentCreditor, remainingDebt);
-        matchController.getMainView().addLog(this.player.getName() + "is in Bankrupt of " + this.currentDebt + "$");
+        matchController.getMainView().addLog(this.player.getName() + " is in Bankrupt of " + this.currentDebt + "$");
     }
 
     /**
@@ -81,12 +83,15 @@ public class LiquidationObserverImpl implements LiquidationObserver {
     @Override
     public void onBankruptcyDeclared(final Player payer, final Player payee, final int requiredAmount) {
         ValidationUtils.requireNonNull(payer, "payer cannot be null");
-        payer.setState(BankruptState.getInstance());
         if (payee != null && payer.getBalance() > 0) {
             matchController.getEconomyController().payPlayer(payer, payee, payer.getBalance());
             matchController.getMainView().addLog(
                     player.getName() + " gives " + payer.getBalance() + "$ to " + payee.getName());
         }
+        if (payer.getBalance() > 0) {
+            matchController.getEconomyController().withdrawFromPlayer(payer, payer.getBalance());
+        }
+        payer.setState(BankruptState.getInstance());
         matchController.getMainView().refreshAll();
     }
 
