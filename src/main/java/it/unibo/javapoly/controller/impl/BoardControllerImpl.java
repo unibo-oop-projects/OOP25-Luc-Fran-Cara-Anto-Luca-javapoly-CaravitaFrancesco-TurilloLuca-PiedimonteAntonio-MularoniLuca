@@ -301,12 +301,6 @@ public class BoardControllerImpl implements BoardController {
             + System.lineSeparator();
 
         this.bank.depositToPlayer(player, GO_BONUS);
-
-        System.out.println(
-            "Player " + player
-                + " passed GO! Receives "
-                + GO_BONUS
-        );
     }
 
     /**
