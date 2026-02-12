@@ -46,7 +46,7 @@ public class MenuControllerImpl implements MenuController {
      * {@inheritDoc}
      */
     @Override
-    public void playerSetupConfirmed(List<String> names, List<TokenType> tokens, List<String> customPaths) {
+    public void playerSetupConfirmed(final List<String> names, final List<TokenType> tokens, final List<String> customPaths) {
         ValidationUtils.requireNonNull(names, NON_NULL);
         ValidationUtils.requireNonNull(tokens, "Player tokens list cannot be null");
         if (names.size() != tokens.size()) {
@@ -66,6 +66,8 @@ public class MenuControllerImpl implements MenuController {
      * {@inheritDoc}
      */
     @Override
+    // Checkstyle suppression is necessary here to catch any exception during loading.
+    @SuppressWarnings("Checkstyle")
     public void loadGame(final File saveFile) {
         ValidationUtils.requireNonNull(saveFile, "Save file cannot be null");
         if (!saveFile.exists()) {
@@ -81,7 +83,7 @@ public class MenuControllerImpl implements MenuController {
             return;
         }
         try {
-            final MatchController matchController = MatchSnapshotter.loadMatch(saveFile);
+            final MatchControllerImpl matchController = MatchControllerSerializer.deserialize(saveFile);
             final MainView mainView = matchController.getMainView();
             final Stage stage = this.menuView.getStage();
             stage.getScene().setRoot(mainView.getRoot());
@@ -89,6 +91,8 @@ public class MenuControllerImpl implements MenuController {
             matchController.startGame();
         } catch (final IOException e) {
             System.err.println("Error loading board from saved file: " + e.getMessage());
+        } catch (final Exception exception) {
+            System.err.println("Error loading board from saved file: " + exception.getMessage());
         }
     }
 
@@ -120,5 +124,4 @@ public class MenuControllerImpl implements MenuController {
             System.err.println("Error loading board from file: " + e.getMessage());
         }
     }
-    
 }
