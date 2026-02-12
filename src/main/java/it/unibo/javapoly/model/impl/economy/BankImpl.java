@@ -41,7 +41,7 @@ public final class BankImpl implements Bank {
     public boolean transferFunds(final Player payer, final Player payee, final int amount) {
         Objects.requireNonNull(payer, PLAYER_NO_NULL);
         Objects.requireNonNull(payee, PLAYER_NO_NULL);
-        ValidationUtils.requirePositive(amount, AMOUNT_MUST_BE_POSITIVE);
+        ValidationUtils.requireNonNegative(amount, AMOUNT_MUST_BE_POSITIVE);
         if (payer.tryToPay(amount)) {
             payee.receiveMoney(amount);
             return true;
