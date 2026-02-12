@@ -1,15 +1,16 @@
 package it.unibo.javapoly.controller.api;
 
 /**
- * Thi interface need to exchange information from view to observer.
+ * Invoked when the liquidation process for a player has concluded.
  */
 public interface LiquidationCallback {
 
     /**
-     * If liquidation complete it will be true, false otherwise.
+     * Invoked when the liquidation process for a player has concluded.
      *
-     * @param success how goes the liquidation.
-     * @param remainingDebt debt to pay.
+     * @param success {@code true} if the player's debt was fully satisfied, {@code false}
+     *                 {@code false} if the partial or no liquidation succeeded and remains.
+     * @param remainingDebt the absolute amount of debt still owed.
      */
     void onLiquidationCompleted(boolean success, int remainingDebt);
 }
