@@ -45,7 +45,7 @@ public final class BankruptState implements PlayerState {
      */
     @Override
     public void playTurn(final Player player, final int potentialDestination, final boolean isDouble) {
-        System.out.println("[Bancarotta] Il giocatore " + player.getName() + " è fuori dal gioco."); // NOPMD
+        // no actions are performed for a bankrupt player during their turn.
     }
 
     /**

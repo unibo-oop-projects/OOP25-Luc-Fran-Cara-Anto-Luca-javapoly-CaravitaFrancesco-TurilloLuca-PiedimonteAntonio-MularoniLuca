@@ -183,10 +183,6 @@ public class PlayerImpl implements Player {
         this.currentPosition = newPosition;
 
         notifyMoved(oldPos, this.currentPosition);
-
-        System.out.println(// NOPMD
-                "DEBUG: " + this.name + " (" + this.token.getType() + ") si sposta da " + oldPos + " a "
-                        + this.currentPosition);
     }
 
     /**
@@ -349,7 +345,6 @@ public class PlayerImpl implements Player {
         if (!oldState.getClass().equals(state.getClass())) {
             notifyStateChanged(oldState, state);
         }
-        System.out.println("Stato cambiato in: " + state.getClass().getSimpleName()); // NOPMD
     }
 
     /**

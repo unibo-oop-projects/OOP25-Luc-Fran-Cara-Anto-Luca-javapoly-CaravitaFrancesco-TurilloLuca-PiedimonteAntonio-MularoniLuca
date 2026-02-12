@@ -78,15 +78,11 @@ public final class JailedState implements PlayerState {
         ValidationUtils.requireNonNegative(potentialDestination, "Potential destination cannot be negative");
 
         turnsInJail++;
-        System.out.println("[Prigione] Turno " + turnsInJail + " di detenzione."); // NOPMD
 
         if (isDouble || turnsInJail >= MAX_TURNS) {
-            System.out.println(player.getName() + " esce di prigione!"); // NOPMD
 
             player.setState(FreeState.getInstance());
             player.move(potentialDestination);
-        } else {
-            System.out.println("Resta in prigione."); // NOPMD
         }
     }
 

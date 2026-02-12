@@ -228,7 +228,7 @@ public interface Player {
      * 
      * @return the file path of the custom token image.
      */
-    public String getCustomTokenPath();
+    String getCustomTokenPath();
 
     /**
      * Sets the file path for the custom token.
@@ -240,5 +240,5 @@ public interface Player {
      * 
      * @param path the file path of the custom token image.
      */
-    public void setCustomTokenPath(final String path);
+    void setCustomTokenPath(String path);
 }
