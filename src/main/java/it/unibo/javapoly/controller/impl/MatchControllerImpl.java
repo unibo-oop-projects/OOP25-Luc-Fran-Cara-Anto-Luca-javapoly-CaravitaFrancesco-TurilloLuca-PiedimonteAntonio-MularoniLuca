@@ -272,7 +272,7 @@ public class MatchControllerImpl implements MatchController{
 
         final Tile currentTile = gameBoard.getTileAt(newPosition);
 
-        this.boardController.executeTileLogic(player, currentTile, this.diceThrow.getLastThrow());
+        this.boardController.executeTileLogic(player, currentTile.getPosition(), this.diceThrow.getLastThrow());
 
         if(currentTile instanceof PropertyTile pt){
             this.currentCreditor = players.stream()
