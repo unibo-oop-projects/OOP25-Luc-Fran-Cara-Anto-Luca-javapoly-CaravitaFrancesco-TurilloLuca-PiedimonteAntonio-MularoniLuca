@@ -154,7 +154,7 @@ public class PropertyControllerImpl implements PropertyController {
     @Override
     public boolean checkPayRent(final Player player, final String propertyId) {
         return this.properties.get(propertyId).isOwnedByPlayer()
-        && this.properties.get(propertyId).playerIsTheOwner(player.getName());
+        && !this.properties.get(propertyId).playerIsTheOwner(player.getName());
     }
 
     /**
@@ -183,7 +183,7 @@ public class PropertyControllerImpl implements PropertyController {
         final List<Property> groupProperties = getPropertiesInGroup(group);
 
         for (final Property property : groupProperties) {
-            if (!propertyOwners.get(property.getId()).getName().equals(playerId)) {
+            if (property.isOwnedByPlayer() && !property.playerIsTheOwner(playerId)) {
                 return false;
             }
         }
@@ -215,7 +215,7 @@ public class PropertyControllerImpl implements PropertyController {
         int i = 0;
 
         for (final Property property : groupProperties) {
-            if (!propertyOwners.get(property.getId()).getName().equals(playerId)) {
+            if (property.isOwnedByPlayer() && property.playerIsTheOwner(playerId)) {
                 i++;
             }
         }
