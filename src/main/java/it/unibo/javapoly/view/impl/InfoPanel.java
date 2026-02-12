@@ -20,8 +20,8 @@ public class InfoPanel {
 
     private final VBox root;
     private final MatchController matchController;
-    private SellAssetViewImpl sellAssetView;
-    private VBox liquidation;
+    private final SellAssetViewImpl sellAssetView;
+    private final VBox liquidation;
     
     /**
      * Constructor: creates labels and adds them to the panel.
@@ -35,7 +35,12 @@ public class InfoPanel {
         this.root.setPadding(new Insets(20));
         this.root.setPrefWidth(280); 
         this.root.setStyle("-fx-background-color: #EEEEEE; -fx-border-color: #CCCCCC; -fx-border-width: 0 0 0 1;");
-
+        this.sellAssetView = new SellAssetViewImpl(this.matchController);
+        this.liquidation = new VBox();
+        this.liquidation.getChildren().add(this.sellAssetView.getRoot());
+        this.sellAssetView.getRoot().setVisible(false);
+        this.sellAssetView.getRoot().setManaged(false);
+        this.root.getChildren().add(this.liquidation);
         this.updateInfo();
     }
 
@@ -44,7 +49,6 @@ public class InfoPanel {
      */
     public void updateInfo(){
         this.root.getChildren().clear();
-        
         Label title = new Label("GIOCATORI");
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         title.setPadding(new Insets(0, 0, 10, 0));
@@ -53,6 +57,8 @@ public class InfoPanel {
         for (Player p : this.matchController.getPlayers()) {
             this.root.getChildren().add(createPlayerCard(p));
         }
+
+        this.root.getChildren().add(this.liquidation);
     }
 
     private VBox createPlayerCard(Player p){
@@ -82,15 +88,6 @@ public class InfoPanel {
 
         card.setStyle(style);
         return card;
-    }
-
-    private void setUpSellView() {
-        this.sellAssetView = new SellAssetViewImpl(this.matchController);
-        this.liquidation = new VBox();
-        this.liquidation.getChildren().add(this.sellAssetView.getRoot());
-        this.liquidation.setVisible(false);
-        this.liquidation.setManaged(false);
-        this.root.getChildren().add(this.liquidation);
     }
     
     /**

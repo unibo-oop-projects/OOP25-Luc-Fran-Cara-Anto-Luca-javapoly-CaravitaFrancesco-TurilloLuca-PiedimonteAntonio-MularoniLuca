@@ -87,7 +87,7 @@ public final class EconomyControllerImpl implements EconomyController {
             }
         }
         if (this.liquidationObserver != null) {
-            this.liquidationObserver.onInsufficientFunds(player, amount);
+            this.liquidationObserver.onInsufficientFunds(player, null, amount);
         }
         return false;
     }
@@ -116,7 +116,7 @@ public final class EconomyControllerImpl implements EconomyController {
             }
         }
         if (this.liquidationObserver != null) {
-            this.liquidationObserver.onInsufficientFunds(payer, rent);
+            this.liquidationObserver.onInsufficientFunds(payer, payee, rent);
         }
         return false;
     }

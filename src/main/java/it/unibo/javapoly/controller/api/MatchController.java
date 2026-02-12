@@ -13,7 +13,7 @@ import it.unibo.javapoly.view.impl.MainView;
  * Interface representing the main controller for a Monopoly match.
  * It manages the game loop, player actions, and turn logic.
  */
-public interface MatchController extends PlayerObserver{
+public interface MatchController extends PlayerObserver {
     /**
      * Starts the game, initializing the board and the first player's turn.
      */
@@ -26,7 +26,7 @@ public interface MatchController extends PlayerObserver{
 
     /**
      * Returns the player who is currently taking their turn.
-     * * @return the current {@link Player}
+     * @return the current {@link Player}
      */
     Player getCurrentPlayer();
 
@@ -36,42 +36,47 @@ public interface MatchController extends PlayerObserver{
     void handleDiceThrow();
 
     /**
-     * Moves the current player on the board.
-     * * @param steps the number of spaces the player should move
+     * Handles the end of the current player's turn.
      */
-    void handleMove(int steps);
-
-    /**
-     * Manages the logic for when a player is sent to or is currently in prison.
-     */
-    void handlePrison();
+    void handleEndTurn();
 
     /** @return the game board. */
     Board getBoard();
 
-    //descrizione da inserire
+    /** @return true if the current player can roll the dice. */
     boolean canCurrentPlayerRoll();
 
+    /** @return the main view/GUI. */
     MainView getMainView();
 
+    /** @return list of all players. */
     List<Player> getPlayers();
 
+    /** Allows the current player to pay to exit jail. */
     void payToExitJail();
 
+    /** @return the index of the current player. */
     int getCurrentPlayerIndex();
 
+    /** @return the number of consecutive doubles rolled. */
     int getConsecutiveDoubles();
 
+    /** Sets the current player index. */
     void setCurrentPlayerIndex(int indx);
 
+    /** Sets the consecutive doubles count. */
     void setConsecutiveDoubles(int d);
 
+    /** Sets whether the current player has rolled. */
     void setHasRolled(boolean b);
 
+    /** Restores the jail turn counter from saved data. */
     void restoreJailTurnCounter(final Map<String, Integer> map, final List<Player> players);
 
+    /** @return the economy controller. */
     EconomyController getEconomyController();
 
+    /** @return the property controller. */
     PropertyController getPropertyController();
 
     /** Acquista la proprietà sulla casella attuale. */
@@ -80,5 +85,6 @@ public interface MatchController extends PlayerObserver{
     /** Costruisce una casa sulla proprietà specificata. */
     void buildHouseOnProperty(Property property);
 
+    /** Finalizes the liquidation process for a player. */
     void finalizeLiquidation(Player p);
 }

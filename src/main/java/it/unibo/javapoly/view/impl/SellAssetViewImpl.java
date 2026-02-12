@@ -64,25 +64,22 @@ public class SellAssetViewImpl implements SellAssetView {
     }
 
     /**
-     * Display the view for the given player with their current debit and available properties.
-     * Updates the UI with button to sell house first(if any), otherwise regular properties.
-     *
-     * @param player the player in turn, must not be {@code null}
-     * @param debtAmount the amount of debt to be settled (must be >0 for UI to populate buttons)
-     * @throws IllegalArgumentException if {@code player} is null or any list is null.
+     * {@inheritDoc}
      */
+    @Override
     public void show(final Player player, final int debtAmount) {
         this.currentPlayer = player;
         this.originalDebt = debtAmount;
         this.remainingDebt = debtAmount;
         debtDisplay();
+        refreshPropertyGrid();
     }
 
     /**
      * This method update debtLabel with remaining debt.
      */
     private void debtDisplay() {
-        this.debtLabel.setText(this.remainingDebt + this.CURRENCY);
+        this.debtLabel.setText(this.remainingDebt + CURRENCY);
     }
 
     /**
@@ -90,6 +87,7 @@ public class SellAssetViewImpl implements SellAssetView {
      */
     private void refreshPropertyGrid() {
         this.propertyGrid.getChildren().clear();
+        this.remainingDebt = Math.max(0, this.originalDebt - this.currentPlayer.getBalance());
         if (this.remainingDebt <= 0) {
             completeLiquidation(true);
             return;
@@ -98,7 +96,6 @@ public class SellAssetViewImpl implements SellAssetView {
                 new ArrayList<>(this.matchController.getPropertyController().getOwnedProperties(this.currentPlayer.getName()));
         final List<Property> houses =
                 new ArrayList<>(this.matchController.getPropertyController().getPropertiesWithHouseByOwner(this.currentPlayer));
-
         if (properties.isEmpty() && houses.isEmpty()) {
             this.currentPlayer.setState(BankruptState.getInstance());
             declareBankruptcy();
@@ -125,7 +122,6 @@ public class SellAssetViewImpl implements SellAssetView {
                 }
             }
         }
-
     }
 
     /**
@@ -136,8 +132,8 @@ public class SellAssetViewImpl implements SellAssetView {
      * @return a non-null button.
      */
     private Button createHouseButton(final Property property) {
-        final Label nameLabel = new Label(property.getCard().getName());
-        final Label houseCountLabel = new Label("House " + property.getState().getHouses());
+        final Label nameLabel = new Label(property.getCard().getName() + " ");
+        final Label houseCountLabel = new Label("House " + property.getState().getHouses() + " ");
         final int housePriceLabel = this.matchController.getPropertyController().getHouseCost(property) / 2;
         final Label price = new Label("Sell for " + housePriceLabel + " $");
         final HBox content = new HBox(nameLabel, houseCountLabel, price);
@@ -155,7 +151,7 @@ public class SellAssetViewImpl implements SellAssetView {
      * @return a non-null button.
      */
     private Button createPropertyButton(final Property property) {
-        final Label name = new Label(property.getCard().getName());
+        final Label name = new Label(property.getCard().getName() + " ");
         final int pricePropertyToSell = property.getState().getPurchasePrice() / 2;
         final Label price = new Label(String.valueOf(pricePropertyToSell));
         final HBox content = new HBox(name, price);
@@ -172,17 +168,19 @@ public class SellAssetViewImpl implements SellAssetView {
      * @param housePrice the sale price.
      */
     private void sellHouse(final Property property, final int housePrice) {
-        final boolean success = matchController.getEconomyController().sellHouse(currentPlayer, property);
-        if (success) {
-            this.remainingDebt -= housePrice;
-            matchController.getMainView().addLog(
-                    currentPlayer.getName() + " sold house in " + property.getId() + " for " + housePrice + CURRENCY);
-            if (remainingDebt <= 0) {
-                completeLiquidation(true);
-            }
-            debtDisplay();
-            refreshPropertyGrid();
+        final boolean success = matchController.getEconomyController().sellHouse(this.currentPlayer, property);
+        if (!success) {
+           return;
         }
+        matchController.getMainView().addLog(
+                currentPlayer.getName() + " sold house in " + property.getId() + " for " + housePrice + CURRENCY);
+        if (this.currentPlayer.getBalance() >= this.originalDebt) {
+            this.remainingDebt = 0;
+            debtDisplay();
+            completeLiquidation(true);
+            return;
+        }
+        refreshPropertyGrid();
     }
 
     /**
@@ -193,16 +191,18 @@ public class SellAssetViewImpl implements SellAssetView {
      */
     private void sellProperty(final Property property, final int pricePropertyToSell) {
         final boolean success = matchController.getEconomyController().sellProperty(this.currentPlayer, property);
-        if (success) {
-            this.remainingDebt -= pricePropertyToSell;
-            matchController.getMainView().addLog(
-            currentPlayer.getName() + " sold " + property.getId() + " for " + pricePropertyToSell + this.CURRENCY);
-            if (remainingDebt <= 0) {
-                completeLiquidation(true);
-            }
-            debtDisplay();
-            refreshPropertyGrid();
+        if (!success) {
+            return;
         }
+        matchController.getMainView().addLog(
+                    currentPlayer.getName() + " sold " + property.getId() + " for " + pricePropertyToSell + CURRENCY);
+        if (this.currentPlayer.getBalance() >= this.originalDebt) {
+            this.remainingDebt = 0;
+            debtDisplay();
+            completeLiquidation(true);
+            return;
+        }
+        refreshPropertyGrid();
     }
 
     /**
@@ -220,7 +220,7 @@ public class SellAssetViewImpl implements SellAssetView {
      */
     private void completeLiquidation(final boolean success) {
         if (this.liquidationCallback != null) {
-            this.liquidationCallback.onLiquidationCompleted(success, Math.max(0, this.remainingDebt));
+            this.liquidationCallback.onLiquidationCompleted(success, this.remainingDebt);
         }
     }
 

@@ -110,23 +110,25 @@ public class MainView {
         });
     }
 
-    public void showLiquidation(Player p, int amount){
+    /**
+     * Shows the liquidation view and disables game controls.
+     */
+    public void showLiquidation() {
         Platform.runLater(() -> {
-            SellAssetViewImpl liquidationView = new SellAssetViewImpl(this.matchController);
-            liquidationView.show(p, amount);
+            this.infoPanel.getSellAssetView().getRoot().setVisible(true);
+            this.infoPanel.getSellAssetView().getRoot().setManaged(true);
+            this.commandPanel.getRoot().setDisable(true);
+        });
+    }
 
-            this.root.setCenter(liquidationView.getRoot());
-
-            Button backButton = new Button("Torna al gioco");
-            backButton.setStyle("-fx-base: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
-            backButton.setOnAction(e -> {
-                if(this.matchController instanceof MatchController impl){
-                    impl.finalizeLiquidation(p);
-                }
-                this.root.setCenter(this.boardPanel.getRoot());
-                this.refreshAll();
-            });
-            liquidationView.getRoot().setBottom(backButton);
+    /**
+     * Hides the liquidation view and re-enables game controls.
+     */
+    public void hideLiquidation() {
+        Platform.runLater(() -> {
+            this.infoPanel.getSellAssetView().getRoot().setVisible(false);
+            this.infoPanel.getSellAssetView().getRoot().setManaged(false);
+            this.commandPanel.getRoot().setDisable(false);
         });
     }
 

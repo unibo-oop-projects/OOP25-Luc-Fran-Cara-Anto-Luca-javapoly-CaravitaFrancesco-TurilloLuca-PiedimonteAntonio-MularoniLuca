@@ -1,6 +1,7 @@
 package it.unibo.javapoly.view.api;
 
 import it.unibo.javapoly.controller.api.LiquidationCallback;
+import it.unibo.javapoly.model.api.Player;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -21,4 +22,14 @@ public interface SellAssetView {
      * @param callback callback.
      */
     void setCallBack(LiquidationCallback callback);
+
+    /**
+     * Display the view for the given player with their current debit and available properties.
+     * Updates the UI with button to sell house first(if any), otherwise regular properties.
+     *
+     * @param player the player in turn, must not be {@code null}
+     * @param debtAmount the amount of debt to be settled (must be >0 for UI to populate buttons)
+     * @throws IllegalArgumentException if {@code player} is null or any list is null.
+     */
+    void show(Player player, int debtAmount);
 }
