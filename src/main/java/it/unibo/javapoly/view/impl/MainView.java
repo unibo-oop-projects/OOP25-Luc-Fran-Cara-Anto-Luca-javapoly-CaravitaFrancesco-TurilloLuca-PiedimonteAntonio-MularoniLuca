@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
@@ -122,6 +123,20 @@ public class MainView {
             }
         });
         liquidationView.getRoot().setBottom(backButton);
+    }
+
+    public void showCard(final String title, final String description, final boolean isImprevisto){
+        Platform.runLater(() -> {
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(isImprevisto ? "IMPREVISTO!" : "PROBABILITA'");
+            alert.setHeaderText(title);
+            alert.setContentText(description);
+
+            String color = isImprevisto ? "#e74c3c" : "#3498db"; 
+            alert.getDialogPane().setStyle("-fx-border-color: " + color + "; -fx-border-width: 5px;");
+
+            alert.showAndWait();
+        });
     }
 
     public void clearLog(){

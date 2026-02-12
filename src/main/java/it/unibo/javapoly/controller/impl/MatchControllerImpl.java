@@ -18,6 +18,7 @@ import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerState;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
+import it.unibo.javapoly.model.api.board.TileType;
 import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.impl.BankruptState;
 import it.unibo.javapoly.model.impl.DiceImpl;
@@ -295,10 +296,16 @@ public class MatchControllerImpl implements MatchController, LiquidationObserver
             this.currentCreditor = null;
 
             if(currentTile instanceof UnexpectedTile){
-                updateGui(g -> {
-                    g.refreshAll();
-                    g.addLog("Sei finito su una casella imprevesti, hai pescato una carta");
-                });
+                String cardDescription = boardController.getMessagePrint();
+                if(cardDescription != null && !cardDescription.isEmpty()){
+                    int pos = player.getCurrentPosition();
+                    boolean isImprevisto = !(pos == 2 || pos == 17 || pos == 33);
+                    updateGui(g -> {
+                        g.showCard(isImprevisto ? "IMPREVISTO" : "PROBABILITÀ", cardDescription, isImprevisto);
+                        g.addLog("[" + (isImprevisto ? "Imprevisto" : "Probabilità") + "] " + cardDescription);
+                        g.refreshAll();
+                    });
+                }
             }
         }
 

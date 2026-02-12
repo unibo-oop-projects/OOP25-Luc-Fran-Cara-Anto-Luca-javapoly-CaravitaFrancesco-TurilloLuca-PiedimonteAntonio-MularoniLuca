@@ -106,7 +106,8 @@ public class CommandPanel {
 
         if(currentTile instanceof PropertyTile pt){
             Property prop = pt.getProperty();
-            boolean isUnowned = (prop.getIdOwner() == null);
+            boolean isUnowned = prop.isOwnedByPlayer() == false;
+            //qui da cambiare
 
             if(isUnowned){
                 this.buyButton.setVisible(true);

@@ -91,6 +91,7 @@ public class InfoPanel {
         this.liquidation.setManaged(false);
         this.root.getChildren().add(this.liquidation);
     }
+    
     /**
      * Returns the root node of this panel to be added to a Scene.
      *
