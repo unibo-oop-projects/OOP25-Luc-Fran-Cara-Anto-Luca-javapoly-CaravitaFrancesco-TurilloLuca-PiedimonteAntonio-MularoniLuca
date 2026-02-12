@@ -217,18 +217,12 @@ public class MatchControllerImpl implements MatchController{
         if(isDouble && !(currentPlayer.getState() instanceof JailedState)){
             this.consecutiveDoubles++;
             if(this.consecutiveDoubles == MAX_DOUBLES){
-                updateGui(g -> g.addLog("3 doubles! Go to jail."));
+                updateGui(g -> g.addLog("3 doubles in a row! Go to jail."));
                 handlePrison(); 
-                //this.hasRolled = true;
                 return;
-            }/*else {
-                this.hasRolled = false;
-                updateGui(g -> g.addLog("Puoi lanciare ancora!"));
-
-            }*/
+            }
         } else {
             this.consecutiveDoubles = 0;
-            //this.hasRolled = true;
         }
 
         this.handleMove(this.diceThrow.getLastThrow());
@@ -271,35 +265,30 @@ public class MatchControllerImpl implements MatchController{
     }
 
     @Override
-public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
-    // 1. Esegue la logica della casella (PAGAMENTO AFFITTO, TASSE, ecc.)
-    final Tile currentTile = this.boardController.executeTileLogic(player, newPosition, this.diceThrow.getLastThrow());
+    public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
+        final Tile currentTile = this.boardController.executeTileLogic(player, newPosition, this.diceThrow.getLastThrow());
 
-    // 2. Se la casella ha spostato il player (es. prigione o carta movimento)
-    if (newPosition != currentTile.getPosition()) {
-        player.setPosition(currentTile.getPosition());
-    }
+        if (newPosition != currentTile.getPosition()) {
+            player.setPosition(currentTile.getPosition());
+        }
 
-    handlePropertyLanding();
+        handlePropertyLanding();
 
-    // 3. Recupera il messaggio generato dal BoardController (es. "Paga l'affitto")
-    final String msg = boardController.getMessagePrint();
+        final String msg = boardController.getMessagePrint();
 
-    updateGui(g -> {
-        // 4. Se è una carta Imprevisto, mostra il pop-up grafico
-        if (currentTile instanceof UnexpectedTile) {
-            if (msg != null && !msg.isEmpty()) {
-                g.showCard("CHANCE", msg, true);
+        updateGui(g -> {
+            if (currentTile instanceof UnexpectedTile) {
+                if (msg != null && !msg.isEmpty()) {
+                    g.showCard("CHANCE", msg, true);
+                }
             }
-        }
 
-        // 5. Stampa sempre l'esito nel log e aggiorna tutto
-        if (msg != null && !msg.isEmpty()) {
-            g.addLog(msg);
-        }
-        g.refreshAll();
-    });
-}
+            if (msg != null && !msg.isEmpty()) {
+                g.addLog(msg);
+            }
+            g.refreshAll();
+        });
+    }
     /* 
     @Override
     public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
@@ -438,11 +427,6 @@ public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
         if(currentTile instanceof PropertyTile pt){
             Property prop = pt.getProperty();
 
-            // DEBUG: Vediamo cosa legge il codice
-            System.out.println("DEBUG - Proprietà: " + prop.getId());
-            System.out.println("DEBUG - Owner ID attuale: " + prop.getIdOwner());
-            System.out.println("DEBUG - IsOwnedByPlayer: " + prop.isOwnedByPlayer());
-
             if (prop.getIdOwner() != null && !prop.getIdOwner().isEmpty() && !prop.getIdOwner().equals("BANK")){
                 updateGui(g -> g.addLog("You cannot buy a property that already has an owner!"));
                 return;
@@ -450,15 +434,12 @@ public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
 
             if(this.economyController.purchaseProperty(currentPlayer, prop)){
                 updateGui(g -> {
-                    g.addLog(currentPlayer.getName() + " purchased " + prop.getId() + " for € " + prop.getPurchasePrice());
+                    g.addLog(currentPlayer.getName() + " purchased " + prop.getCard().getName() + " for € " + prop.getPurchasePrice());
                     g.refreshAll();
                 });
             }else {
                 updateGui(g -> g.addLog("You don't have enough money to buy " + prop.getId()));
             }
-
-            System.out.println("DEBUG_BUY - Owner ID attuale: " + prop.getIdOwner());
-            System.out.println("DEBUG_BUY - IsOwnedByPlayer: " + prop.isOwnedByPlayer());
         }
     }
 
