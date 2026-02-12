@@ -6,7 +6,6 @@ import it.unibo.javapoly.view.api.SellAssetView;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -16,7 +15,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.model.api.Player;
 
 /**
  * MainFrame is the main window of the JavaPoly game.
@@ -87,12 +85,14 @@ public class MainView {
             Text textNode = new Text(msg);
             textNode.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13)); 
 
-            if (msg.contains("guadagna") || msg.contains("VIA") || msg.contains("+")) {
+            String upperMsg = msg.toUpperCase();
+
+            if (upperMsg.contains("PURCHASED") || upperMsg.contains("EARNED") || upperMsg.contains("COLLECT") || upperMsg.contains("+")) {
                 textNode.setFill(Color.DARKGREEN);
                 textNode.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
-            } else if (msg.contains("paga") || msg.contains("tassa") || msg.contains("prigione") || msg.contains("DOPPIO")) {
+            } else if (upperMsg.contains("PAYS") || upperMsg.contains("TAX") || upperMsg.contains("JAIL") || upperMsg.contains("DOUBLE") || upperMsg.contains("DEBT")) {
                 textNode.setFill(Color.FIREBRICK);
-            } else if (msg.contains("turno di")) {
+            } else if (upperMsg.contains("TURN")) {
                 textNode.setFill(Color.CORNFLOWERBLUE);
                 textNode.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
             } else {
@@ -135,7 +135,7 @@ public class MainView {
     public void showCard(final String title, final String description, final boolean isImprevisto){
         Platform.runLater(() -> {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("IMPREVISTO!");
+            alert.setTitle("CHANCE CARD!");
             alert.setHeaderText(title);
             alert.setContentText(description);
 
