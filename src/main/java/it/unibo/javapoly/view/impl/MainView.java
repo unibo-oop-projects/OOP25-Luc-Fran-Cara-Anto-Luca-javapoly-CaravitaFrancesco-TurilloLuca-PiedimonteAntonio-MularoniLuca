@@ -2,6 +2,7 @@ package it.unibo.javapoly.view.impl;
 
 import java.util.Objects;
 
+import it.unibo.javapoly.view.api.SellAssetView;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -122,6 +123,15 @@ public class MainView {
             }
         });
         liquidationView.getRoot().setBottom(backButton);
+    }
+
+    /**
+     * Get info panel.
+     *
+     * @return info panel.
+     */
+    public SellAssetView getSellAssetView() {
+        return this.infoPanel.getSellAssetView();
     }
 
     public void clearLog(){
