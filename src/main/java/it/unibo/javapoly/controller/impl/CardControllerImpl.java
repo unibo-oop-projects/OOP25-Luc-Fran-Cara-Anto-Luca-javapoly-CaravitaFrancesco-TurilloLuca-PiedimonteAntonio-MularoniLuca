@@ -66,7 +66,10 @@ public class CardControllerImpl implements CardController {
     }
 
     /**
-     * {@inheritDoc}
+     * Draws a card for the player.
+     *
+     * @param playerId the ID of the player drawing the card
+     * @return the drawn game card
      */
     @Override
     public GameCard drawCard(final String playerId) {
@@ -74,7 +77,13 @@ public class CardControllerImpl implements CardController {
     }
 
     /**
-     * {@inheritDoc}
+     * Executes the effect of the drawn card.
+     * Handles different types of card payloads (money, move, etc.).
+     *
+     * @param player the player for whom the card effect is executed
+     * @param card the drawn game card
+     * @param diceRoll the dice roll value
+     * @return the position of the tile the player ended up on, or a default value (-1) for non-move cards
      */
     @Override
     public int executeCardEffect(final Player player, final GameCard card, 
@@ -97,15 +106,14 @@ public class CardControllerImpl implements CardController {
             return handleMoneyPerBuilding(player, (BuildingPayload) payload);
         }
 
-        if (CardType.GO_TO_JAIL == card.getType() && !useGetOutOfJailFreeCard(player.getName())) {
-            return boardController.sendPlayerToJail(player).getPosition();
-        }
-
         return this.VALUE_DEF;
     }
 
     /**
-     * {@inheritDoc}
+     * Uses a "Get Out Of Jail Free" card for the player.
+     *
+     * @param playerId the ID of the player using the card
+     * @return true if the card was successfully discarded, false otherwise
      */
     @Override
     public boolean useGetOutOfJailFreeCard(final String playerId) {
@@ -115,8 +123,9 @@ public class CardControllerImpl implements CardController {
     /**
      * Handles money-related card effects (pay or receive).
      *
-     * @param player the player
-     * @param payload the money payload
+     * @param player the player involved in the transaction
+     * @param payload the money payload containing the amount and recipient
+     * @return a default value (-1) after processing the money transaction
      */
     private int handleMoneyPayload(final Player player, final MoneyPayload payload) {
         if (this.BANK_REC.equals(payload.getReceiverMoney())) {
@@ -131,9 +140,10 @@ public class CardControllerImpl implements CardController {
     /**
      * Handles "move to" card effects (go to specific tile).
      *
-     * @param player the player
-     * @param payload the move-to payload
+     * @param player the player who is moving
+     * @param payload the move-to payload containing the target position
      * @param diceRoll the dice roll value
+     * @return the position of the tile the player ended up on
      */
     private int handleMoveToPayload(final Player player, 
                                      final MoveToPayload payload,
@@ -146,9 +156,10 @@ public class CardControllerImpl implements CardController {
     /**
      * Handles "move relative" card effects (go back/forward N spaces).
      *
-     * @param player the player
-     * @param payload the move-relative payload
+     * @param player the player who is moving
+     * @param payload the move-relative payload containing the number of steps
      * @param diceRoll the dice roll value
+     * @return the position of the tile the player ended up on
      */
     private int handleMoveRelativePayload(final Player player, 
                                            final MoveRelativePayload payload,
@@ -161,9 +172,10 @@ public class CardControllerImpl implements CardController {
     /**
      * Handles "move to nearest" card effects (go to nearest station/utility).
      *
-     * @param player the player
+     * @param player the player who is moving
      * @param payload the move-to-nearest payload
-     * @param diceRoll the dice roll value (for utility rent calculation)
+     * @param diceRoll the dice roll value (used for rent calculation)
+     * @return the position of the tile the player ended up on
      */
     private int handleMoveToNearestPayload(final Player player, final MoveToNearestPayload payload, 
                                             final int diceRoll) {
@@ -175,8 +187,9 @@ public class CardControllerImpl implements CardController {
     /**
      * Handles "money per building" card effects (earn money for houses/hotels).
      *
-     * @param player the player
-     * @param payload the building payload
+     * @param player the player receiving the money
+     * @param payload the building payload containing the multiplier values
+     * @return the amount of money the player receives
      */
     private int handleMoneyPerBuilding(final Player player, final BuildingPayload payload) {
         final List<Property> list = this.propertyController.getPropertiesWithHouseByOwner(player);
@@ -190,6 +203,12 @@ public class CardControllerImpl implements CardController {
         return handleMoneyPayload(player, new MoneyPayload(amount, BANK_REC));
     }
 
+    /**
+     * Loads the card deck from a file.
+     *
+     * @return the list of game cards loaded from the file
+     * @throws IOException if there is an error reading the file
+     */
     private List<GameCard> loadCardDeck() throws IOException {
         try {
             return CardLoader.loadCardsFromFile(this.PATH_CARD);

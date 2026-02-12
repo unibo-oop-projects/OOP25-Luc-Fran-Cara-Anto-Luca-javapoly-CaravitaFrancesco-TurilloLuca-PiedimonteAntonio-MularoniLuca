@@ -4,7 +4,11 @@ import java.util.Objects;
 
 import it.unibo.javapoly.view.api.SellAssetView;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -49,7 +53,7 @@ public class InfoPanel {
      */
     public void updateInfo(){
         this.root.getChildren().clear();
-        Label title = new Label("GIOCATORI");
+        Label title = new Label("PLAYERS");
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         title.setPadding(new Insets(0, 0, 10, 0));
         this.root.getChildren().add(title);
@@ -64,17 +68,35 @@ public class InfoPanel {
     private VBox createPlayerCard(Player p){
         VBox card = new VBox(5);
         card.setPadding(new Insets(12));
+        card.setAlignment(Pos.CENTER_LEFT);
+
+        ImageView icon = new ImageView();
+        try {
+            String fileName = p.getToken().getType().toString().toLowerCase();
+            Image tokenImg = new Image(getClass().getResourceAsStream("/images/tokens/" + fileName + ".png"));
+            icon.setImage(tokenImg);
+        } catch (Exception e) {
+            System.err.println("Image not found for: " + p.getName());
+        }
+
+        icon.setFitWidth(40);
+        icon.setFitHeight(40);
+        icon.setPreserveRatio(true);
 
         Label name = new Label(p.getName());
         name.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
 
-        Label balance = new Label("Saldo: " + p.getBalance() + "€");
+        Label balance = new Label("Balance: " + p.getBalance() + "€");
         balance.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
 
-        Label position = new Label("Posizione: " + p.getCurrentPosition());
+        Label position = new Label("Position: " + p.getCurrentPosition());
         position.setFont(Font.font("Segoe UI", FontPosture.ITALIC, 11));
 
-        card.getChildren().addAll(name, balance, position);
+        HBox header = new HBox(10);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.getChildren().addAll(icon, name);
+
+        card.getChildren().addAll(header, balance, position);
 
         String style = "-fx-background-radius: 10; -fx-background-color: white; " +
                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);";

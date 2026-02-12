@@ -47,7 +47,7 @@ public interface BoardController {
      * @param player the player who landed on the tile
      * @param tilePos the tile position the player landed on
      * @param diceRoll the sum of the two dice
-     * @return 
+     * @return the landing tile
      */
     Tile executeTileLogic(Player player, int tilePos, int diceRoll);
 

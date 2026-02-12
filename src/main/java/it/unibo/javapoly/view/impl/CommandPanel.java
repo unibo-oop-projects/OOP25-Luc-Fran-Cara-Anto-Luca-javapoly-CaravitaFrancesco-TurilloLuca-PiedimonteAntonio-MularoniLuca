@@ -42,14 +42,14 @@ public class CommandPanel {
 
         this.root = new HBox(15); 
 
-        this.throwDice = new Button("Lancia dadi");
-        this.endTurnButton = new Button("Fine turno");
-        this.payJailButton = new Button("Paga 50€");
+        this.throwDice = new Button("Throw dices");
+        this.endTurnButton = new Button("End turn");
+        this.payJailButton = new Button("Pay 50€");
         this.saveButton = new Button("Save");
 
-        this.buyButton = new Button("Acquista Proprieta'");
+        this.buyButton = new Button("Buy property");
         this.buyButton.setStyle("-fx-base: #2ecc71; -fx-text-fill: white;");
-        this.buildButton = new Button("Costruisci la casa");
+        this.buildButton = new Button("Build house");
         this.buildButton.setStyle("-fx-base: #f1c40f;");
 
         this.payJailButton.setStyle("-fx-base: #e74c3c; -fx-text-fill: white;");

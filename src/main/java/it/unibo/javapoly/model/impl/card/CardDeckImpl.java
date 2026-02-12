@@ -71,6 +71,8 @@ public class CardDeckImpl implements CardDeck {
 
         if (card.isKeepUntilUsed()) {
             heldCards.put(card, playerId);
+        } else {
+            discardPile.addFirst(card);
         }
 
         return card;

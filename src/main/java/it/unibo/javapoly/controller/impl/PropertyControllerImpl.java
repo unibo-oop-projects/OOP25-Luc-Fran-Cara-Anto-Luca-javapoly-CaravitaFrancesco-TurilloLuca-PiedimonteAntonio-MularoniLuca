@@ -105,7 +105,7 @@ public class PropertyControllerImpl implements PropertyController {
     @Override
     public boolean buildHouse(final Player playerId, final String propertyId) {
         final Property property = properties.get(propertyId);
-
+/*
         if (!ownsCompleteGroup(playerId.getName(), property.getPropertyGroup())) {
             return false;
         }
@@ -114,7 +114,7 @@ public class PropertyControllerImpl implements PropertyController {
             if (property.getBuiltHouses() >= prop.getBuiltHouses() + 1) {
                 return false;
             }
-        }
+        }*/
 
         return property.buildHouse(playerId.getName());
     }
@@ -168,6 +168,14 @@ public class PropertyControllerImpl implements PropertyController {
 
         final LandPropertyCard card = (LandPropertyCard) property.getCard();
         return card.getHouseCost();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Player getOwnerByProperty(final Property property) {
+        return this.propertyOwners.get(property.getId());
     }
 
     //#region Private Method
@@ -245,11 +253,6 @@ public class PropertyControllerImpl implements PropertyController {
         }
 
         return RentContext.forLand(prop.getBuiltHouses(), ownsCompleteGroup(owner.getName(), prop.getPropertyGroup()));
-    }
-
-    @Override
-    public Player getOwnerByProperty(Property property) {
-        return this.propertyOwners.get(property.getId());
     }
 
     //#endregion
