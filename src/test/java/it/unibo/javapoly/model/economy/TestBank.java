@@ -36,74 +36,98 @@ class TestBank {
      * Tests the deposit of positive amount on a player.
      */
     @Test
-    void testDepositMoneySuccessfully(){
-        bank.deposit(player1, DEPOSIT_AMOUNT);
-        assertEquals(INITIAL_BALANCE+DEPOSIT_AMOUNT, player1.getBalance());
+    void testDepositMoneySuccessfully() {
+        bank.deposit(this.player1, DEPOSIT_AMOUNT);
+        assertEquals(INITIAL_BALANCE+DEPOSIT_AMOUNT, this.player1.getBalance());
     }
 
     /**
      * Tests deposit of negative amount on a player.
      */
     @Test
-    void testDepositMoneyNegative(){
-        assertThrows(IllegalArgumentException.class, () -> bank.deposit(player1, -DEPOSIT_AMOUNT));
+    void testDepositMoneyNegative() {
+        assertThrows(IllegalArgumentException.class, () -> bank.deposit(this.player1, -DEPOSIT_AMOUNT));
     }
 
     /**
      * Tests withdraw with positive amount lower than player balance.
      */
     @Test
-    void testWithdrawMoneySuccessfully(){
-        final boolean result = bank.withdraw(player1, WITHDRAW_AMOUNT);
+    void testWithdrawMoneySuccessfully() {
+        final boolean result = bank.withdraw(this.player1, WITHDRAW_AMOUNT);
         assertTrue(result);
-        assertEquals(INITIAL_BALANCE - WITHDRAW_AMOUNT, player1.getBalance());
+        assertEquals(INITIAL_BALANCE - WITHDRAW_AMOUNT, this.player1.getBalance());
     }
 
     /**
      * Tests withdraw with negative amount.
      */
     @Test
-    void testWithdrawMoneyNegative(){
-        assertThrows(IllegalArgumentException.class, () -> bank.withdraw(player1, -WITHDRAW_AMOUNT));
+    void testWithdrawMoneyNegative() {
+        assertThrows(IllegalArgumentException.class, () -> bank.withdraw(this.player1, -WITHDRAW_AMOUNT));
     }
 
     /**
      * Tests withdraw with positive amount greater than player balance.
      */
     @Test
-    void testWithdrawMoneyGreaterThanBalance(){
-        final  boolean result = bank.withdraw(player1, INITIAL_BALANCE+1);
+    void testWithdrawMoneyGreaterThanBalance() {
+        final  boolean result = bank.withdraw(this.player1, INITIAL_BALANCE+1);
         assertFalse(result);
-        assertEquals(INITIAL_BALANCE, player1.getBalance());
+        assertEquals(INITIAL_BALANCE, this.player1.getBalance());
     }
 
     /**
      * Tests transfer funds with positive amount lower than the player1's balance.
      */
     @Test
-    void testTransferFundsSuccessfully(){
-        final boolean result = bank.transferFunds(player1, player2, TRANSFER_AMOUNT);
+    void testTransferFundsSuccessfully() {
+        final boolean result = bank.transferFunds(this.player1, this.player2, TRANSFER_AMOUNT);
         assertTrue(result);
-        assertEquals(INITIAL_BALANCE - TRANSFER_AMOUNT, player1.getBalance());
-        assertEquals(INITIAL_BALANCE + TRANSFER_AMOUNT, player2.getBalance());
+        assertEquals(INITIAL_BALANCE - TRANSFER_AMOUNT, this.player1.getBalance());
+        assertEquals(INITIAL_BALANCE + TRANSFER_AMOUNT, this.player2.getBalance());
     }
 
     /**
      * Tests transfer funds with positive amount greater than the player1's balance.
      */
     @Test
-    void testTransferFundsGreaterThanBalance(){
-        final boolean result = bank.transferFunds(player1, player2, INITIAL_BALANCE+1);
+    void testTransferFundsGreaterThanBalance() {
+        final boolean result = bank.transferFunds(this.player1, this.player2, INITIAL_BALANCE+1);
         assertFalse(result);
-        assertEquals(INITIAL_BALANCE, player1.getBalance());
-        assertEquals(INITIAL_BALANCE, player2.getBalance());
+        assertEquals(INITIAL_BALANCE, this.player1.getBalance());
+        assertEquals(INITIAL_BALANCE, this.player2.getBalance());
     }
 
     /**
      * Tests transfer funds with negative amount.
      */
     @Test
-    void testTransferFundsMoneyNegative(){
-        assertThrows(IllegalArgumentException.class, () -> bank.transferFunds(player1, player2, -WITHDRAW_AMOUNT));
+    void testTransferFundsMoneyNegative() {
+        assertThrows(IllegalArgumentException.class, () -> bank.transferFunds(this.player1, this.player2, -WITHDRAW_AMOUNT));
+    }
+
+    /**
+     * Test can afford with positive and right amount.
+     */
+    @Test
+    void testCanAffordTrue() {
+        assertTrue(bank.canAfford(this.player1, DEPOSIT_AMOUNT));
+    }
+
+    /**
+     * Test can afford with positive and amount > player1's balance.
+     */
+    @Test
+    void testCanAffordFalse() {
+        assertFalse(bank.canAfford(this.player1, INITIAL_BALANCE+1));
+    }
+
+    /**
+     * Test can afford with negative amount.
+     */
+    @Test
+    void testCanAffordMoneyNegative() {
+        assertThrows(IllegalArgumentException.class, () -> bank.canAfford(this.player1, -WITHDRAW_AMOUNT));
     }
 }
