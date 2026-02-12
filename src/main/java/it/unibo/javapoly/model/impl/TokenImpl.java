@@ -20,7 +20,6 @@ class TokenImpl implements Token {
      * @param type the {@link String} representation of the token type.
      */
     protected TokenImpl(final String type) {
-        ValidationUtils.requireNonNull(type, "The token type cannot be null");
         ValidationUtils.requireNonBlank(type, "The token type cannot be blank");
         this.type = type;
     }
