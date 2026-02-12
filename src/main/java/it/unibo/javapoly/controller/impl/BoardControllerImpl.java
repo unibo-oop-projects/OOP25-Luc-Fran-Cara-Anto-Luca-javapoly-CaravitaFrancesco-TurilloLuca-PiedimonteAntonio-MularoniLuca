@@ -8,6 +8,7 @@ import it.unibo.javapoly.model.api.player.Player;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.board.Tile;
 import it.unibo.javapoly.model.api.board.TileType;
+import it.unibo.javapoly.model.api.card.GameCard;
 import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.model.impl.board.tile.TaxTile;
 import it.unibo.javapoly.model.impl.player.JailedState;
@@ -118,8 +119,10 @@ public class BoardControllerImpl implements BoardController {
                 sendPlayerToJail(player);
                 return;
             case UNEXPECTED:
-                this.cardController.executeCardEffect(player, this.cardController.drawCard(player.getName()), BOARD_SIZE);
-                break;
+                final GameCard cardDrawed = this.cardController.drawCard(player.getName());
+                this.message = tile.getDescription() + "\n" + cardDrawed.getName();
+                this.cardController.executeCardEffect(player, cardDrawed, BOARD_SIZE);
+                return;
             case PROPERTY:
             case RAILROAD:
             case UTILITY:
