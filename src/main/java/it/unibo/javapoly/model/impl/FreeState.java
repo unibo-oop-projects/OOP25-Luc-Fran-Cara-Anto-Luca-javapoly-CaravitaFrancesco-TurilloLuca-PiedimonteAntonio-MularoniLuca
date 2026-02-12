@@ -51,8 +51,6 @@ public final class FreeState implements PlayerState {
         ValidationUtils.requireNonNull(player, "The player cannot be null");
         ValidationUtils.requireNonNegative(potentialDestination, "Potential destination cannot be negative");
         player.move(potentialDestination);
-
-        System.out.println("[Stato Libero] Il giocatore si muove a " + potentialDestination); // NOPMD
     }
 
     /**
