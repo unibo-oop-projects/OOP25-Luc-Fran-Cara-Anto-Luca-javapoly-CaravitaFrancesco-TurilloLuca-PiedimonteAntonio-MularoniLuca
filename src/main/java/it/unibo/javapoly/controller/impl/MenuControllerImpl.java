@@ -9,6 +9,7 @@ import it.unibo.javapoly.model.impl.PlayerImpl;
 import it.unibo.javapoly.model.impl.board.BoardImpl;
 import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.utils.BoardLoader;
+import it.unibo.javapoly.utils.MatchControllerDeserializer;
 import it.unibo.javapoly.utils.ValidationUtils;
 import it.unibo.javapoly.view.api.MenuView;
 import java.io.File;
