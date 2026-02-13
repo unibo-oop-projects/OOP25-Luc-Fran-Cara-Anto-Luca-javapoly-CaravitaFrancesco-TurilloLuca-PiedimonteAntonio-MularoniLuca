@@ -20,7 +20,6 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
  * The class stores the rents for different numbers of houses and for the hotel,
  * together with the costs to build houses and hotels.
  */
-@JsonRootName("LandPropertyCard")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class LandPropertyCard extends AbstractPropertyCard {
 
