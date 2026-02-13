@@ -88,7 +88,7 @@ public class SellAssetViewImpl implements SellAssetView {
     private void refreshPropertyGrid() {
         this.propertyGrid.getChildren().clear();
         this.remainingDebt = Math.max(0, this.originalDebt - this.currentPlayer.getBalance());
-        if (this.remainingDebt <= 0) {
+        if (this.remainingDebt == 0) {
             completeLiquidation(true);
             return;
         }
