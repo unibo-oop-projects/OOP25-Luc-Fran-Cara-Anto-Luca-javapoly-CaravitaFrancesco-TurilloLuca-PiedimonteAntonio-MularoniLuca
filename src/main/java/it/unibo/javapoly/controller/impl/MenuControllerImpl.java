@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import it.unibo.javapoly.view.impl.MainViewImpl;
 import javafx.application.Platform;
@@ -36,6 +37,7 @@ public class MenuControllerImpl implements MenuController {
     private static final String NON_NULL = "Player names list cannot be null";
     private static final String JSON_EXTENSION = ".json";
     private final MenuView menuView;
+    private final Logger logger = Logger.getLogger(MenuControllerImpl.class.getName());
 
     /**
      * Creates a new MenuControllerImpl with the specified view.
@@ -92,7 +94,7 @@ public class MenuControllerImpl implements MenuController {
             stage.setTitle(TITLE);
             matchController.startGame();
         } catch (final IOException e) {
-            System.err.println("Error loading board from saved file: " + e.getMessage());
+            logger.fine("Error loading board from saved file: " + e.getMessage());
         }
     }
 
@@ -127,7 +129,7 @@ public class MenuControllerImpl implements MenuController {
             stage.setTitle(TITLE);
             matchController.startGame();
         } catch (final IOException e) {
-            System.err.println("Error loading board from file: " + e.getMessage());
+            logger.fine("Error loading board from file: " + e.getMessage());
         }
     }
 }

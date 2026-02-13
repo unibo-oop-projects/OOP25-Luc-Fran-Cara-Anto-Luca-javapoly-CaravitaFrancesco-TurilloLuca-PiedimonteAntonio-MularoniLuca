@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * Implementation of the main menu view for the Javapoly application.
@@ -39,6 +40,7 @@ public class MenuViewImpl implements MenuView {
     private static final double SPACING = 0.02;
     private final Stage stage;
     private MenuController controller;
+    private final Logger logger =  Logger.getLogger(MenuViewImpl.class.getName());
 
     /**
      * Constructor a new MenuViewImpl with the specific stage.
@@ -67,12 +69,12 @@ public class MenuViewImpl implements MenuView {
     private void loadIcon() {
         final var iconStream = MenuViewImpl.class.getResourceAsStream(ICON_PATH);
         if (iconStream == null) {
-            System.err.println("Icon loading failed.");
+            logger.fine("Icon loading failed.");
             return;
         }
         final Image icon = new Image(iconStream);
         if (icon.isError()) {
-            System.err.println("Icon loading failed.");
+            logger.fine("Icon loading failed.");
             return;
         }
         this.stage.getIcons().add(icon);
@@ -102,7 +104,7 @@ public class MenuViewImpl implements MenuView {
         topBox.setPadding(new Insets(TOP_PADDING));
             final var logoStream = MenuViewImpl.class.getResourceAsStream(LOGO_PATH);
             if (logoStream == null) {
-                System.err.println("Logo not found");
+                logger.fine("Logo not found");
                 topBox.getChildren().add(createTitleLabel());
                 return topBox;
             }

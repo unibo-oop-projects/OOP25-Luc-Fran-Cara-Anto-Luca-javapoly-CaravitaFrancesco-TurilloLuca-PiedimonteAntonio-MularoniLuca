@@ -3,6 +3,7 @@ package it.unibo.javapoly.controller.api;
 /**
  * Invoked when the liquidation process for a player has concluded.
  */
+@FunctionalInterface
 public interface LiquidationCallback {
 
     /**

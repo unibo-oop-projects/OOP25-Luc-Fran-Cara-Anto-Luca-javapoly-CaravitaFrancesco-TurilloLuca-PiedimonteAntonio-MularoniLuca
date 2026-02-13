@@ -30,7 +30,7 @@ public final class BankImpl implements Bank {
     @Override
     public boolean withdraw(final Player player, final int amount) {
         Objects.requireNonNull(player, PLAYER_NO_NULL);
-        ValidationUtils.requirePositive(amount, AMOUNT_MUST_BE_POSITIVE);
+        ValidationUtils.requireNonNegative(amount, AMOUNT_MUST_BE_POSITIVE);
         return player.tryToPay(amount);
     }
 

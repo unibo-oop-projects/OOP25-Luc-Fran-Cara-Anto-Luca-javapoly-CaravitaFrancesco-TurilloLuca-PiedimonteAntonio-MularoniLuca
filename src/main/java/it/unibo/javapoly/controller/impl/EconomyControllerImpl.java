@@ -66,10 +66,8 @@ public final class EconomyControllerImpl implements EconomyController {
         }
         final int currentBalance = payer.getBalance();
         final int rent = this.propertyController.getRent(payer, property.getId(), diceRoll);
-        if (currentBalance >= rent) {
-            if (this.bank.transferFunds(payer, payee, rent)) {
-                return;
-            }
+        if (currentBalance >= rent && this.bank.transferFunds(payer, payee, rent)) {
+            return;
         }
         if (this.liquidationObserver != null) {
             this.liquidationObserver.onInsufficientFunds(payer, payee, rent);
@@ -82,11 +80,9 @@ public final class EconomyControllerImpl implements EconomyController {
     @Override
     public boolean purchaseProperty(final Player buyer, final Property property) {
         final int price = property.getPurchasePrice();
-        if (bank.canAfford(buyer, price)) {
-            if (this.propertyController.purchaseProperty(buyer, property.getId())) {
-                this.bank.withdraw(buyer, price);
-                return true;
-            }
+        if (bank.canAfford(buyer, price) && this.propertyController.purchaseProperty(buyer, property.getId())) {
+            this.bank.withdraw(buyer, price);
+            return true;
         }
         return false;
     }

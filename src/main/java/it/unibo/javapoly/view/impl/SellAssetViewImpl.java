@@ -51,7 +51,7 @@ public class SellAssetViewImpl implements SellAssetView {
     /**
      * Initialize the UI layout structure.
      */
-    public void initialize() {
+    private void initialize() {
         final HBox header = new HBox(titleLabel, debtLabel);
         header.setAlignment(Pos.CENTER);
 
@@ -103,7 +103,8 @@ public class SellAssetViewImpl implements SellAssetView {
         if (!houses.isEmpty()) {
             for (final Property propertyWithHouse: houses) {
                 final Button houseButton = createHouseButton(propertyWithHouse);
-                propertyGrid.add(houseButton, col++, row);
+                propertyGrid.add(houseButton, col, row);
+                col++;
                 if (col >= 2) {
                     col = 0;
                     row++;
@@ -112,7 +113,8 @@ public class SellAssetViewImpl implements SellAssetView {
         } else {
             for (final Property propertyWithoutHouse: properties) {
                 final Button propertyButton = createPropertyButton(propertyWithoutHouse);
-                propertyGrid.add(propertyButton, col++, row);
+                propertyGrid.add(propertyButton, col, row);
+                col++;
                 if (col >= 2) {
                     col = 0;
                     row++;
