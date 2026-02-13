@@ -38,8 +38,8 @@ import javafx.application.Platform;
 @JsonIgnoreProperties(value = { "gui", "economyController", "mainView", "" }, ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class MatchControllerImpl implements MatchController {
-    private static final int MAX_DOUBLES = 1;
-    private static final int JAIL_EXIT_FEE = 1400;
+    private static final int MAX_DOUBLES = 3;
+    private static final int JAIL_EXIT_FEE = 50;
 
     private final List<Player> players;
     private final List<Player> playersBankrupt;
