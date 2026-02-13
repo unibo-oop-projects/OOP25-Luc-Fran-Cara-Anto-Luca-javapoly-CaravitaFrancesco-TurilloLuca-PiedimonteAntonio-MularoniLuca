@@ -42,7 +42,7 @@ public class MenuControllerImpl implements MenuController {
      * @param view the main menu view.
      */
     public MenuControllerImpl(final MenuView view) {
-        this.menuView = Objects.requireNonNull(view);
+        this.menuView = Objects.requireNonNull(view, "View cannot be null");
         this.menuView.setController(this);
     }
 
