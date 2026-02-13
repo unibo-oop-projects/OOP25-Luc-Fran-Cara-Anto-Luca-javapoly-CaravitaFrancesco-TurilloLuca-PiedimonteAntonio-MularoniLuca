@@ -17,7 +17,6 @@ import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
  * This class manages the property's ownership, rent calculation, and house construction.
  *
  */
-@JsonTypeName("PROPERTYIMPL")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class PropertyImpl implements Property {
 
