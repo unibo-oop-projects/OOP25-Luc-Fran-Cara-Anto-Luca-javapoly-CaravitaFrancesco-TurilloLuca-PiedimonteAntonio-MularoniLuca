@@ -55,7 +55,6 @@ public class BoardControllerImpl implements BoardController {
      * Constructs a new BoardControllerImpl.
      *
      * @param board the game board
-     * @param bank the bank instance for handling transactions
      * @param propertyController the property controller for handling tile properties
      */
     public BoardControllerImpl(
@@ -73,7 +72,6 @@ public class BoardControllerImpl implements BoardController {
      * Constructs a new BoardControllerImpl.
      *
      * @param board the game board
-     * @param bank the bank instance for handling transactions
      * @param propertyController the property controller for handling tile properties
      * @param cardController the card controller for handling cards
      */

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibo.javapoly.model.impl.card.GameCardImpl;
 import it.unibo.javapoly.model.api.card.GameCard;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -29,24 +29,11 @@ public final class CardLoader {
      * @return A List of GameCard objects.
      * @throws IOException If there is an error reading from the file.
      */
-    public static List<GameCard> loadCardsFromFile(final String filePath) throws IOException {
+    public static List<GameCard> loadCardsFromFile(final InputStream filePath) throws IOException {
         final ObjectMapper mapper = JsonUtils.getInstance().mapper();
-        final File file = new File(filePath);
-        return mapper.readValue(file, 
+        return mapper.readValue(filePath, 
             mapper.getTypeFactory().constructCollectionType(List.class, GameCardImpl.class));
     }
 
-    /**
-     * Writes a list of GameCard objects to a file in JSON format.
-     * 
-     * @param cards The List of GameCard objects to write.
-     * @param filePath The path to the file where the cards will be saved.
-     * @throws IOException If there is an error writing to the file.
-     */
-    public static void writeCardsToFile(final List<GameCard> cards, final String filePath) throws IOException {
-        final ObjectMapper mapper = JsonUtils.getInstance().mapper();
-        final File file = new File(filePath);
-        mapper.writeValue(file, cards);
-    }
 }
 

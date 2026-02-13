@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unibo.javapoly.model.api.RentContext;
@@ -20,7 +19,6 @@ import it.unibo.javapoly.model.api.property.PropertyGroup;
  * The class stores the rents for different numbers of houses and for the hotel,
  * together with the costs to build houses and hotels.
  */
-@JsonRootName("LandPropertyCard")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class LandPropertyCard extends AbstractPropertyCard {
 
