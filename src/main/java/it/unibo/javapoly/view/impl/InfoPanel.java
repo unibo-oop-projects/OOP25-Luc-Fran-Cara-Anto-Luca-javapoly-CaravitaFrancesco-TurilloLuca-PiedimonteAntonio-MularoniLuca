@@ -2,6 +2,7 @@ package it.unibo.javapoly.view.impl;
 
 import java.util.Objects;
 
+import it.unibo.javapoly.controller.api.LiquidationCallback;
 import it.unibo.javapoly.view.api.SellAssetView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,7 +25,7 @@ public class InfoPanel {
 
     private final VBox root;
     private final MatchController matchController;
-    private final SellAssetViewImpl sellAssetView;
+    private final SellAssetView sellAssetView;
     private final VBox liquidation;
     
     /**
@@ -122,11 +123,38 @@ public class InfoPanel {
     }
 
     /**
-     * Get sell asset view.
-     *
-     * @return sell asset view.
+     * Show the sell asset view for liquidation.
      */
-    public SellAssetView getSellAssetView() {
-        return this.sellAssetView;
+    public void showSellAssetView() {
+        this.sellAssetView.getRoot().setVisible(true);
+        this.sellAssetView.getRoot().setManaged(true);
+    }
+
+    /**
+     * Hide the sell asset view for liquidation.
+     */
+    public void hideSellAssetView() {
+        this.sellAssetView.getRoot().setVisible(false);
+        this.sellAssetView.getRoot().setManaged(false);
+    }
+
+    /**
+     * Shows the sell asset view with player and debt information.
+     *
+     * @param player the player who needs to liquidate assets.
+     * @param debtAmount the amount of debt to pay off.
+     */
+    public void showLiquidation(final Player player, final int debtAmount) {
+        this.sellAssetView.show(player, debtAmount);
+        showSellAssetView();
+    }
+
+    /**
+     * Sets the callback to invoke when liquidation completes
+     *
+     * @param callback the callback to invoke when liquidation completes.
+     */
+    public void setLiquidationCallback(final LiquidationCallback callback) {
+        this.sellAssetView.setCallBack(callback);
     }
 }
