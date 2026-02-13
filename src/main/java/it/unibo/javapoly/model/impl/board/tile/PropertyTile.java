@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.javapoly.model.api.board.TileType;
 import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
@@ -42,6 +43,10 @@ public class PropertyTile extends AbstractTile {
      *
      * @return the property
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     public Property getProperty() {
         return this.property;
     }

@@ -59,14 +59,13 @@ public class CardControllerImpl implements CardController {
     /**
      * Constructs a new CardControllerImpl.
      *
-     * @param bank the bank instance for money transactions
      * @param boardController the board controller for movement operations
      * @param propertyController the property controller for property-related actions
      */
-    public CardControllerImpl(final EconomyController bank, final BoardController boardController, 
+    public CardControllerImpl(final BoardController boardController, 
                               final PropertyController propertyController) {
         this.boardController = boardController;
-        this.bank = bank;
+        this.bank = new EconomyControllerImpl(propertyController);
         this.propertyController = propertyController;
 
         List<GameCard> cardsList = new ArrayList<>();
@@ -82,20 +81,17 @@ public class CardControllerImpl implements CardController {
     /**
      * Constructs a new CardControllerImpl.
      *
-     * @param bank the bank instance for money transactions
      * @param boardController the board controller for movement operations
      * @param propertyController the property controller for property-related actions
      * @param deck the CardDeck with all information
      */
     @JsonCreator
-    public CardControllerImpl(@JsonProperty("bank") final EconomyController bank, 
-                              @JsonProperty("boardController") final BoardController boardController, 
+    public CardControllerImpl(@JsonProperty("boardController") final BoardController boardController, 
                               @JsonProperty("propertyController") final PropertyController propertyController,
                               @JsonProperty("deck") final CardDeck deck) {
         this.boardController = boardController;
-        this.bank = bank;
+        this.bank = new EconomyControllerImpl(propertyController);
         this.propertyController = propertyController;
-
         this.cardDeck = deck;
     }
 

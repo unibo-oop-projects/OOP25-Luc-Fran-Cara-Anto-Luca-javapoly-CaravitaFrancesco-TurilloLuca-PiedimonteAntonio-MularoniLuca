@@ -80,7 +80,7 @@ public class MatchControllerImpl implements MatchController {
         this.economyController.setLiquidationObserver(this.liquidationObserver);
         this.playersBankrupt = new ArrayList<>();
 
-        this.boardController = new BoardControllerImpl(gameBoard, economyController, propertyController);
+        this.boardController = new BoardControllerImpl(gameBoard, propertyController);
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
         this.gui = new MainView(this);
         this.currentPlayerIndex = 0;

@@ -60,14 +60,12 @@ public class BoardControllerImpl implements BoardController {
      */
     public BoardControllerImpl(
             final Board board,
-            final EconomyController bank,
             final PropertyController propertyController) {
 
         this.board = board;
-        this.bank = bank;
+        this.bank = new EconomyControllerImpl(propertyController);
         this.propertyController = propertyController;
-        this.cardController =
-            new CardControllerImpl(bank, this, this.propertyController);
+        this.cardController = new CardControllerImpl(this, this.propertyController);
         this.message = "";
     }
 
@@ -82,12 +80,11 @@ public class BoardControllerImpl implements BoardController {
     @JsonCreator
     public BoardControllerImpl(
             @JsonProperty("board") final Board board,
-            @JsonProperty("bank") final EconomyController bank,
             @JsonProperty("propertyController") final PropertyController propertyController,
             @JsonProperty("cardController") final CardController cardController) {
 
         this.board = board;
-        this.bank = bank;
+        this.bank = new EconomyControllerImpl(propertyController);
         this.propertyController = propertyController;
         this.cardController = cardController;
         this.message = "";
