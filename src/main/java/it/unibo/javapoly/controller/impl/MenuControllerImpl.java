@@ -14,6 +14,7 @@ import it.unibo.javapoly.utils.ValidationUtils;
 import it.unibo.javapoly.view.api.MenuView;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ import static it.unibo.javapoly.view.impl.MenuViewImpl.TITLE;
  * Coordinates navigation.
  */
 public class MenuControllerImpl implements MenuController {
-    public static final String PATH_BOARD_JSON = "src/main/resources/Card/BoardTiles.json";
+    public static final String PATH_BOARD_JSON = "/Card/BoardTiles.json";
     private static final String NON_NULL = "Player names list cannot be null";
     private static final String JSON_EXTENSION = ".json";
     private final MenuView menuView;
@@ -111,7 +112,8 @@ public class MenuControllerImpl implements MenuController {
     private void showMainView(final List<Player> players) {
         ValidationUtils.requireNonNull(players, NON_NULL);
         try {
-            final BoardImpl board = BoardLoader.loadBoardFromJson(PATH_BOARD_JSON);
+            final InputStream is = MatchControllerImpl.class.getResourceAsStream(PATH_BOARD_JSON);
+            final BoardImpl board = BoardLoader.loadBoardFromJson(is);
             final Map<String, Property> properties = new HashMap<>();
             for (int i = 0; i < board.size(); i++) {
                 if (board.getTileAt(i) instanceof PropertyTile propertyTile) {

@@ -2,6 +2,10 @@ package it.unibo.javapoly.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +34,9 @@ public final class BoardLoader {
      * @return a new BoardImpl instance populated with tiles from the JSON
      * @throws IOException if an I/O error occurs during file reading or parsing
      */
-    public static BoardImpl loadBoardFromJson(final String jsonFilePath) throws IOException {
+    public static BoardImpl loadBoardFromJson(final InputStream jsonFilePath) throws IOException {
         final ObjectMapper mapper = JsonUtils.getInstance().mapper();
-
-        final JsonNode root = mapper.readTree(new File(jsonFilePath));
-
+        final JsonNode root = mapper.readTree(jsonFilePath);
         final JsonNode tilesNode = root.get("tiles");
         if (tilesNode == null || !tilesNode.isArray()) {
             throw new IllegalStateException("Formato JSON non valido: manca l'array 'tiles'");
@@ -57,10 +59,10 @@ public final class BoardLoader {
      * @return a Map where keys are property IDs and values are Property instances
      * @throws IOException if an I/O error occurs during file reading or parsing
      */
-    public static Map<String, Property> loadPropertiesFromJson(final String jsonFilePath) throws IOException {
+    public static Map<String, Property> loadPropertiesFromJson(final InputStream jsonFilePath) throws IOException {
         final ObjectMapper mapper = JsonUtils.getInstance().mapper();
 
-        final JsonNode root = mapper.readTree(new File(jsonFilePath));
+        final JsonNode root = mapper.readTree(jsonFilePath);
         final JsonNode tilesNode = root.path("tiles");
         if (!tilesNode.isArray()) {
             throw new IllegalStateException("Formato JSON non valido: manca l'array 'tiles' in root");

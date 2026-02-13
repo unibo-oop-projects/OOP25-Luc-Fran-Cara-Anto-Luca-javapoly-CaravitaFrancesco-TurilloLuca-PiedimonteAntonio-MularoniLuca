@@ -1,6 +1,7 @@
 package it.unibo.javapoly.controller.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -40,7 +41,7 @@ public class CardControllerImpl implements CardController {
 
     private static final String BANK_REC = "BANK";
     private static final int VALUE_DEF = -1;
-    private static final String PATH_CARD = "src/main/resources/Card/UnexpectedCards.json";
+    private static final String PATH_CARD = "/Card/UnexpectedCards.json";
 
     @JsonIgnore
     private static final Logger LOGGER = Logger.getLogger(CardController.class.getName());
@@ -224,7 +225,7 @@ public class CardControllerImpl implements CardController {
     private int handleMoneyPerBuilding(final Player player, final BuildingPayload payload) {
         final List<Property> list = this.propertyController.getPropertiesWithHouseByOwner(player);
 
-        int amount = 1;
+        int amount = 0;
         for (final Property property : list) {
             final int taxHouse = property.getBuiltHouses() * payload.getMoltiplierHouse();
             amount += property.hotelIsBuilt() ? payload.getMoltiplierHotel() : taxHouse;
@@ -241,7 +242,9 @@ public class CardControllerImpl implements CardController {
      */
     private List<GameCard> loadCardDeck() throws IOException {
         try {
-            return CardLoader.loadCardsFromFile(this.PATH_CARD);
+            final InputStream is = getClass().getResourceAsStream(this.PATH_CARD);
+
+            return CardLoader.loadCardsFromFile(is);
         } catch (final IOException e) {
             LOGGER.severe("Error loading Cards: " + e.getMessage());
             throw new IOException(e);
