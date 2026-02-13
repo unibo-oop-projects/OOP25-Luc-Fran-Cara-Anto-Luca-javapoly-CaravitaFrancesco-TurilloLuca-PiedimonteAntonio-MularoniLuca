@@ -228,6 +228,10 @@ public class BoardControllerImpl implements BoardController {
                         return sendPlayerToJail(player);
                     }
 
+                    if (passedThroughGo(pos, tile.getPosition())) {
+                        awardGoBonus(player);
+                    }
+
                     this.message += JAIL_FREE
                         + System.lineSeparator();
                     return tile;
