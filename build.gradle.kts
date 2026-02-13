@@ -68,5 +68,5 @@ tasks.withType<Test> {
 }
 
 application {
-    mainClass.set("it.unibo.javapoly.Main") 
+    mainClass.set("it.unibo.javapoly.JavaPolyApp")
 }
