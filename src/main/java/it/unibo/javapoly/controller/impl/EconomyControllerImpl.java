@@ -51,10 +51,8 @@ public final class EconomyControllerImpl implements EconomyController {
      */
     @Override
     public void withdrawFromPlayer(final Player player, final int amount) {
-        if (!(this.bank.withdraw(player, amount))) {
-            if (this.liquidationObserver != null) {
-                this.liquidationObserver.onInsufficientFunds(player, null, amount);
-            }
+        if (!this.bank.withdraw(player, amount) && this.liquidationObserver != null) {
+            this.liquidationObserver.onInsufficientFunds(player, null, amount);
         }
     }
 

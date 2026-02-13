@@ -65,17 +65,17 @@ public class MenuViewImpl implements MenuView {
      * Loads the window icon if available.
      */
     private void loadIcon() {
-        try {
-            final var iconStream = MenuViewImpl.class.getResourceAsStream(ICON_PATH);
-            if (iconStream == null) {
-                System.err.println("Icon loading failed.");
-                return;
-            }
-            final Image icon = new Image(iconStream);
-            this.stage.getIcons().add(icon);
-        } catch (final RuntimeException e) {
+        final var iconStream = MenuViewImpl.class.getResourceAsStream(ICON_PATH);
+        if (iconStream == null) {
             System.err.println("Icon loading failed.");
+            return;
         }
+        final Image icon = new Image(iconStream);
+        if (icon.isError()) {
+            System.err.println("Icon loading failed.");
+            return;
+        }
+        this.stage.getIcons().add(icon);
     }
 
     /**

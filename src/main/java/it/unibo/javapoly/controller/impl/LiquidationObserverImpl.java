@@ -101,15 +101,16 @@ public class LiquidationObserverImpl implements LiquidationObserver {
     /**
      * Helper method to retrieve a player by name.
      *
-     * @param playerName the player's name.
+     * @param name the player's name.
+     *
      * @return the Player object, or null if not found.
      */
-    private Player getPlayerByName(final String playerName) {
-        if (playerName == null) {
+    private Player getPlayerByName(final String name) {
+        if (name == null) {
             return null;
         }
         return matchController.getPlayers().stream()
-                .filter(p->p.getName().equals(playerName))
+                .filter(p -> p.getName().equals(name))
                 .findFirst()
                 .orElse(null);
     }
