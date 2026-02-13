@@ -64,7 +64,7 @@ public class LiquidationObserverImpl implements LiquidationObserver {
                 matchController.getEconomyController()
                         .payPlayer(this.player, this.currentCreditor, this.currentDebt);
                 matchController.getMainView().addLog(
-                        this.player.getName() + " pay debt to " + this.currentCreditor + " of " + this.currentDebt + CURRENCY);
+                        this.player.getName() + " pay debt to " + this.currentCreditor.getName() + " of " + this.currentDebt + CURRENCY);
             } else {
                 matchController.getEconomyController().withdrawFromPlayer(this.player, this.currentDebt);
                 matchController.getMainView().addLog(this.player.getName() + " pay debt of " + this.currentDebt + CURRENCY);

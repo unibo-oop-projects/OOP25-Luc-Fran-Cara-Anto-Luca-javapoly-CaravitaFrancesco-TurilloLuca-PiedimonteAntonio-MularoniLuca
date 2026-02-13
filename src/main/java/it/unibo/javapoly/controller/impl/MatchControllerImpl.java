@@ -39,7 +39,7 @@ import javafx.application.Platform;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class MatchControllerImpl implements MatchController {
     private static final int MAX_DOUBLES = 1;
-    private static final int JAIL_EXIT_FEE = 1410;
+    private static final int JAIL_EXIT_FEE = 1300;
 
     private final List<Player> players;
     private final List<Player> playersBankrupt;
@@ -321,26 +321,33 @@ public class MatchControllerImpl implements MatchController {
     @Override
     public void payToExitJail() {
         final Player p = getCurrentPlayer();
-        if (p.getState() instanceof JailedState && (economyController.withdrawFromPlayer(p, JAIL_EXIT_FEE))) {
+        if (!(p.getState() instanceof JailedState)) {
+            return;
+        }
+        final boolean payment = economyController.withdrawFromPlayer(p, JAIL_EXIT_FEE);
+        if (payment) {
             p.setState(FreeState.getInstance());
             jailTurnCounter.remove(p);
             updateGui(g -> {
                 g.addLog(p.getName() + " pays 50€ and is now free!");
                 g.refreshAll();
             });
-            return;
+        } else {
+            if (p.getState() == BankruptState.getInstance()) {
+                jailTurnCounter.remove(p);
+                updateGui(g -> {
+                    g.addLog(p.getName() + " cannot pay (bankrupt)");
+                    g.refreshAll();
+                });
+            } else {
+                p.setState(FreeState.getInstance());
+                jailTurnCounter.remove(p);
+                updateGui(g -> {
+                    g.addLog(p.getName() + " sell asset");
+                    g.refreshAll();
+                });
+            }
         }
-
-        if (p.getState() != BankruptState.getInstance()) {
-            p.setState(FreeState.getInstance());
-            jailTurnCounter.remove(p);
-            updateGui(g -> {
-                g.addLog(p.getName() + " pays 50€ and is now free!");
-                g.refreshAll();
-            });
-            return;
-        }
-
     }
 
     /**
