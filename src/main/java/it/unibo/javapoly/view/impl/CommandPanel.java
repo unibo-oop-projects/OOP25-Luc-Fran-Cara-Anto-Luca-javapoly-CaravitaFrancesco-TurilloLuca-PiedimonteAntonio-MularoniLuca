@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+import it.unibo.javapoly.model.impl.BankruptState;
 import it.unibo.javapoly.utils.JsonUtils;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -46,7 +47,7 @@ public class CommandPanel {
         this.endTurnButton = new Button("End turn");
         this.payJailButton = new Button("Pay 50€");
         this.saveButton = new Button("Save");
-
+        Player p = matchController.getCurrentPlayer();
         this.buyButton = new Button("Buy property");
         this.buyButton.setStyle("-fx-base: #2ecc71; -fx-text-fill: white;");
         this.buildButton = new Button("Build house");
@@ -55,6 +56,13 @@ public class CommandPanel {
         this.payJailButton.setStyle("-fx-base: #e74c3c; -fx-text-fill: white;");
 
         this.throwDice.setOnAction(e -> {
+
+            if (p.getState() instanceof BankruptState) {
+                this.matchController.updatePlayerBankrupt();
+                this.actionDone = true;
+                return;
+            }
+
             this.actionDone = false;
             this.matchController.handleDiceThrow();
             updateState();
@@ -78,7 +86,6 @@ public class CommandPanel {
             updateState();
         });
         this.buildButton.setOnAction(e -> {
-            Player p = matchController.getCurrentPlayer();
             Tile t = matchController.getBoard().getTileAt(p.getCurrentPosition());
             if (t instanceof PropertyTile pt) {
                 this.actionDone = true;

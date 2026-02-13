@@ -50,7 +50,7 @@ public class CardDeckImpl implements CardDeck {
         this.cards = new ArrayList<>(cards);
     }
 
-        /**
+    /**
      * Constructs a new CardDeckImpl with the provided list of cards.
      * The cards are added to the discard pile, because the first time 
      * we draw cards, the cards will be shuffled. 

@@ -14,11 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import it.unibo.javapoly.controller.api.BoardController;
-import it.unibo.javapoly.controller.api.EconomyController;
-import it.unibo.javapoly.controller.api.LiquidationObserver;
-import it.unibo.javapoly.controller.api.MatchController;
-import it.unibo.javapoly.controller.api.PropertyController;
+import it.unibo.javapoly.controller.api.*;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerState;
 import it.unibo.javapoly.model.api.board.Board;
@@ -42,10 +38,11 @@ import javafx.application.Platform;
 @JsonIgnoreProperties(value = { "gui", "economyController", "mainView", "" }, ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class MatchControllerImpl implements MatchController {
-    private static final int MAX_DOUBLES = 3;
-    private static final int JAIL_EXIT_FEE = 50;
+    private static final int MAX_DOUBLES = 1;
+    private static final int JAIL_EXIT_FEE = 1410;
 
     private final List<Player> players;
+    private final List<Player> playersBankrupt;
     private final DiceThrow diceThrow;
     private final Board gameBoard;
     @JsonIgnore
@@ -81,6 +78,7 @@ public class MatchControllerImpl implements MatchController {
         this.propertyController = new PropertyControllerImpl(properties);
         this.economyController = new EconomyControllerImpl(propertyController);
         this.economyController.setLiquidationObserver(this.liquidationObserver);
+        this.playersBankrupt = new ArrayList<>();
 
         this.boardController = new BoardControllerImpl(gameBoard, economyController, propertyController);
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
@@ -109,11 +107,13 @@ public class MatchControllerImpl implements MatchController {
             @JsonProperty("players") final List<Player> players,
             @JsonProperty("gameBoard") final Board gameBoard,
             @JsonProperty("propertyController") final PropertyController propertyController,
+            @JsonProperty("boardController") final BoardController boardController,
             @JsonProperty("currentPlayerIndex") final int currentPlayerIndex,
             @JsonProperty("consecutiveDoubles") final int consecutiveDoubles,
             @JsonProperty("hasRolled") final boolean hasRolled,
             @JsonProperty("jailTurnCounter") final Map<String, Integer> jailTurnCounterJson,
-            @JsonProperty("diceThrow") final DiceThrow diceThrow) {
+            @JsonProperty("diceThrow") final DiceThrow diceThrow,
+            @JsonProperty("playersBankrupt") final List<Player> playersBankrupt) {
         this.players = players != null ? List.copyOf(players) : new ArrayList<>();
         this.gameBoard = gameBoard != null ? gameBoard : new BoardImpl(new ArrayList<>());
         this.propertyController = propertyController != null ? propertyController
@@ -121,8 +121,10 @@ public class MatchControllerImpl implements MatchController {
         this.liquidationObserver = new LiquidationObserverImpl(this);
         this.economyController = new EconomyControllerImpl(this.propertyController);
         this.economyController.setLiquidationObserver(this.liquidationObserver);
-        this.boardController = new BoardControllerImpl(this.gameBoard, this.economyController, this.propertyController);
+        this.boardController = boardController;
         this.diceThrow = diceThrow != null ? diceThrow : new DiceThrow(new DiceImpl(), new DiceImpl());
+        this.playersBankrupt = playersBankrupt;
+
         this.gui = new MainView(this);
         this.currentPlayerIndex = currentPlayerIndex;
         this.consecutiveDoubles = consecutiveDoubles;
@@ -319,13 +321,37 @@ public class MatchControllerImpl implements MatchController {
     @Override
     public void payToExitJail() {
         final Player p = getCurrentPlayer();
-        if (p.getState() instanceof JailedState && economyController.withdrawFromPlayer(p, JAIL_EXIT_FEE)) {
+        if (p.getState() instanceof JailedState && (economyController.withdrawFromPlayer(p, JAIL_EXIT_FEE))) {
             p.setState(FreeState.getInstance());
             jailTurnCounter.remove(p);
             updateGui(g -> {
                 g.addLog(p.getName() + " pays 50€ and is now free!");
                 g.refreshAll();
             });
+            return;
+        }
+
+        if (p.getState() != BankruptState.getInstance()) {
+            p.setState(FreeState.getInstance());
+            jailTurnCounter.remove(p);
+            updateGui(g -> {
+                g.addLog(p.getName() + " pays 50€ and is now free!");
+                g.refreshAll();
+            });
+            return;
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updatePlayerBankrupt() {
+        final Player currentPlayer = this.getCurrentPlayer();
+        if (currentPlayer.getState() instanceof BankruptState) {
+            this.players.remove(currentPlayer);
+            this.players.add(currentPlayer);
         }
     }
 

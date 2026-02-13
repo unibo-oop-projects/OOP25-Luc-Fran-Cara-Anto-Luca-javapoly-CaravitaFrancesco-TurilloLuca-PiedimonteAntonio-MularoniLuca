@@ -1,10 +1,14 @@
 package it.unibo.javapoly.model.api.card;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.unibo.javapoly.controller.impl.PropertyControllerImpl;
 import it.unibo.javapoly.model.api.card.payload.CardPayload;
+import it.unibo.javapoly.model.impl.card.GameCardImpl;
 
 /**
  * General interface that every type of card will implement (not the {@code ProprietyCard} type).
  */
+@JsonDeserialize(as = GameCardImpl.class)
 public interface GameCard extends Card {
 
     /**

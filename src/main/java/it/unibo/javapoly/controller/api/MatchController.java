@@ -54,6 +54,11 @@ public interface MatchController extends PlayerObserver {
     MainView getMainView();
 
     /**
+     * This method update the list of player in bankruptState.
+     */
+    void updatePlayerBankrupt();
+
+    /**
      * Returns the list of players.
      * * @return list of all players.
      */

@@ -1,5 +1,8 @@
 package it.unibo.javapoly.controller.api;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.unibo.javapoly.controller.impl.CardControllerImpl;
+import it.unibo.javapoly.controller.impl.PropertyControllerImpl;
 import it.unibo.javapoly.model.api.card.GameCard;
 import it.unibo.javapoly.model.api.Player;
 
@@ -7,6 +10,7 @@ import it.unibo.javapoly.model.api.Player;
  * Controller responsible for managing game cards (Chance/Community Chest).
  * Handles drawing cards and executing their effects on players.
  */
+@JsonDeserialize(as = CardControllerImpl.class)
 public interface CardController {
 
     /**

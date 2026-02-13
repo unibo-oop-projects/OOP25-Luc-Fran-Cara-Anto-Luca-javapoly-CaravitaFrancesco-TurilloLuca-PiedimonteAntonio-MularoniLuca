@@ -1,9 +1,14 @@
 package it.unibo.javapoly.model.api.card;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.unibo.javapoly.controller.impl.PropertyControllerImpl;
+import it.unibo.javapoly.model.impl.card.CardDeckImpl;
+
 /**
  * Represents a deck of game cards.
  * Provides operations to draw, discard, shuffle cards, and check if the deck is empty.
  */
+@JsonDeserialize(as = CardDeckImpl.class)
 public interface CardDeck {
 
     /**

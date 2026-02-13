@@ -1,5 +1,8 @@
 package it.unibo.javapoly.controller.api;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.unibo.javapoly.controller.impl.BoardControllerImpl;
+import it.unibo.javapoly.controller.impl.PropertyControllerImpl;
 import it.unibo.javapoly.model.api.board.Tile;
 import it.unibo.javapoly.model.api.board.TileType;
 import it.unibo.javapoly.model.api.Player;
@@ -8,6 +11,7 @@ import it.unibo.javapoly.model.api.Player;
  * Controller responsible for managing board operations such as player movement,
  * tile logic execution, and handling the "Go" tile bonus.
  */
+@JsonDeserialize(as = BoardControllerImpl.class)
 public interface BoardController {
 
     /**
