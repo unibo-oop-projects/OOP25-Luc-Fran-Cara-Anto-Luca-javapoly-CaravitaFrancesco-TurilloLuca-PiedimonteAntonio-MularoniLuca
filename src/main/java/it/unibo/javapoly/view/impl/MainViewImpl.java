@@ -3,6 +3,7 @@ package it.unibo.javapoly.view.impl;
 import java.util.Locale;
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -216,6 +217,10 @@ public final class MainViewImpl implements MainView {
      *
      * @return the InfoPanel instance.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "Necessary to expose the info panel for liquidation UI"
+    )
     public InfoPanelImpl getInfoPanel() {
         return this.infoPanel;
     }
@@ -233,6 +238,10 @@ public final class MainViewImpl implements MainView {
      * 
      * @return the borderpane root.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "JavaFX nodes must be exposed"
+    )
     @Override
     public BorderPane getRoot() {
         return this.root;

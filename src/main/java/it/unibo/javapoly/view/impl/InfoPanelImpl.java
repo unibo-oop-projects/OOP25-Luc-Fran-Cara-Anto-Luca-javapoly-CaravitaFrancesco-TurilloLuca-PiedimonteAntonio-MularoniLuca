@@ -117,8 +117,7 @@ public final class InfoPanelImpl implements InfoPanel {
         card.getChildren().addAll(header, balance, position);
 
         final StringBuilder style = new StringBuilder(512);
-        style.append("-fx-background-radius: 10; -fx-background-color: white; ")
-             .append("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);");
+        style.append("-fx-background-radius: 10; -fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4); ");
 
         if (p.equals(this.matchController.getCurrentPlayer())) {
             style.append("-fx-border-color: #4CAF50; -fx-border-width: 2.5; -fx-background-color: #F1F8E9;");

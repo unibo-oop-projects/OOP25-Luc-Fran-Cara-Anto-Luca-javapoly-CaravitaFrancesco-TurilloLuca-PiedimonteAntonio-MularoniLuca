@@ -1,5 +1,6 @@
 package it.unibo.javapoly.view.impl;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,6 +44,10 @@ public final class CommandPanelImpl implements CommandPanel {
      *
      * @param matchController the controller that handles game logic
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2", 
+        justification = "The controller is required to handle UI actions"
+    )
     public CommandPanelImpl(final MatchController matchController) {
         this.matchController = Objects.requireNonNull(matchController);
 
@@ -157,6 +162,10 @@ public final class CommandPanelImpl implements CommandPanel {
      *
      * @return the {@link HBox} containing the action buttons.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "JavaFX nodes must be exposed"
+    )
     @Override
     public HBox getRoot() {
         return this.root;

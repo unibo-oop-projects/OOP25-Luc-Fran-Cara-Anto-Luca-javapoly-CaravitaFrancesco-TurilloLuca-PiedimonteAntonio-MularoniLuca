@@ -1,5 +1,6 @@
 package it.unibo.javapoly.view.impl;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Locale;
 import java.util.List;
 import java.util.Objects;
@@ -221,6 +222,10 @@ public final class BoardPanelImpl implements BoardPanel {
      *
      * @return the visual root of the board.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "JavaFX nodes must be exposed to be added to the scene graph"
+    )
     @Override
     public Pane getRoot() {
         return this.root;

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.javapoly.controller.api.BoardController;
 import it.unibo.javapoly.controller.api.EconomyController;
 import it.unibo.javapoly.controller.api.LiquidationObserver;
@@ -432,6 +433,10 @@ public class MatchControllerImpl implements MatchController {
      *
      * @return the main view.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "Access to the main view is needed for UI updates"
+    )
     @Override
     @JsonIgnore
     public MainViewImpl getMainViewImpl() {
@@ -539,6 +544,10 @@ public class MatchControllerImpl implements MatchController {
      *
      * @return the economy controller.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "Internal controllers must be accessible by other components"
+    )
     @Override
     public EconomyController getEconomyController() {
         return this.economyController;
