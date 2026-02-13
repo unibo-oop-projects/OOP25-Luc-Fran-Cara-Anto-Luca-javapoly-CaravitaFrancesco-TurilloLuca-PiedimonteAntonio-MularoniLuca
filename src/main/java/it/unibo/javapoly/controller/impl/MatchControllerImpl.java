@@ -1,6 +1,7 @@
 package it.unibo.javapoly.controller.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class MatchControllerImpl implements MatchController {
     private boolean hasRolled;
     private Player currentCreditor;
     @JsonIgnore
-    private LiquidationObserver liquidationObserver;
+    private final LiquidationObserver liquidationObserver;
 
     /**
      * Constructor for MatchControllerImpl.
@@ -129,8 +130,10 @@ public class MatchControllerImpl implements MatchController {
         this.economyController = new EconomyControllerImpl(this.propertyController);
         this.economyController.setLiquidationObserver(this.liquidationObserver);
         this.boardController = boardController;
-        this.diceThrow = diceThrow != null ? diceThrow : new DiceThrow(new DiceImpl(), new DiceImpl());
-        this.playersBankrupt = playersBankrupt;
+        this.diceThrow = diceThrow != null ? 
+                new DiceThrow(diceThrow.getDice1(), diceThrow.getDice2()) : 
+                new DiceThrow(new DiceImpl(), new DiceImpl());
+        this.playersBankrupt = playersBankrupt != null ? new ArrayList<>(playersBankrupt) : new ArrayList<>();
 
         this.gui = new MainViewImpl(this);
         this.currentPlayerIndex = currentPlayerIndex;
@@ -260,7 +263,7 @@ public class MatchControllerImpl implements MatchController {
         if (isDouble && this.consecutiveDoubles < MAX_DOUBLES) {
             this.hasRolled = false;
         }
-        updateGui(g -> g.refreshAll());
+        updateGui(MainViewImpl::refreshAll);
     }
 
     /**
@@ -277,7 +280,7 @@ public class MatchControllerImpl implements MatchController {
 
         this.onPlayerMoved(currentPlayer, oldPos, newPos);
 
-        updateGui(g -> g.refreshAll());
+        updateGui(MainViewImpl::refreshAll);
     }
 
     /**
@@ -314,10 +317,8 @@ public class MatchControllerImpl implements MatchController {
         final String msg = boardController.getMessagePrint();
 
         updateGui(g -> {
-            if (currentTile instanceof UnexpectedTile) {
-                if (msg != null && !msg.isEmpty()) {
-                    g.showCard("CHANCE", msg);
-                }
+            if (currentTile instanceof UnexpectedTile && msg != null && !msg.isEmpty()) {
+                g.showCard("CHANCE", msg);
             }
 
             if (msg != null && !msg.isEmpty()) {
@@ -351,7 +352,7 @@ public class MatchControllerImpl implements MatchController {
             });
         } else {
             this.economyController.withdrawFromPlayer(p, JAIL_EXIT_FEE);
-            if (p.getState() != BankruptState.getInstance()) {
+            if (!p.getState().equals(BankruptState.getInstance())) {
                 p.setState(FreeState.getInstance());
                 jailTurnCounter.remove(p);
                 updateGui(g -> {
@@ -397,7 +398,7 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     public List<Player> getPlayers() {
-        return this.players;
+        return List.copyOf(this.players);
     }
 
     /**
@@ -440,7 +441,7 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     public void onBalanceChanged(final Player player, final int newBalance) {
-        updateGui(g -> g.refreshAll());
+        updateGui(MainViewImpl::refreshAll);
     }
 
     /**
@@ -464,6 +465,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @return the current player index.
      */
+    @Override
     public int getCurrentPlayerIndex() {
         return this.currentPlayerIndex;
     }
@@ -473,6 +475,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @return the number of consecutive doubles.
      */
+    @Override
     public int getConsecutiveDoubles() {
         return this.consecutiveDoubles;
     }
@@ -482,6 +485,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @param i the new current player index.
      */
+    @Override
     public void setCurrentPlayerIndex(final int i) {
         this.currentPlayerIndex = i;
     }
@@ -491,6 +495,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @param d the new number of consecutive doubles.
      */
+    @Override
     public void setConsecutiveDoubles(final int d) {
         this.consecutiveDoubles = d;
     }
@@ -500,6 +505,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @param b set if player has rolled.
      */
+    @Override
     public void setHasRolled(final boolean b) {
         this.hasRolled = b;
     }
@@ -519,7 +525,7 @@ public class MatchControllerImpl implements MatchController {
      * @return the jail turn counter map.
      */
     public Map<Player, Integer> getJailTurnCounter() {
-        return this.jailTurnCounter;
+        return Collections.unmodifiableMap(this.jailTurnCounter);
     }
 
     /**
@@ -527,6 +533,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @return the economy controller.
      */
+    @Override
     public EconomyController getEconomyController() {
         return this.economyController;
     }
@@ -536,6 +543,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @return the property controller.
      */
+    @Override
     public PropertyController getPropertyController() {
         return this.propertyController;
     }
@@ -543,6 +551,7 @@ public class MatchControllerImpl implements MatchController {
     /**
      * Logic for buying the current property.
      */
+    @Override
     public void buyCurrentProperty() {
         final Player currentPlayer = getCurrentPlayer();
         final Tile currentTile = gameBoard.getTileAt(currentPlayer.getCurrentPosition());
@@ -550,7 +559,7 @@ public class MatchControllerImpl implements MatchController {
         if (currentTile instanceof PropertyTile pt) {
             final Property prop = pt.getProperty();
 
-            if (prop.getIdOwner() != null && !prop.getIdOwner().isEmpty() && !prop.getIdOwner().equals("BANK")) {
+            if (prop.getIdOwner() != null && !prop.getIdOwner().isEmpty() && !"BANK".equals(prop.getIdOwner())) {
                 updateGui(g -> g.addLog("You cannot buy a property that already has an owner!"));
                 return;
             }
@@ -572,6 +581,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @param property the property to build on.
      */
+    @Override
     public void buildHouseOnProperty(final Property property) {
         try {
             if (this.economyController.purchaseHouse(getCurrentPlayer(), property)) {
@@ -595,6 +605,7 @@ public class MatchControllerImpl implements MatchController {
      *
      * @param p the player.
      */
+    @Override
     public void finalizeLiquidation(final Player p) {
         if (p.getBalance() >= 0) {
             updateGui(g -> {
@@ -614,6 +625,7 @@ public class MatchControllerImpl implements MatchController {
      * @param map         the data map.
      * @param playersList the list of players.
      */
+    @Override
     public void restoreJailTurnCounter(final Map<String, Integer> map, final List<Player> playersList) {
         this.jailTurnCounter.clear();
         for (final Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -670,12 +682,12 @@ public class MatchControllerImpl implements MatchController {
             final Property prop = ((PropertyTile) currentTile).getProperty();
             if (prop.getIdOwner() == null) {
                 updateGui(g -> g.addLog("You can buy " + prop.getId() + " for €" + prop.getPurchasePrice()));
-            } else if (prop.getIdOwner().equals(currentPlayer.getName())) {
+            } else if (currentPlayer.getName().equals(prop.getIdOwner())) {
                 updateGui(g -> {
                     g.addLog("You are at home (" + prop.getId() + ").");
                 });
             }
-            updateGui(g -> g.refreshAll());
+            updateGui(MainViewImpl::refreshAll);
         }
 
     }

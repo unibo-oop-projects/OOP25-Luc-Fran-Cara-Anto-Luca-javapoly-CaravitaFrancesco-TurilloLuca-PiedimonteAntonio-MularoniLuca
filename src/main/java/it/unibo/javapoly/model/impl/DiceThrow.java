@@ -29,6 +29,14 @@ public final class DiceThrow {
         this.lastDiceResult = 0;
     }
 
+    public Dice getDice1() {
+        return this.dice1;
+    }
+
+    public Dice getDice2() {
+        return this.dice2;
+    }
+
     /**
      * Throws both dice and updates the total result.
      */
