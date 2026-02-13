@@ -88,15 +88,14 @@ public class MatchControllerImpl implements MatchController {
         this.currentPlayerIndex = 0;
         this.consecutiveDoubles = 0;
 
-        for (Player p : this.players) {
+        for (final Player p : this.players) {
             p.addObserver(this);
         }
     }
 
     /**
      * JSON Creator for loading a saved match state.
-     * * @param players the list of players.
-     * 
+     * @param players             the list of players.  
      * @param gameBoard           the game board.
      * @param propertyController  the property controller.
      * @param currentPlayerIndex  index of the current player.
@@ -110,14 +109,15 @@ public class MatchControllerImpl implements MatchController {
             @JsonProperty("players") final List<Player> players,
             @JsonProperty("gameBoard") final Board gameBoard,
             @JsonProperty("propertyController") final PropertyController propertyController,
-            @JsonProperty("currentPlayerIndex") int currentPlayerIndex,
-            @JsonProperty("consecutiveDoubles") int consecutiveDoubles,
-            @JsonProperty("hasRolled") boolean hasRolled,
-            @JsonProperty("jailTurnCounter") Map<String, Integer> jailTurnCounterJson,
-            @JsonProperty("diceThrow") DiceThrow diceThrow) {
+            @JsonProperty("currentPlayerIndex") final int currentPlayerIndex,
+            @JsonProperty("consecutiveDoubles") final int consecutiveDoubles,
+            @JsonProperty("hasRolled") final boolean hasRolled,
+            @JsonProperty("jailTurnCounter") final Map<String, Integer> jailTurnCounterJson,
+            @JsonProperty("diceThrow") final DiceThrow diceThrow) {
         this.players = players != null ? List.copyOf(players) : new ArrayList<>();
         this.gameBoard = gameBoard != null ? gameBoard : new BoardImpl(new ArrayList<>());
-        this.propertyController = propertyController != null ? propertyController : new PropertyControllerImpl(new HashMap<>());
+        this.propertyController = propertyController != null ? propertyController
+                : new PropertyControllerImpl(new HashMap<>());
         this.liquidationObserver = new LiquidationObserverImpl(this);
         this.economyController = new EconomyControllerImpl(this.propertyController);
         this.economyController.setLiquidationObserver(this.liquidationObserver);
@@ -128,7 +128,7 @@ public class MatchControllerImpl implements MatchController {
         this.consecutiveDoubles = consecutiveDoubles;
         this.hasRolled = hasRolled;
         if (jailTurnCounterJson != null) {
-            for (Map.Entry<String, Integer> entry : jailTurnCounterJson.entrySet()) {
+            for (final Map.Entry<String, Integer> entry : jailTurnCounterJson.entrySet()) {
                 final String playerName = entry.getKey();
                 final Player player = this.players.stream()
                         .filter(p -> p.getName().equals(playerName))
@@ -139,19 +139,20 @@ public class MatchControllerImpl implements MatchController {
                 }
             }
         }
-        for (Player p : this.players) {
+        for (final Player p : this.players) {
             p.addObserver(this);
         }
     }
 
     /**
      * Returns a JSON-compatible map of the jail turn counter.
+     * 
      * @return map of player names and turn counts.
      */
     @JsonGetter("jailTurnCounter")
     public Map<String, Integer> getJailTurnCounterJson() {
-        Map<String, Integer> result = new HashMap<>();
-        for (Map.Entry<Player, Integer> entry : this.jailTurnCounter.entrySet()) {
+        final Map<String, Integer> result = new HashMap<>();
+        for (final Map.Entry<Player, Integer> entry : this.jailTurnCounter.entrySet()) {
             result.put(entry.getKey().getName(), entry.getValue());
         }
         return result;
@@ -208,7 +209,7 @@ public class MatchControllerImpl implements MatchController {
         final boolean isDouble = diceThrow.isDouble();
 
         if (currentPlayer.getState() instanceof JailedState) {
-            int turns = jailTurnCounter.getOrDefault(currentPlayer, 0);
+            final int turns = jailTurnCounter.getOrDefault(currentPlayer, 0);
             if (isDouble) {
                 updateGui(g -> g.addLog(currentPlayer.getName() + " leaves jail with a DOUBLE ("
                         + this.diceThrow.getLastThrow() + ")!"));
@@ -250,13 +251,14 @@ public class MatchControllerImpl implements MatchController {
 
     /**
      * Moves the current player.
+     * 
      * @param steps number of steps.
      */
-    public void handleMove(int steps) {
+    public void handleMove(final int steps) {
         final Player currentPlayer = getCurrentPlayer();
-        int oldPos = currentPlayer.getCurrentPosition();
+        final int oldPos = currentPlayer.getCurrentPosition();
 
-        int newPos = this.boardController.movePlayer(currentPlayer, steps).getPosition();
+        final int newPos = this.boardController.movePlayer(currentPlayer, steps).getPosition();
         currentPlayer.setPosition(newPos);
 
         this.onPlayerMoved(currentPlayer, oldPos, newPos);
@@ -277,8 +279,15 @@ public class MatchControllerImpl implements MatchController {
         });
     }
 
+    /**
+     * Handles the logic after a player has moved to a new position.
+     *
+     * @param player the player who moved.
+     * @param oldPosition the previous position of the player.
+     * @param newPosition the current position of the player.
+     */
     @Override
-    public void onPlayerMoved(Player player, int oldPosition, int newPosition) {
+    public void onPlayerMoved(final Player player, final int oldPosition, final int newPosition) {
         final Tile currentTile = this.boardController.executeTileLogic(player, newPosition,
                 this.diceThrow.getLastThrow());
 
@@ -304,9 +313,12 @@ public class MatchControllerImpl implements MatchController {
         });
     }
 
+    /**
+     * Allows the current player to pay the required fee to exit jail.
+     */
     @Override
     public void payToExitJail() {
-        Player p = getCurrentPlayer();
+        final Player p = getCurrentPlayer();
         if (p.getState() instanceof JailedState && economyController.withdrawFromPlayer(p, JAIL_EXIT_FEE)) {
             p.setState(FreeState.getInstance());
             jailTurnCounter.remove(p);
@@ -317,38 +329,66 @@ public class MatchControllerImpl implements MatchController {
         }
     }
 
-    /** @return the current player index. */
+    /**
+     * Returns the list of players.
+     *
+     * @return the list of players.
+     */
     @Override
     public List<Player> getPlayers() {
         return this.players;
     }
 
-    /** @return the number of consecutive doubles. */
+    /**
+     * Returns the current player.
+     *
+     * @return the current player.
+     */
     @Override
     public Player getCurrentPlayer() {
         return this.players.get(this.currentPlayerIndex);
     }
 
-    /** @param i the new current player index. */
+    /**
+     * Returns the board.
+     *
+    /** @return the game board. */
     @Override
     @JsonIgnore
     public Board getBoard() {
         return this.gameBoard;
     }
 
+    /**
+     * Returns the main view.
+     *
+    /** @return the main view. */
     @Override
     @JsonIgnore
     public MainView getMainView() {
         return this.gui;
     }
 
+    /**
+     * Notifies the controller that a player's balance has changed.
+     *
+     * @param player the player whose balance changed.
+     * @param newBalance the new balance value.
+     */
     @Override
-    public void onBalanceChanged(Player player, int newBalance) {
+    public void onBalanceChanged(final Player player, final int newBalance) {
         updateGui(g -> g.refreshAll());
     }
 
+    /**
+     * Notifies the controller that a player's state has changed.
+     *
+     * @param player the player whose state changed.
+     * @param oldState the previous state.
+     * @param newState the new state.
+     */
     @Override
-    public void onStateChanged(Player player, PlayerState oldState, PlayerState newState) {
+    public void onStateChanged(final Player player, final PlayerState oldState, final PlayerState newState) {
         updateGui(g -> {
             g.addLog(player.getName() + " is now in state: " + newState.getClass().getSimpleName());
             g.refreshAll();
@@ -356,48 +396,96 @@ public class MatchControllerImpl implements MatchController {
     }
 
     // #region public method
+    /**
+     * Returns the index.
+     *
+     * @return the current player index.
+     */
     public int getCurrentPlayerIndex() {
         return this.currentPlayerIndex;
     }
 
+    /**
+     * Returns doubles count.
+     *
+     * @return the number of consecutive doubles.
+     */
     public int getConsecutiveDoubles() {
         return this.consecutiveDoubles;
     }
 
-    public void setCurrentPlayerIndex(int i) {
+    /**
+     * Sets index.
+     *
+     * @param i the new current player index.
+     */
+    public void setCurrentPlayerIndex(final int i) {
         this.currentPlayerIndex = i;
     }
 
-    public void setConsecutiveDoubles(int d) {
+    /**
+     * Sets doubles count.
+     *
+     * @param d the new number of consecutive doubles.
+     */
+    public void setConsecutiveDoubles(final int d) {
         this.consecutiveDoubles = d;
     }
 
-    public void setHasRolled(boolean b) {
+    /**
+     * Sets rolled flag.
+     *
+     * @param b set if player has rolled.
+     */
+    public void setHasRolled(final boolean b) {
         this.hasRolled = b;
     }
 
+    /**
+     * Checks roll possibility.
+     *
+     * @return true if player can roll.
+     */
     public boolean canCurrentPlayerRoll() {
         return !hasRolled;
     }
 
+    /**
+     * Returns jail counter.
+     *
+     * @return the jail turn counter map.
+     */
     public Map<Player, Integer> getJailTurnCounter() {
         return this.jailTurnCounter;
     }
 
+    /**
+     * Returns economy controller.
+     *
+     * @return the economy controller.
+     */
     public EconomyController getEconomyController() {
         return this.economyController;
     }
 
+    /**
+     * Returns property controller.
+     *
+     * @return the property controller.
+     */
     public PropertyController getPropertyController() {
         return this.propertyController;
     }
 
+    /**
+     * Logic for buying the current property.
+     */
     public void buyCurrentProperty() {
         final Player currentPlayer = getCurrentPlayer();
         final Tile currentTile = gameBoard.getTileAt(currentPlayer.getCurrentPosition());
 
         if (currentTile instanceof PropertyTile pt) {
-            Property prop = pt.getProperty();
+            final Property prop = pt.getProperty();
 
             if (prop.getIdOwner() != null && !prop.getIdOwner().isEmpty() && !prop.getIdOwner().equals("BANK")) {
                 updateGui(g -> g.addLog("You cannot buy a property that already has an owner!"));
@@ -416,7 +504,12 @@ public class MatchControllerImpl implements MatchController {
         }
     }
 
-    public void buildHouseOnProperty(Property property) {
+    /**
+     * Logic for building a house.
+     * 
+     * @param property the property to build on.
+     */
+    public void buildHouseOnProperty(final Property property) {
         try {
             if (this.economyController.purchaseHouse(getCurrentPlayer(), property)) {
                 updateGui(g -> {
@@ -426,15 +519,20 @@ public class MatchControllerImpl implements MatchController {
             } else {
                 updateGui(g -> g.addLog("Cannot build on " + property.getId()));
             }
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             updateGui(g -> g.addLog("Error: " + e.getMessage()));
 
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             updateGui(g -> g.addLog("You cannot build on this type of tile."));
         }
     }
 
-    public void finalizeLiquidation(Player p) {
+    /**
+     * Finalizes the liquidation process.
+     * 
+     * @param p the player.
+     */
+    public void finalizeLiquidation(final Player p) {
         if (p.getBalance() >= 0) {
             updateGui(g -> {
                 g.addLog("✅ Debt settled! " + p.getName() + " can continue.");
@@ -447,10 +545,15 @@ public class MatchControllerImpl implements MatchController {
         }
     }
 
-    // For jail turn counter restoration
+    /**
+     * Restores the jail counter state.
+     * 
+     * @param map     the data map.
+     * @param players the list of players.
+     */
     public void restoreJailTurnCounter(final Map<String, Integer> map, final List<Player> players) {
         this.jailTurnCounter.clear();
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+        for (final Map.Entry<String, Integer> entry : map.entrySet()) {
             final String ownerId = entry.getKey();
             final Player owner = players.stream()
                     .filter(p -> p.getName().equals(ownerId))
@@ -465,12 +568,15 @@ public class MatchControllerImpl implements MatchController {
     // #endregion
 
     // #region Private method
+    /**
+     * Checks if only one player remains active and declares the winner.
+     */
     private void checkWinCondition() {
-        List<Player> activePlayers = players.stream()
+        final List<Player> activePlayers = players.stream()
                 .filter(p -> !(p.getState() instanceof BankruptState))
                 .toList();
         if (activePlayers.size() == 1) {
-            Player winner = activePlayers.get(0);
+            final Player winner = activePlayers.get(0);
             updateGui(g -> {
                 g.addLog("🏆 GAME OVER! The winner is " + winner.getName());
                 g.showWinner(winner.getName());
@@ -478,7 +584,11 @@ public class MatchControllerImpl implements MatchController {
         }
     }
 
-    private void updateGui(Consumer<MainView> action) {
+    /**
+     * Safely updates the GUI using the JavaFX Platform thread.
+     * * @param action the consumer action to perform on the MainView.
+     */
+    private void updateGui(final Consumer<MainView> action) {
         if (this.gui != null)
             Platform.runLater(() -> action.accept(this.gui));
     }
@@ -492,7 +602,7 @@ public class MatchControllerImpl implements MatchController {
         final Tile currentTile = gameBoard.getTileAt(currentPlayer.getCurrentPosition());
 
         if (currentTile instanceof PropertyTile) {
-            Property prop = ((PropertyTile) currentTile).getProperty();
+            final Property prop = ((PropertyTile) currentTile).getProperty();
             if (prop.getIdOwner() == null) {
                 updateGui(g -> g.addLog("You can buy " + prop.getId() + " for €" + prop.getPurchasePrice()));
             } else if (prop.getIdOwner().equals(currentPlayer.getName())) {
@@ -505,10 +615,6 @@ public class MatchControllerImpl implements MatchController {
 
     }
 
-    @Override
-    public void handleEndTurn() {
-
-    }
     // #endregion
 
 }
