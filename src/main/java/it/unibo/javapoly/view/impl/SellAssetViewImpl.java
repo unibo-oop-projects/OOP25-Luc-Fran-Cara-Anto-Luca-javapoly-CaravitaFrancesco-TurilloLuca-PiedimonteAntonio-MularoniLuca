@@ -228,10 +228,17 @@ public class SellAssetViewImpl implements SellAssetView {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * Suppressed EI_EXPOSE_REP and E2_EXPOSE_REP waring: the exposure of the
+     * internal instance is intentional and consistent with the architectural role of this class.
+     * </p>
+     *
      */
+    @SuppressWarnings({"EI_EXSPOSE_REP", "E2_EXPOSE_REP"})
     @Override
     public BorderPane getRoot() {
-        return root;
+        return this.root;
     }
 
     /**

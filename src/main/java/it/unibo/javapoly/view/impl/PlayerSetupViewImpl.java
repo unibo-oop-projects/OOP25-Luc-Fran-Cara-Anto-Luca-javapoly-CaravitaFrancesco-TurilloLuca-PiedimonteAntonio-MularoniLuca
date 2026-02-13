@@ -297,7 +297,13 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * Suppressed EI_EXPOSE_REP waring: the exposure of the
+     * internal instance is intentional and consistent with the architectural role of this class.
+     * </p>
      */
+    @SuppressWarnings("EI_EXSPOSE_REP")
     @Override
     public BorderPane getRoot() {
         return root;
