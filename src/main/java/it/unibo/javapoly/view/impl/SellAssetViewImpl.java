@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Implementation of {@link SellAssetView}, providing a UI for player to sell property/houses
  * in order to satisfy debt obligation.
@@ -235,7 +237,10 @@ public class SellAssetViewImpl implements SellAssetView {
      * </p>
      *
      */
-    @SuppressWarnings({"EI_EXSPOSE_REP", "E2_EXPOSE_REP"})
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     @Override
     public BorderPane getRoot() {
         return this.root;

@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.javapoly.controller.api.LiquidationCallback;
 import it.unibo.javapoly.view.api.InfoPanel;
 import it.unibo.javapoly.view.api.SellAssetView;
@@ -50,6 +51,10 @@ public final class InfoPanelImpl implements InfoPanel {
      *
      * @param matchController reference to the game controller
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     public InfoPanelImpl(final MatchController matchController) {
         this.matchController = Objects.requireNonNull(matchController);
 
@@ -89,7 +94,7 @@ public final class InfoPanelImpl implements InfoPanel {
         card.setAlignment(Pos.CENTER_LEFT);
 
         final ImageView icon = new ImageView();
-        final String fileName = p.getToken().getType().toUpperCase(Locale.ROOT);
+        final String fileName = p.getToken().getType().toLowerCase(Locale.ROOT);
         final var stream = getClass().getResourceAsStream("/images/tokens/" + fileName + ".png");
         if (stream != null) {
             icon.setImage(new Image(stream));
@@ -119,7 +124,6 @@ public final class InfoPanelImpl implements InfoPanel {
         final StringBuilder style = new StringBuilder(512);
         style.append("-fx-background-radius: 10; -fx-background-color: white;"
         + " -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4); ");
-
         if (p.equals(this.matchController.getCurrentPlayer())) {
             style.append("-fx-border-color: #4CAF50; -fx-border-width: 2.5; -fx-background-color: #F1F8E9;");
             name.setText("▶ " + p.getName()); 
@@ -136,6 +140,10 @@ public final class InfoPanelImpl implements InfoPanel {
      *
      * @return the {@link VBox} containing the labels.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     @Override
     public VBox getRoot() {
         return this.root;

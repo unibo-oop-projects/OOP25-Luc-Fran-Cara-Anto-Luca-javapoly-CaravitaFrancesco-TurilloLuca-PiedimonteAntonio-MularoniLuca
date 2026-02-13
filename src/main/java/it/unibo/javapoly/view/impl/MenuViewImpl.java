@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Implementation of the main menu view for the Javapoly application.
  */
@@ -48,6 +50,10 @@ public final class MenuViewImpl implements MenuView {
      *
      * @param stage the primary stage for the view.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     public MenuViewImpl(final Stage stage) {
         this.stage = Objects.requireNonNull(stage);
         configureStage();

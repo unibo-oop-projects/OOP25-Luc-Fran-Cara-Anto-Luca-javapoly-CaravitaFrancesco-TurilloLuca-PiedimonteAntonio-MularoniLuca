@@ -49,8 +49,8 @@ public final class MainViewImpl implements MainView {
      * @param matchController the controller that manages the game logic.
      */
     @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2", 
-        justification = "The controller is vital for coordinating the different view panels"
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
     )
     public MainViewImpl(final MatchController matchController) {
         this.matchController = Objects.requireNonNull(matchController);

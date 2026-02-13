@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.EnumSet;
 import java.util.Objects;
 
@@ -289,6 +292,10 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     @Override
     public void setStage(final Stage stage) {
         this.stage = stage;
@@ -303,7 +310,10 @@ public class PlayerSetupViewImpl implements PlayerSetupView {
      * internal instance is intentional and consistent with the architectural role of this class.
      * </p>
      */
-    @SuppressWarnings("EI_EXSPOSE_REP")
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Property is intentionally shared and mutable in game model"
+    )
     @Override
     public BorderPane getRoot() {
         return root;
