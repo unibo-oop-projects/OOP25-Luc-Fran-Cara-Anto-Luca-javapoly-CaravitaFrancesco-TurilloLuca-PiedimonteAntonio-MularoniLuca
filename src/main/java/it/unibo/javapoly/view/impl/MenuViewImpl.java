@@ -30,7 +30,7 @@ public class MenuViewImpl implements MenuView {
     public static final String TITLE = "Javapoly";
     private static final String MENU = " - Menu";
     private static final String SETUP = " - Setup player";
-    private static final String ICON_PATH = "/images/javapolyICON.png";
+    private static final String ICON_PATH = "/images/javapolyIcon.png";
     private static final String LOGO_PATH = "/images/javapolyLogo.png";
     private static final String[] DEVELOPERS = {"Francesco Caravita", "Luca Turillo", "Antonio Piedimonte", "Luca Mularoni"};
     private static final int TOP_PADDING = 20;
