@@ -2,7 +2,6 @@ package it.unibo.javapoly.view.api;
 
 import it.unibo.javapoly.controller.api.MenuController;
 import javafx.scene.Parent;
-import javafx.stage.Stage;
 
 /**
  * Interface for the main menu view of the JavaPoly game.
