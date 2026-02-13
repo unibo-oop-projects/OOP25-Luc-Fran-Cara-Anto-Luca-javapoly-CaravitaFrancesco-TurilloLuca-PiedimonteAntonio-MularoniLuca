@@ -1,4 +1,4 @@
-package it.unibo.javapoly.model.impl.change;
+package it.unibo.javapoly.model.impl.propertycard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
