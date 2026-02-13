@@ -1,10 +1,9 @@
-package it.unibo.javapoly.model.economy;
+package it.unibo.javapoly.model.impl.economy;
 
 import it.unibo.javapoly.model.api.TokenType;
 import it.unibo.javapoly.model.api.economy.Bank;
 import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.impl.PlayerImpl;
-import it.unibo.javapoly.model.impl.economy.BankImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
