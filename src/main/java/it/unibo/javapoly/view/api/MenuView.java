@@ -1,6 +1,7 @@
 package it.unibo.javapoly.view.api;
 
 import it.unibo.javapoly.controller.api.MenuController;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 /**
@@ -33,9 +34,16 @@ public interface MenuView {
     void showLoadGameView();
 
     /**
-     * Get stage.
+     * Set root
      *
-     * @return stage.
+     * @param root to set.
      */
-    Stage getStage();
+    void setRoot(Parent root);
+
+    /**
+     * Set title to stage.
+     *
+     * @param title to set.
+     */
+    void setTitle(String title);
 }

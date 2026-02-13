@@ -5,6 +5,7 @@ import it.unibo.javapoly.view.api.PlayerSetupView;
 import it.unibo.javapoly.view.api.MenuView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
 /**
  * Implementation of the main menu view for the Javapoly application.
  */
-public class MenuViewImpl implements MenuView {
+public final class MenuViewImpl implements MenuView {
     public static final String BG_COLOR = "-fx-background-color: #edfbea;";
     public static final String TITLE = "Javapoly";
     private static final String MENU = " - Menu";
@@ -231,7 +232,15 @@ public class MenuViewImpl implements MenuView {
      * {@inheritDoc}
      */
     @Override
-    public Stage getStage() {
-        return this.stage;
+    public void setRoot(final Parent root) {
+        this.stage.getScene().setRoot(root);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTitle(final String title) {
+        this.stage.setTitle(title);
     }
 }
