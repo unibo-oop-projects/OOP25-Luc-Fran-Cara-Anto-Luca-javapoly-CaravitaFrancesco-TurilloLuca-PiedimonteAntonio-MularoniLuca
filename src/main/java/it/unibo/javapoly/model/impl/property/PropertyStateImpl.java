@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import it.unibo.javapoly.model.api.property.PropertyState;
 
@@ -12,6 +13,7 @@ import it.unibo.javapoly.model.api.property.PropertyState;
  * Represents the state of a property in the game.
  * It keeps track of the owner and number of houses (or hotel) on the property.
  */
+@JsonTypeName("PROPERTYIMPL")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class PropertyStateImpl implements PropertyState {
 

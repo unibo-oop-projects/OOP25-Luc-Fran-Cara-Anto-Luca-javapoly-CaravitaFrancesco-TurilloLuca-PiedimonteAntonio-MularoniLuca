@@ -1,6 +1,7 @@
 package it.unibo.javapoly.model.api.property;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
@@ -14,7 +15,10 @@ import it.unibo.javapoly.model.impl.property.PropertyImpl;
  * call AFTER performing domain checks (e.g., checking if the player has enough money).
  * The Property does NOT manage the player's money.
  */
-@JsonDeserialize(as = PropertyImpl.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = PropertyImpl.class, name = "PROPERTYIMPL")
+})
 public interface Property {
 
     /**
