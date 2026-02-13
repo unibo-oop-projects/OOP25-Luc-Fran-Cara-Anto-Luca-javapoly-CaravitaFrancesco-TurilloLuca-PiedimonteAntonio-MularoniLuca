@@ -7,7 +7,10 @@ import it.unibo.javapoly.model.impl.PlayerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BankImplTest {
 
@@ -37,7 +40,7 @@ class BankImplTest {
     @Test
     void testDepositMoneySuccessfully() {
         bank.deposit(this.player1, DEPOSIT_AMOUNT);
-        assertEquals(INITIAL_BALANCE+DEPOSIT_AMOUNT, this.player1.getBalance());
+        assertEquals(INITIAL_BALANCE + DEPOSIT_AMOUNT, this.player1.getBalance());
     }
 
     /**
@@ -71,7 +74,7 @@ class BankImplTest {
      */
     @Test
     void testWithdrawMoneyGreaterThanBalance() {
-        final  boolean result = bank.withdraw(this.player1, INITIAL_BALANCE+1);
+        final boolean result = bank.withdraw(this.player1, INITIAL_BALANCE + 1);
         assertFalse(result);
         assertEquals(INITIAL_BALANCE, this.player1.getBalance());
     }
@@ -92,7 +95,7 @@ class BankImplTest {
      */
     @Test
     void testTransferFundsGreaterThanBalance() {
-        final boolean result = bank.transferFunds(this.player1, this.player2, INITIAL_BALANCE+1);
+        final boolean result = bank.transferFunds(this.player1, this.player2, INITIAL_BALANCE + 1);
         assertFalse(result);
         assertEquals(INITIAL_BALANCE, this.player1.getBalance());
         assertEquals(INITIAL_BALANCE, this.player2.getBalance());
@@ -119,7 +122,7 @@ class BankImplTest {
      */
     @Test
     void testCanAffordFalse() {
-        assertFalse(bank.canAfford(this.player1, INITIAL_BALANCE+1));
+        assertFalse(bank.canAfford(this.player1, INITIAL_BALANCE + 1));
     }
 
     /**
