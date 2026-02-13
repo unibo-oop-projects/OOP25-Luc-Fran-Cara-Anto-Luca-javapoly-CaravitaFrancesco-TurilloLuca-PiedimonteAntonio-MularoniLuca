@@ -7,7 +7,7 @@ import it.unibo.javapoly.model.api.Player;
 import it.unibo.javapoly.model.api.PlayerObserver;
 import it.unibo.javapoly.model.api.board.Board;
 import it.unibo.javapoly.model.api.property.Property;
-import it.unibo.javapoly.view.impl.MainView;
+import it.unibo.javapoly.view.impl.MainViewImpl;
 
 /**
  * Interface representing the main controller for a Monopoly match.
@@ -55,7 +55,7 @@ public interface MatchController extends PlayerObserver {
      * 
      * @return the main view/GUI.
      */
-    MainView getMainView();
+    MainViewImpl getMainViewImpl();
 
     /**
      * This method update the list of player in bankruptState.

@@ -32,7 +32,7 @@ import it.unibo.javapoly.model.impl.JailedState;
 import it.unibo.javapoly.model.impl.board.BoardImpl;
 import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.model.impl.board.tile.UnexpectedTile;
-import it.unibo.javapoly.view.impl.MainView;
+import it.unibo.javapoly.view.impl.MainViewImpl;
 import javafx.application.Platform;
 
 /**
@@ -50,7 +50,7 @@ public class MatchControllerImpl implements MatchController {
     private final DiceThrow diceThrow;
     private final Board gameBoard;
     @JsonIgnore
-    private final MainView gui;
+    private final MainViewImpl gui;
     private final Map<Player, Integer> jailTurnCounter = new HashMap<>();
 
     @JsonIgnore
@@ -86,7 +86,7 @@ public class MatchControllerImpl implements MatchController {
 
         this.boardController = new BoardControllerImpl(gameBoard, propertyController);
         this.diceThrow = new DiceThrow(new DiceImpl(), new DiceImpl());
-        this.gui = new MainView(this);
+        this.gui = new MainViewImpl(this);
         this.currentPlayerIndex = 0;
         this.consecutiveDoubles = 0;
 
@@ -132,7 +132,7 @@ public class MatchControllerImpl implements MatchController {
         this.diceThrow = diceThrow != null ? diceThrow : new DiceThrow(new DiceImpl(), new DiceImpl());
         this.playersBankrupt = playersBankrupt;
 
-        this.gui = new MainView(this);
+        this.gui = new MainViewImpl(this);
         this.currentPlayerIndex = currentPlayerIndex;
         this.consecutiveDoubles = consecutiveDoubles;
         this.hasRolled = hasRolled;
@@ -321,7 +321,12 @@ public class MatchControllerImpl implements MatchController {
             }
 
             if (msg != null && !msg.isEmpty()) {
-                g.addLog(msg);
+                String priceMsg = "";
+                if (currentTile instanceof PropertyTile pt) {
+                    final int price = pt.getProperty().getPurchasePrice();
+                    priceMsg = "[Price: " + price + "€]";
+                }
+                g.addLog(msg + priceMsg);
             }
             g.refreshAll();
         });
@@ -423,7 +428,7 @@ public class MatchControllerImpl implements MatchController {
      */
     @Override
     @JsonIgnore
-    public MainView getMainView() {
+    public MainViewImpl getMainViewImpl() {
         return this.gui;
     }
 
@@ -647,7 +652,7 @@ public class MatchControllerImpl implements MatchController {
      * 
      * @param action the consumer action to perform on the MainView.
      */
-    private void updateGui(final Consumer<MainView> action) {
+    private void updateGui(final Consumer<MainViewImpl> action) {
         if (this.gui != null) {
             Platform.runLater(() -> action.accept(this.gui));
         }

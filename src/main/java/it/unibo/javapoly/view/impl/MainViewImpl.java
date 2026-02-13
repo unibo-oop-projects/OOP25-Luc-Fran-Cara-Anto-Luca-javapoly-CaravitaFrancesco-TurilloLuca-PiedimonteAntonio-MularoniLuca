@@ -14,12 +14,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import it.unibo.javapoly.controller.api.MatchController;
+import it.unibo.javapoly.view.api.MainView;
 
 /**
  * MainFrame is the main window of the JavaPoly game.
  * It contains the game board, player info, action buttons, and a log area.
  */
-public final class MainView {
+public final class MainViewImpl implements MainView {
 
     private static final int LOG_SPACING = 5;
     private static final int LOG_PREF_WIDTH = 250;
@@ -32,9 +33,9 @@ public final class MainView {
     private static final String FONT_FAMILY = "Segoe UI";
 
     private final BorderPane root;
-    private final BoardPanel boardPanel; 
-    private final CommandPanel commandPanel; 
-    private final InfoPanel infoPanel; 
+    private final BoardPanelImpl boardPanel; 
+    private final CommandPanelImpl commandPanel; 
+    private final InfoPanelImpl infoPanel; 
     private final MatchController matchController;
 
     private final VBox logContainer;
@@ -45,13 +46,13 @@ public final class MainView {
      *
      * @param matchController the controller that manages the game logic.
      */
-    public MainView(final MatchController matchController) {
+    public MainViewImpl(final MatchController matchController) {
         this.matchController = Objects.requireNonNull(matchController);
         this.root = new BorderPane();
 
-        this.boardPanel = new BoardPanel(this.matchController.getBoard(), this.matchController.getPlayers()); 
-        this.commandPanel = new CommandPanel(this.matchController);
-        this.infoPanel = new InfoPanel(this.matchController); 
+        this.boardPanel = new BoardPanelImpl(this.matchController.getBoard(), this.matchController.getPlayers()); 
+        this.commandPanel = new CommandPanelImpl(this.matchController);
+        this.infoPanel = new InfoPanelImpl(this.matchController); 
 
         this.logContainer = new VBox(LOG_SPACING);
         this.logScroll = new ScrollPane(this.logContainer);
@@ -205,7 +206,7 @@ public final class MainView {
      *
      * @return the InfoPanel instance.
      */
-    public InfoPanel getInfoPanel() {
+    public InfoPanelImpl getInfoPanel() {
         return this.infoPanel;
     }
 

@@ -10,6 +10,7 @@ import it.unibo.javapoly.model.api.property.Property;
 import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
 import it.unibo.javapoly.model.impl.card.LandPropertyCard;
 import it.unibo.javapoly.model.impl.card.StationPropertyCard;
+import it.unibo.javapoly.view.api.BoardPanel;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -31,7 +32,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * BoardPanel handles the visual representation of the board.
  */
-public final class BoardPanel {
+public final class BoardPanelImpl implements BoardPanel {
 
     private static final int GRID_SIZE = 11;
     private static final double CELL_PERCENT = 100.0 / GRID_SIZE;
@@ -54,7 +55,7 @@ public final class BoardPanel {
      * @param board the game board.
      * @param players the list of players.
      */
-    public BoardPanel(final Board board, final List<Player> players) {
+    public BoardPanelImpl(final Board board, final List<Player> players) {
         this.board = Objects.requireNonNull(board);
         this.players = Objects.requireNonNull(players);
         this.root = new GridPane();

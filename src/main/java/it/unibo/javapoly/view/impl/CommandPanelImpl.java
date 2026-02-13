@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import it.unibo.javapoly.model.impl.BankruptState;
 import it.unibo.javapoly.utils.JsonUtils;
+import it.unibo.javapoly.view.api.CommandPanel;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import it.unibo.javapoly.controller.api.MatchController;
@@ -20,7 +21,7 @@ import it.unibo.javapoly.model.impl.board.tile.PropertyTile;
  * CommandPanel contains the buttons for player actions,
  * such as throwing the dice and ending the turn.
  */
-public final class CommandPanel {
+public final class CommandPanelImpl implements CommandPanel {
 
     private static final int SPACING = 15;
 
@@ -40,7 +41,7 @@ public final class CommandPanel {
      *
      * @param matchController the controller that handles game logic
      */
-    public CommandPanel(final MatchController matchController) {
+    public CommandPanelImpl(final MatchController matchController) {
         this.matchController = Objects.requireNonNull(matchController);
 
         this.root = new HBox(SPACING); 

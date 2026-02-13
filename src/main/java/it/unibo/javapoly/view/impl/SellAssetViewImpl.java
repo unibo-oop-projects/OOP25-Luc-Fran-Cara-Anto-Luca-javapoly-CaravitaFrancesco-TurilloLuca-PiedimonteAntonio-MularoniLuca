@@ -170,7 +170,7 @@ public class SellAssetViewImpl implements SellAssetView {
         if (!success) {
            return;
         }
-        matchController.getMainView().addLog(
+        matchController.getMainViewImpl().addLog(
                 currentPlayer.getName() + " sold house in " + property.getId() + " for " + housePrice + CURRENCY);
         if (currentPlayer.getBalance() >= this.originalDebt) {
             this.remainingDebt = 0;
@@ -193,7 +193,7 @@ public class SellAssetViewImpl implements SellAssetView {
         if (!success) {
             return;
         }
-        matchController.getMainView().addLog(
+        matchController.getMainViewImpl().addLog(
                     currentPlayer.getName() + " sold " + property.getId() + " for " + pricePropertyToSell + CURRENCY);
         if (currentPlayer.getBalance() >= this.originalDebt) {
             this.remainingDebt = 0;
