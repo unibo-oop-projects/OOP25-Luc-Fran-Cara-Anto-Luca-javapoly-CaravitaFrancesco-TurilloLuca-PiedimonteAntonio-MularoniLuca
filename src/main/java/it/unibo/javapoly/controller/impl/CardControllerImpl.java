@@ -45,7 +45,6 @@ public class CardControllerImpl implements CardController {
     @JsonIgnore
     private static final Logger LOGGER = Logger.getLogger(CardController.class.getName());
 
-
     private final CardDeck cardDeck;
 
     @JsonIgnore
@@ -80,22 +79,23 @@ public class CardControllerImpl implements CardController {
         this.cardDeck = new CardDeckImpl(cardsList);
     }
 
-        /**
+    /**
      * Constructs a new CardControllerImpl.
      *
      * @param bank the bank instance for money transactions
      * @param boardController the board controller for movement operations
      * @param propertyController the property controller for property-related actions
+     * @param deck the CardDeck with all information
      */
     @JsonCreator
     public CardControllerImpl(@JsonProperty("bank") final EconomyController bank, 
                               @JsonProperty("boardController") final BoardController boardController, 
                               @JsonProperty("propertyController") final PropertyController propertyController,
-                              @JsonProperty("deck") CardDeck deck) {
+                              @JsonProperty("deck") final CardDeck deck) {
         this.boardController = boardController;
         this.bank = bank;
         this.propertyController = propertyController;
-                                
+
         this.cardDeck = deck;
     }
 

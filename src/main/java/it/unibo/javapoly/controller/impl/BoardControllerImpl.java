@@ -77,6 +77,7 @@ public class BoardControllerImpl implements BoardController {
      * @param board the game board
      * @param bank the bank instance for handling transactions
      * @param propertyController the property controller for handling tile properties
+     * @param cardController the card controller for handling cards
      */
     @JsonCreator
     public BoardControllerImpl(

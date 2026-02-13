@@ -57,6 +57,9 @@ public class CardDeckImpl implements CardDeck {
      * (This is because we cannot call @Override methods in the constructor)
      * 
      * @param cards the list of cards to initialize the deck with
+     * @param drawPile the list of cards to be drawed 
+     * @param discardPile the list of cards that are already drawed
+     * @param heldCards the list of cards that a player is keeping for later
      */
     @JsonCreator
     public CardDeckImpl(@JsonProperty("cards") final List<GameCard> cards,
@@ -68,21 +71,20 @@ public class CardDeckImpl implements CardDeck {
         this.cards = new ArrayList<>(cards != null ? cards : new ArrayList<>());
         this.random = new Random();
         this.heldCards = new HashMap<>();
-        
+
         if (heldCards != null && cards != null) {
-            for (Map.Entry<String, String> entry : heldCards.entrySet()) {
+            for (final Map.Entry<String, String> entry : heldCards.entrySet()) {
                 final String cardId = entry.getKey();
                 final String playerId = entry.getValue();
-                
-                // Trova la carta corrispondente nella lista cards (senza stream)
+
                 GameCard card = null;
-                for (GameCard c : cards) {
+                for (final GameCard c : cards) {
                     if (c.getId().equals(cardId)) {
                         card = c;
                         break;
                     }
                 }
-                
+
                 if (card != null) {
                     this.heldCards.put(card, playerId);
                 }
@@ -92,12 +94,19 @@ public class CardDeckImpl implements CardDeck {
 
     //#region Getter
     /**
-     * Getter per serializzazione: converte Map<GameCard, String> → Map<String, String>
+     * Getter to serialize: trasform Map<GameCard String>.
+     * 
+     * <p>
+     * This method is used by the library Jackson to serialize
+     * the map of GameCard - ownderID
+     * 
+     * @return the map Map<String String>
      */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     @JsonProperty("heldCards")
     private Map<String, String> getHeldCardsJson() {
-        Map<String, String> result = new HashMap<>();
-        for (Map.Entry<GameCard, String> entry : heldCards.entrySet()) {
+        final Map<String, String> result = new HashMap<>();
+        for (final Map.Entry<GameCard, String> entry : heldCards.entrySet()) {
             result.put(entry.getKey().getId(), entry.getValue());
         }
         return result;

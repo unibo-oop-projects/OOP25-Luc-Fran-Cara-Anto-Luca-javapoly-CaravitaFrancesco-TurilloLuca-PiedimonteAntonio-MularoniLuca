@@ -1,7 +1,6 @@
 package it.unibo.javapoly.model.api.card;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import it.unibo.javapoly.controller.impl.PropertyControllerImpl;
 import it.unibo.javapoly.model.impl.card.CardDeckImpl;
 
 /**
