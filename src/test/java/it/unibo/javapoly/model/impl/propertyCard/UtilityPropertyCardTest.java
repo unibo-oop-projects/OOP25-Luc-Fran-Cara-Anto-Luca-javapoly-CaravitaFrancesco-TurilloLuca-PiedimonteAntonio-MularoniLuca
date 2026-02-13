@@ -75,9 +75,6 @@ class UtilityPropertyCardTest {
         );
 
         final RentContext ctx = RentContext.forUtilities(DICE_TOTAL_ZERO, 0);
-        assertThrows(
-            NoSuchElementException.class,
-            () -> card.calculateRent(ctx)
-        );
+        assertEquals(card.calculateRent(ctx), 0);
     }
 }

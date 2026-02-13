@@ -106,6 +106,14 @@ public class PropertyControllerImpl implements PropertyController {
     public boolean buildHouse(final Player playerId, final String propertyId) {
         final Property property = properties.get(propertyId);
 
+        if (!ownsCompleteGroup(playerId.getName(), property.getPropertyGroup())) {
+            return false;
+        }
+
+        if (property.getBuiltHouses() >= property.getBuiltHouses() + 1) {
+            return false;
+        }
+
         return property.buildHouse(playerId.getName());
     }
 

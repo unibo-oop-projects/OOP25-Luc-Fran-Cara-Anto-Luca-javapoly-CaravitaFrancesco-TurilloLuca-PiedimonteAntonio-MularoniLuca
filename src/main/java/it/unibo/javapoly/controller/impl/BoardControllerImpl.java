@@ -193,7 +193,9 @@ public class BoardControllerImpl implements BoardController {
             + System.lineSeparator();
 
         switch (tile.getType()) {
-
+            case START:
+                awardGoBonus(player);
+                break;
             case TAX:
                 if (tile instanceof TaxTile) {
                     final TaxTile tax = (TaxTile) tile;
