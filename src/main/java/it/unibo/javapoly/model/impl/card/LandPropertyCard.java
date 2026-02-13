@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unibo.javapoly.model.api.RentContext;

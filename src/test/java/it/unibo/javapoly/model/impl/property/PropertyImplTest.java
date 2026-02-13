@@ -12,7 +12,9 @@ import it.unibo.javapoly.model.api.RentContext;
 import it.unibo.javapoly.model.api.property.PropertyGroup;
 import it.unibo.javapoly.model.impl.card.AbstractPropertyCard;
 
-
+/**
+ * Test fot PropertyImpl.
+ */
 class PropertyImplTest {
 
     private static final int FIXED_RENT = 777;
