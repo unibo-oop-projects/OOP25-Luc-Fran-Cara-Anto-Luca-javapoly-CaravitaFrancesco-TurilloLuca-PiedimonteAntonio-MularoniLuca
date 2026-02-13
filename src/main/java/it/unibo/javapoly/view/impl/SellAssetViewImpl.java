@@ -27,9 +27,8 @@ public class SellAssetViewImpl implements SellAssetView {
     private final GridPane propertyGrid;
     private final Label titleLabel;
     private final Label debtLabel;
-    private final Button bankruptButton;
     private final MatchController matchController;
-    private Player currentPlayer;
+    private String playerName;
     private int originalDebt;
     private int remainingDebt;
     private LiquidationCallback liquidationCallback;
@@ -45,7 +44,6 @@ public class SellAssetViewImpl implements SellAssetView {
         this.propertyGrid = new GridPane();
         this.titleLabel = new Label("Amount to pay off: ");
         this.debtLabel = new Label();
-        this.bankruptButton = new Button("Bankrupt");
         this.matchController = Objects.requireNonNull(controller, "Match controller must not be null");
         initialize();
     }
@@ -56,11 +54,9 @@ public class SellAssetViewImpl implements SellAssetView {
     public void initialize() {
         final HBox header = new HBox(titleLabel, debtLabel);
         header.setAlignment(Pos.CENTER);
-        bankruptButton.setOnAction(e -> declareBankruptcy());
 
         this.root.setTop(header);
         this.root.setCenter(this.propertyGrid);
-        this.root.setBottom(this.bankruptButton);
     }
 
     /**
@@ -68,7 +64,7 @@ public class SellAssetViewImpl implements SellAssetView {
      */
     @Override
     public void show(final Player player, final int debtAmount) {
-        this.currentPlayer = player;
+        this.playerName = player.getName();
         this.originalDebt = debtAmount;
         this.remainingDebt = debtAmount;
         debtDisplay();
@@ -87,17 +83,18 @@ public class SellAssetViewImpl implements SellAssetView {
      */
     private void refreshPropertyGrid() {
         this.propertyGrid.getChildren().clear();
-        this.remainingDebt = Math.max(0, this.originalDebt - this.currentPlayer.getBalance());
+        final Player currentPlayer = this.matchController.getCurrentPlayer();
+        this.remainingDebt = Math.max(0, this.originalDebt - currentPlayer.getBalance());
         if (this.remainingDebt == 0) {
             completeLiquidation(true);
             return;
         }
         final List<Property> properties =
-                new ArrayList<>(this.matchController.getPropertyController().getOwnedProperties(this.currentPlayer.getName()));
+                new ArrayList<>(this.matchController.getPropertyController().getOwnedProperties(this.playerName));
         final List<Property> houses =
-                new ArrayList<>(this.matchController.getPropertyController().getPropertiesWithHouseByOwner(this.currentPlayer));
+                new ArrayList<>(this.matchController.getPropertyController().getPropertiesWithHouseByOwner(currentPlayer));
         if (properties.isEmpty() && houses.isEmpty()) {
-            this.currentPlayer.setState(BankruptState.getInstance());
+            currentPlayer.setState(BankruptState.getInstance());
             declareBankruptcy();
             return;
         }
@@ -107,7 +104,7 @@ public class SellAssetViewImpl implements SellAssetView {
             for (final Property propertyWithHouse: houses) {
                 final Button houseButton = createHouseButton(propertyWithHouse);
                 propertyGrid.add(houseButton, col++, row);
-                if (col >= 3) {
+                if (col >= 2) {
                     col = 0;
                     row++;
                 }
@@ -116,7 +113,7 @@ public class SellAssetViewImpl implements SellAssetView {
             for (final Property propertyWithoutHouse: properties) {
                 final Button propertyButton = createPropertyButton(propertyWithoutHouse);
                 propertyGrid.add(propertyButton, col++, row);
-                if (col >= 3) {
+                if (col >= 2) {
                     col = 0;
                     row++;
                 }
@@ -168,13 +165,14 @@ public class SellAssetViewImpl implements SellAssetView {
      * @param housePrice the sale price.
      */
     private void sellHouse(final Property property, final int housePrice) {
-        final boolean success = matchController.getEconomyController().sellHouse(this.currentPlayer, property);
+        final Player currentPlayer = this.matchController.getCurrentPlayer();
+        final boolean success = matchController.getEconomyController().sellHouse(currentPlayer, property);
         if (!success) {
            return;
         }
         matchController.getMainView().addLog(
                 currentPlayer.getName() + " sold house in " + property.getId() + " for " + housePrice + CURRENCY);
-        if (this.currentPlayer.getBalance() >= this.originalDebt) {
+        if (currentPlayer.getBalance() >= this.originalDebt) {
             this.remainingDebt = 0;
             debtDisplay();
             completeLiquidation(true);
@@ -190,13 +188,14 @@ public class SellAssetViewImpl implements SellAssetView {
      * @param pricePropertyToSell the sale price.
      */
     private void sellProperty(final Property property, final int pricePropertyToSell) {
-        final boolean success = matchController.getEconomyController().sellProperty(this.currentPlayer, property);
+        final Player currentPlayer = this.matchController.getCurrentPlayer();
+        final boolean success = matchController.getEconomyController().sellProperty(currentPlayer, property);
         if (!success) {
             return;
         }
         matchController.getMainView().addLog(
                     currentPlayer.getName() + " sold " + property.getId() + " for " + pricePropertyToSell + CURRENCY);
-        if (this.currentPlayer.getBalance() >= this.originalDebt) {
+        if (currentPlayer.getBalance() >= this.originalDebt) {
             this.remainingDebt = 0;
             debtDisplay();
             completeLiquidation(true);
@@ -209,6 +208,7 @@ public class SellAssetViewImpl implements SellAssetView {
      * Declares bankruptcy.
      */
     private void declareBankruptcy() {
+        final Player currentPlayer = this.matchController.getCurrentPlayer();
         currentPlayer.setState(BankruptState.getInstance());
         completeLiquidation(false);
     }

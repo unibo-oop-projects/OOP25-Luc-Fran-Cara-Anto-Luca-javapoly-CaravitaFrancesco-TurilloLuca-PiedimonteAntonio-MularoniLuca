@@ -2,7 +2,6 @@ package it.unibo.javapoly.view.impl;
 
 import java.util.Objects;
 
-import it.unibo.javapoly.view.api.SellAssetView;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -130,8 +129,7 @@ public final class MainView {
      */
     public void showLiquidation() {
         Platform.runLater(() -> {
-            this.infoPanel.getSellAssetView().getRoot().setVisible(true);
-            this.infoPanel.getSellAssetView().getRoot().setManaged(true);
+            this.infoPanel.showSellAssetView();
             this.commandPanel.getRoot().setDisable(true);
         });
     }
@@ -141,8 +139,7 @@ public final class MainView {
      */
     public void hideLiquidation() {
         Platform.runLater(() -> {
-            this.infoPanel.getSellAssetView().getRoot().setVisible(false);
-            this.infoPanel.getSellAssetView().getRoot().setManaged(false);
+            this.infoPanel.hideSellAssetView();
             this.commandPanel.getRoot().setDisable(false);
         });
     }
@@ -205,12 +202,12 @@ public final class MainView {
     }
 
     /**
-     * Get info panel.
+     * Get access to InfoPanel for delegated liquidation operations.
      *
-     * @return info panel.
+     * @return the InfoPanel instance.
      */
-    public SellAssetView getSellAssetView() {
-        return this.infoPanel.getSellAssetView();
+    public InfoPanel getInfoPanel() {
+        return this.infoPanel;
     }
 
     /**

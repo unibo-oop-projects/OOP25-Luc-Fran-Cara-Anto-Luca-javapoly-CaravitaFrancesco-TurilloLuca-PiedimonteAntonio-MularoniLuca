@@ -66,14 +66,14 @@ public class MenuViewImpl implements MenuView {
      */
     private void loadIcon() {
         try {
-            final var iconStream = getClass().getResourceAsStream(ICON_PATH);
+            final var iconStream = MenuViewImpl.class.getResourceAsStream(ICON_PATH);
             if (iconStream == null) {
                 System.err.println("Icon loading failed.");
                 return;
             }
             final Image icon = new Image(iconStream);
             this.stage.getIcons().add(icon);
-        } catch (final NullPointerException e) {
+        } catch (final RuntimeException e) {
             System.err.println("Icon loading failed.");
         }
     }
@@ -100,7 +100,7 @@ public class MenuViewImpl implements MenuView {
         final VBox topBox = new VBox();
         topBox.setAlignment(Pos.CENTER);
         topBox.setPadding(new Insets(TOP_PADDING));
-            final var logoStream = getClass().getResourceAsStream(LOGO_PATH);
+            final var logoStream = MenuViewImpl.class.getResourceAsStream(LOGO_PATH);
             if (logoStream == null) {
                 System.err.println("Logo not found");
                 topBox.getChildren().add(createTitleLabel());
