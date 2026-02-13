@@ -1,11 +1,11 @@
-package it.unibo.javapoly.controller.impl;
+package it.unibo.javapoly.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.unibo.javapoly.utils.JsonUtils;
+import it.unibo.javapoly.controller.impl.MatchControllerImpl;
 import java.io.File;
 import java.io.IOException;
 
