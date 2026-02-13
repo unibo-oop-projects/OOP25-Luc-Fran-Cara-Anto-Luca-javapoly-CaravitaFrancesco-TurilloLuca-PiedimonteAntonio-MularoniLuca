@@ -1,5 +1,10 @@
 package it.unibo.javapoly.controller.impl;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import it.unibo.javapoly.controller.api.BoardController;
 import it.unibo.javapoly.controller.api.CardController;
 import it.unibo.javapoly.controller.api.EconomyController;
@@ -21,6 +26,7 @@ import it.unibo.javapoly.model.impl.card.UtilityPropertyCard;
  * Manages player movement on the board, handling "Go" bonuses,
  * tile logic execution, and special movements (to jail, to nearest tile, etc.).
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class BoardControllerImpl implements BoardController {
 
     private static final int MAX_DICE = 12;
@@ -31,11 +37,18 @@ public class BoardControllerImpl implements BoardController {
     private static final String JAIL_FREE =
         "Hai usato una carta esci di prigione gratis.";
 
+    @JsonIgnore
     private final Board board;
+
+    @JsonIgnore
     private final PropertyController propertyController;
+
+    @JsonIgnore
     private final EconomyController bank;
+
     private final CardController cardController;
 
+    @JsonIgnore
     private String message;
 
     /**
@@ -55,6 +68,27 @@ public class BoardControllerImpl implements BoardController {
         this.propertyController = propertyController;
         this.cardController =
             new CardControllerImpl(bank, this, this.propertyController);
+        this.message = "";
+    }
+
+    /**
+     * Constructs a new BoardControllerImpl.
+     *
+     * @param board the game board
+     * @param bank the bank instance for handling transactions
+     * @param propertyController the property controller for handling tile properties
+     */
+    @JsonCreator
+    public BoardControllerImpl(
+            @JsonProperty("board") final Board board,
+            @JsonProperty("bank") final EconomyController bank,
+            @JsonProperty("propertyController") final PropertyController propertyController,
+            @JsonProperty("cardController") final CardController cardController) {
+
+        this.board = board;
+        this.bank = bank;
+        this.propertyController = propertyController;
+        this.cardController = cardController;
         this.message = "";
     }
 
@@ -266,6 +300,7 @@ public class BoardControllerImpl implements BoardController {
      *
      * @return the current message
      */
+    @JsonIgnore
     @Override
     public String getMessagePrint() {
         final String tmp = this.message;

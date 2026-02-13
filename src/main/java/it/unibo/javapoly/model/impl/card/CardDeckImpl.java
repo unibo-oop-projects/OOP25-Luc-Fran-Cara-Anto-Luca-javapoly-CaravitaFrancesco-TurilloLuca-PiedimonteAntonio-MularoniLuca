@@ -14,17 +14,25 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Implementation of the CardDeck interface, representing a deck of game cards.
  * It allows drawing, discarding, shuffling, and checking if the deck is empty.
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CardDeckImpl implements CardDeck {
 
     private final Deque<GameCard> drawPile;
     private final Deque<GameCard> discardPile;
     private final Map<GameCard, String> heldCards;
-    private final Random random;
     private final List<GameCard> cards;
+
+    @JsonIgnore
+    private final Random random;
 
     /**
      * Constructs a new CardDeckImpl with the provided list of cards.
@@ -38,6 +46,26 @@ public class CardDeckImpl implements CardDeck {
         this.drawPile = new ArrayDeque<>();
         this.discardPile = new ArrayDeque<>(cards);
         this.heldCards = new HashMap<>();
+        random = new Random();
+        this.cards = new ArrayList<>(cards);
+    }
+
+        /**
+     * Constructs a new CardDeckImpl with the provided list of cards.
+     * The cards are added to the discard pile, because the first time 
+     * we draw cards, the cards will be shuffled. 
+     * (This is because we cannot call @Override methods in the constructor)
+     * 
+     * @param cards the list of cards to initialize the deck with
+     */
+    @JsonCreator
+    public CardDeckImpl(@JsonProperty("cards") final List<GameCard> cards,
+                        @JsonProperty("drawPile") final Deque<GameCard> drawPile,
+                        @JsonProperty("discardPile") final Deque<GameCard> discardPile,
+                        @JsonProperty("heldCards") final Map<GameCard, String> heldCards) {
+        this.drawPile = new ArrayDeque<>(drawPile);
+        this.discardPile = new ArrayDeque<>(discardPile);
+        this.heldCards = new HashMap<>(heldCards);
         random = new Random();
         this.cards = new ArrayList<>(cards);
     }

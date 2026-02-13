@@ -2,6 +2,12 @@ package it.unibo.javapoly.controller.impl;
 
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,17 +35,26 @@ import it.unibo.javapoly.utils.CardLoader;
  * Implementation of the CardController interface.
  * Manages drawing and executing effects of unexpected game cards.
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CardControllerImpl implements CardController {
 
     private static final String BANK_REC = "BANK";
     private static final int VALUE_DEF = -1;
     private static final String PATH_CARD = "src/main/resources/Card/UnexpectedCards.json";
 
+    @JsonIgnore
     private static final Logger LOGGER = Logger.getLogger(CardController.class.getName());
 
+
     private final CardDeck cardDeck;
+
+    @JsonIgnore
     private final BoardController boardController;
+
+    @JsonIgnore
     private final PropertyController propertyController;
+
+    @JsonIgnore
     private final EconomyController bank;
 
     /**
@@ -63,6 +78,25 @@ public class CardControllerImpl implements CardController {
         }
 
         this.cardDeck = new CardDeckImpl(cardsList);
+    }
+
+        /**
+     * Constructs a new CardControllerImpl.
+     *
+     * @param bank the bank instance for money transactions
+     * @param boardController the board controller for movement operations
+     * @param propertyController the property controller for property-related actions
+     */
+    @JsonCreator
+    public CardControllerImpl(@JsonProperty("bank") final EconomyController bank, 
+                              @JsonProperty("boardController") final BoardController boardController, 
+                              @JsonProperty("propertyController") final PropertyController propertyController,
+                              @JsonProperty("deck") CardDeck deck) {
+        this.boardController = boardController;
+        this.bank = bank;
+        this.propertyController = propertyController;
+                                
+        this.cardDeck = deck;
     }
 
     /**

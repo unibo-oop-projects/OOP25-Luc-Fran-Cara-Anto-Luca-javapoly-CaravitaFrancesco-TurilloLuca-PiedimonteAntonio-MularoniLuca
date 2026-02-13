@@ -55,7 +55,7 @@ public class MatchControllerImpl implements MatchController {
     @JsonIgnore
     private final EconomyController economyController;
     private final PropertyController propertyController;
-    @JsonIgnore
+
     private final BoardController boardController;
 
     private int currentPlayerIndex;
